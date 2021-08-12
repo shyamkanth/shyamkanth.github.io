@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Mac UI Notepad</title>
+    <script type="text/javascript" src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas2image@1.0.5/canvas2image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas2image@1.0.5/canvas2image.js"></script>
+
+</head>
+<body >
+    <center><h6><p>Mac UI Notepad</p></h6></center>
+    <div id="menu">
+        <button type="button" class="material-icons" style="font-size:36px" data-toggle="modal" data-target="#mymodal" onclick="takeshot()">screenshot</button>
+        <button type="button" class="material-icons" style="font-size:36px" disabled>file_download</button>
+    </div>
+
+    <!-- Starting Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Welcome to Mac UI Notepad.</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Instruction to Use : </p>
+                    <p>You have to type everything manually i.e. Window title, line number and body.</p>
+                    <p>Screenshot can be taken by the first button on the right.</p>
+                    <p>Save your image with .png or .jpg/.jpeg extension.</p>
+                    <p>With Regard <br> Shyam<br><i>"Sam"</i></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+          <!-- Final Modal -->
+  <div class="modal" id="mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Snapshot Taken</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="back">
+    <div id="main">
+        <div id="child" class="sticky-top">
+            <!--Icons-->
+                <div id="red">
+                </div>
+                <div id="yellow">
+                </div>
+                <div id="green">
+                </div>
+            <!--Window title-->
+                <div id="title">
+                    <b><p id="window-title" onmouseover = "myFunction3()" spellcheck="false">Window Title</p></b>
+                </div>
+        </div>
+  
+    <!--Line number-->
+        <div id="line">
+            <p id="line-no" onmouseover = "myFunction2()" spellcheck="false">1</p>
+        </div>
+    <!--Coding-->
+            <p id="code" onmouseover = "myFunction()" spellcheck="false" >Hello world. Click me to start writing.</p>
+    </div>
+</div>
+
+
+
+</body>
+</html>
