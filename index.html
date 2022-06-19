@@ -49,18 +49,6 @@
 
     </style>
     <script>
-        const countEl = document.getElementById('visits');
-
-        updateVisitCount();
-
-        function updateVisitCount() {
-            fetch('https://api.countapi.xyz/update/shyam-github/e1f2e8bf-0a0f-4535-91c2-566788fcd09c/?amount=1')
-            .then(res => res.json())
-            .then(res => {
-                countEl.innerHTML = res.value;
-            })
-        }
-
         function projectshow(){
             document.getElementById('projects').style="display:block;";
         }
@@ -82,19 +70,19 @@
                             <a href="https://shyamkanth.github.io" class="nav-link" style="margin-right: 30px;">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://shyamkanth.blogspot.com/p/about.html" class="nav-link" style="margin-right: 30px;">About</a>
+                            <a href="https://shyamkanth.blogspot.com/p/about.html" target="_blank" class="nav-link" style="margin-right: 30px;">About</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Projects</a>
                             <ul class="dropdown-menu dropdown-menu-end" id="projects">
-                              <li><a class="dropdown-item" href="#">Mac UI Notepd</a></li>
+                              <li><a class="dropdown-item" href="#" target="_blank">Mac UI Notepd</a></li>
                             </ul>
                           </li>
                           <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sites</a>
                             <ul class="dropdown-menu dropdown-menu-end">
                               <li><a class="dropdown-item" href="shyamkanth.github.io">shyamkanth.github.io</a></li>
-                              <li><a class="dropdown-item" href="shyamkanth.blogspot.com">shyamkanth.blogspot.com</a></li>
+                              <li><a class="dropdown-item" href="shyamkanth.blogspot.com" target="_blank">shyamkanth.blogspot.com</a></li>
                               <li><a class="dropdown-item" href="">shyamkanth.wordpress.com<sub> not active</sub></a></li>
                               <li><a class="dropdown-item" href="">tnmafia.com<sub> not active</sub></a></li>
                             </ul>
@@ -102,10 +90,10 @@
                           <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">More</a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                              <li><a class="dropdown-item" href="shyamkanth.blogspot.com">Click here to learn with me.</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/search/label/Programs">Click here to see all C programs by me</a></li>
-                              <li><a class="dropdown-item" href="#">Click here to view Question library.</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/index.html">Click here to see all my posts</a></li>
+                              <li><a class="dropdown-item" href="shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a></li>
+                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/search/label/Programs" target="_blank">Click here to see all C programs by me</a></li>
+                              <li><a class="dropdown-item" href="#" target="_blank">Click here to view Question library.</a></li>
+                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/index.html" target="_blank">Click here to see all my posts</a></li>
                             </ul>
                           </li>
                     </ul>
@@ -162,10 +150,10 @@
                                         Student ( B. Tech CSE ) <br>
                                         Sharda University, Greater Noida, U.P</li>
                                         
-                                        <li>LinkedIn : <a href="https://www.linkedin.com/in/shyam-sunder-kanth-0a8934182/">Go to linkedIn</a></li>
-                                        <li>GitHub : <a href="https://github.com/shyamkanth">Go to github</a></li>
+                                        <li>LinkedIn : <a href="https://www.linkedin.com/in/shyam-sunder-kanth-0a8934182/" target="_blank">Go to linkedIn</a></li>
+                                        <li>GitHub : <a href="https://github.com/shyamkanth" target="_blank">Go to github</a></li>
                                     </ul>
-                                    <a href="https://shyamkanth.blogspot.com/p/about.html"><button class="btn btn-outline-info">Know more about me</button></a>
+                                    <a href="https://shyamkanth.blogspot.com/p/about.html"><button class="btn btn-outline-info" target="_blank">Know more about me</button></a>
                                 </div>
                             </div>
                             <!--Tile 3-->
@@ -175,13 +163,13 @@
                                     <button class="btn btn-outline-info" style="margin-bottom: 15px;" onpointerenter="projectshow()" onpointerleave="hide()">Have a look at my some of the front-end projects.</button>
                                     <ul id="more">
                                         <li>
-                                            <a href="#">Mac UI Notepad</a>
+                                            <a href="#" target="_blank">Mac UI Notepad</a>
                                         </li>
                                         <li>
-                                            <a href="#">Site Mailer</a>
+                                            <a href="#" target="_blank">Site Mailer</a>
                                         </li>
                                         <li>
-                                            <a href="#">Home Banner</a>
+                                            <a href="#" target="_blank">Home Banner</a>
                                         </li>
                                     </ul>
                                     <button class="btn btn-outline-info" onpointerenter="projectshow()" onpointerleave="hide()">View more</button>
@@ -194,7 +182,7 @@
                                     <ul>
                                         <li><a href="shyamkanth.github.io">shyamkanth.github.io</a><br>Administrator
                                         July 2021 - Present</li>
-                                        <li><a href="shyamkanth.blogspot.com">shyamkanth.blogspot.com</a><br>Administrator
+                                        <li><a href="shyamkanth.blogspot.com" target="_blank">shyamkanth.blogspot.com</a><br>Administrator
                                         December 2021 - Present</li>
                                         <li><a href="#">shyamkanth.wordpress.com</a><br>Administrator: August 2020 - January 2022</li>
                                         <li><a href="#">tnmafia.com</a><br>AdministratorOctober 2019 - June 2020</li>
@@ -207,16 +195,16 @@
                                     <p style="font-size: 35px;">Moreover</p>
                                     <ul id="more">
                                         <li>
-                                            <a href="shyamkanth.blogspot.com">Click here to learn with me.</a>
+                                            <a href="shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a>
                                         </li>
                                         <li>
-                                            <a href="https://shyamkanth.blogspot.com/search/label/Programs">Click here to see all C programs by me</a>
+                                            <a href="https://shyamkanth.blogspot.com/search/label/Programs" target="_blank">Click here to see all C programs by me</a>
                                         </li>
                                         <li>
-                                            <a href="#">Click here to view Question library.</a>
+                                            <a href="#" target="_blank">Click here to view Question library.</a>
                                         </li>
                                         <li>
-                                            <a href="https://shyamkanth.blogspot.com/index.html">Click here to see all my posts</a>
+                                            <a href="https://shyamkanth.blogspot.com/index.html" target="_blank">Click here to see all my posts</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -237,7 +225,7 @@
                 </div>
             </div>
             <div class="row">
-                <h2 style="font-size: 30px; color: rgb(56, 96, 129); display: flex; justify-content: center;">Just a showcase, nothing much :)</h2>
+                <h2 style="text-align: center; font-size: 30px; color: rgb(56, 96, 129); display: flex; justify-content: center;">Just a showcase, nothing much :)</h2>
             </div>
         </div>
     </main>
@@ -254,23 +242,23 @@
                 <p style="font-size: 25px;">More from me</p>
                 <ul id="more">
                     <li>
-                        <a href="shyamkanth.blogspot.com">Click here to learn with me.</a>
+                        <a href="shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a>
                     </li>
                     <li>
-                        <a href="https://shyamkanth.blogspot.com/search/label/Programs">Click here to see all C programs by me</a>
+                        <a href="https://shyamkanth.blogspot.com/search/label/Programs" target="_blank">Click here to see all C programs by me</a>
                     </li>
                     <li>
-                        <a href="#">Click here to view Question library.</a>
+                        <a href="#" target="_blank">Click here to view Question library.</a>
                     </li>
                     <li>
-                        <a href="https://shyamkanth.blogspot.com/index.html">Click here to see all my posts</a>
+                        <a href="https://shyamkanth.blogspot.com/index.html" target="_blank">Click here to see all my posts</a>
                     </li>
                 </ul>
             </div>
             <div class="col-xl-4">
                 <p style="font-size: 25px;">Should we end now :( </p>
                 <p>Felling sad to see you go :( Hope we meet again :)</p>
-                <p style="font-size: 30px;font-family: sans-serif;color: #d6a829;">Thank You !</p>
+                <p style="font-size: 30px;font-family: sans-serif;color: #d6a829;">Thank You !</p> 
             </div>
         </div>
     </footer>
