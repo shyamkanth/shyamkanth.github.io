@@ -202,4 +202,7 @@ body, html{
     .badge{
         font-size: 14px;
     }
+    #main{
+    height: 100%;
+    }
 }
