@@ -1,271 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Shyam Kanth</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Shyam Sunder Kanth</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" type="text/javascript"></script>
-    <style>
-        a{
-            text-decoration: none;
-            
-        }
-        ul#more li {
-            margin-bottom: 21px;
-            list-style-type: none;
-        }
-        div#tile{
-            background-color: rgb(86, 7, 16);
-            color:white;
-            height: 350px;
-            width: 100%;
-            border-radius: 15px;
-            padding:20px 55px;
-        }
-
-        @media screen and (max-width:1200px){
-
-            #col1{
-                display: none;
-            }
-            div#tile{
-                margin-top: 30px;
-            }
-            div.col-xl-4{
-                text-align: center;
-            }
-        }
-        
-        @media screen and (max-width:768px){
-            div.carousel-indicators{
-                display: none;
-            }
-        }
-
-
-    </style>
-    <script>
-        function projectshow(){
-            document.getElementById('projects').style="display:block;";
-        }
-        function hide(){
-            document.getElementById('projects').style="display:hidden;";}
-    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <script src="script.js" defer></script>
 </head>
-<!--Body starts-->
-<body>
-    <!--Header Starts-->
-    <header>
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark" style="padding-left: 35px;padding-right: 35px;">
-            <div class="container-fluid">
-                <a href="https://shyamkanth.github.io" class="navbar-brand">Shyam Sunder Kanth</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="https://shyamkanth.github.io" class="nav-link" style="margin-right: 30px;">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="https://shyamkanth.blogspot.com/p/about.html" target="_blank" class="nav-link" style="margin-right: 30px;">About</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Projects</a>
-                            <ul class="dropdown-menu dropdown-menu-end" style="z-index: 10000;" id="projects">
-                              <li><a class="dropdown-item" href="https://shyamkanth.github.io/Mac-UI-Notepad/" target="_blank">Mac UI Notepd</a></li>
-                                <li><a class="dropdown-item" href="https://github.com/shyamkanth/Journal-website" target="_blank">Journal Website</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.github.io/site-mailer/" target="_blank">Site Mailer</a></li>
-                            <li><a class="dropdown-item" href="https://github.com/shyamkanth/calculator-in-c" target="_blank">Multifunctional C calculator<sub>exe</sub></a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.github.io/home-banner/" target="_blank">Home Banner</a></li>
-                            </ul>
-                          </li>
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Sites</a>
-                            <ul class="dropdown-menu dropdown-menu-end" style="z-index: 10000;">
-                              <li><a class="dropdown-item" href="https://shyamkanth.github.io">shyamkanth.github.io</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com" target="_blank">shyamkanth.blogspot.com</a></li>
-                              <li><a class="dropdown-item" href="">shyamkanth.wordpress.com<sub> not active</sub></a></li>
-                              <li><a class="dropdown-item" href="">tnmafia.com<sub> not active</sub></a></li>
-                            </ul>
-                          </li>
-                          <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">More</a>
-                            <ul class="dropdown-menu dropdown-menu-end" style="z-index: 10000;">
-                                <li><a class="dropdown-item" href="https://youtube.com/@DevelopersByte" target="_blank">Educator at YouTube. Click to see</a> </li>
-                                <li><a class="dropdown-item" href="https://github.com/shyamkanth/Placements" target="_blank">Click here to Get placement ready.</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/p/unlocking-world-of-c-and-c-coding-your.html" target="_blank">Click here to see programs</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/p/academic-excellence-your-source-for-cse.html" target="_blank">Click here to view Question library.</a></li>
-                              <li><a class="dropdown-item" href="https://shyamkanth.blogspot.com/search/label/Data-Structure" target="_blank">Dive dep into Data Structure</a></li>
-                            </ul>
-                          </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <!--Header Ends-->
-    <!--Main Body Starts-->
-    <main style="background-color: rgb(229, 241, 209); padding-top: 20px;padding-bottom: 20px;">
-        <div class="container">
-            <div class="row" style="padding-bottom: 20px;">
-                <h1 style="font-size: 60px; color: rgb(56, 96, 129); display: flex; justify-content: center;"> &lt;/ Hey !! &gt; </h1>
-            </div>
-            <div class="row" style="border-top: 1px solid brown;display: flex;align-items: center;padding-bottom: 20px;">
-                <div class="col" id="col1">
-                    <img src="man.png" alt="Man Pic">
-                </div>
-                <div class="col" id="col2">
-                    <!--Carousel starts-->
-                    <div id="project-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
-                       <!-- Indicators/dots starts-->
-                        <div class="carousel-indicators" style="height: 30px;width: 150px; margin-left: 35%;">
-                            <button type="button" data-bs-target="#project-carousel" data-bs-slide-to="0" class="active"></button>
-                            <button type="button" data-bs-target="#project-carousel" data-bs-slide-to="1" class="active"></button>
-                            <button type="button" data-bs-target="#project-carousel" data-bs-slide-to="2" class="active"></button>
-                            <button type="button" data-bs-target="#project-carousel" data-bs-slide-to="3" class="active"></button>
-                            <button type="button" data-bs-target="#project-carousel" data-bs-slide-to="4" class="active"></button>
-                        </div>
-                        <!-- Indicators/dots ends-->
-                        <!-- The slideshow/carousel starts -->
-                        <div class="carousel-inner">
 
-                            <!--Tile 1-->
-                            <div class="carousel-item active">
-                                <div id="tile">
-                                    <p style="font-size: 35px;">Let's start</p>
-                                    <p>A portfolio website of me including :</p>
-                                    <ul>
-                                        <li>Codes</li>
-                                        <li>Projects</li>
-                                        <li>Skills</li>
-                                        <li>Achievements</li>
-                                    </ul>
-                                    <button class="btn btn-outline-info">Slide to view</button>
-                                </div>
-                            </div>
-                            <!--Tile 2-->
-                            <div class="carousel-item">
-                                <div id="tile">
-                                    <p style="font-size: 35px;">About</p>
-                                    <ul>
-                                        <li>Shyam Sunder Kanth<br>
-                                        Student ( B. Tech CSE ) <br>
-                                        Sharda University, Greater Noida, U.P</li>
-                                        
-                                        <li>LinkedIn : <a href="https://www.linkedin.com/in/shyam-sunder-kanth-0a8934182/" target="_blank">Go to linkedIn</a></li>
-                                        <li>GitHub : <a href="https://github.com/shyamkanth" target="_blank">Go to github</a></li>
-                                    </ul>
-                                    <a href="https://shyamkanth.blogspot.com/p/about.html"><button class="btn btn-outline-info" target="_blank">Know more about me</button></a>
-                                </div>
-                            </div>
-                            <!--Tile 3-->
-                            <div class="carousel-item">
-                                <div id="tile">
-                                    <p style="font-size: 35px;">Projects</p>
-                                    <button class="btn btn-outline-info" style="margin-bottom: 15px;" onpointerenter="projectshow()" onpointerleave="hide()">Have a look at my some of the front-end projects.</button>
-                                    <ul id="more">
-                                        <li>
-                                            <a href="https://shyamkanth.github.io/Mac-UI-Notepad/" target="_blank">Mac UI Notepad</a>
-                                        </li>
-                                        <li>
-                                            <a href="https://github.com/shyamkanth/Journal-website" target="_blank">Journal Website</a>
-                                        </li>
-                                        <li>
-                                            <a href="https://github.com/shyamkanth/calculator-in-c" target="_blank">Multifunctional C calculator</a>
-                                        </li>
-                                    </ul>
-                                    <button class="btn btn-outline-info" onpointerenter="projectshow()" onpointerleave="hide()">View more</button>
-                                </div>
-                            </div>
-                            <!--Tile 4-->
-                            <div class="carousel-item">
-                                <div id="tile">
-                                    <p style="font-size: 35px;">Sites</p>
-                                    <ul>
-                                        <li><a href="https://shyamkanth.github.io">shyamkanth.github.io</a><br>Administrator
-                                        July 2021 - Present</li>
-                                        <li><a href="https://shyamkanth.blogspot.com" target="_blank">shyamkanth.blogspot.com</a><br>Administrator
-                                        December 2021 - Present</li>
-                                        <li><a href="#">shyamkanth.wordpress.com</a><br>Administrator: August 2020 - January 2022</li>
-                                        <li><a href="#">tnmafia.com</a><br>AdministratorOctober 2019 - June 2020</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--Tile 5-->
-                            <div class="carousel-item">
-                                <div id="tile">
-                                    <p style="font-size: 35px;">Moreover</p>
-                                    <ul id="more">
-                                        <li>
-                        <a href="https://youtube.com/@DevelopersByte" target="_blank">Educator at YouTube. Click to see</a>
-                    </li>
-                                        <li>
-                                            <a href="https://github.com/shyamkanth/Placements" target="_blank">Click here to Get placement ready.</a>
-                                        </li>
-                                        <li>
-                                            <a href="https://shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a>
-                                        </li>
-                              <li>
-                                  <a href="https://shyamkanth.blogspot.com/search/label/Data-Structure" target="_blank">Dive dep into Data Structure</a>
-                              </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <!-- The slideshow/carousel ends -->
-                        <!-- Left and right controls/icons starts-->
-                        <button class="carousel-control-prev" type="button" data-bs-target="#project-carousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#project-carousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                        <!-- Left and right controls/icons ends-->
-                    </div>
-                    <!--Carousel ends-->
+<body>
+
+    <div id="topbar">
+        <div id="title">
+            <span id="name">Shyam Sunder Kanth</span>
+            <span id="bio">Android (Kotlin) + Angular Developer</span>
+        </div>
+        <div class="dp">
+            <img class="dp" src="./images/dp.png" alt="Shyam Sunder Kanth">
+        </div>
+    </div>
+
+    <div id="main">
+
+        <div class="content">
+            <div class="section" id="introduction">
+                <div class="heading">Introduction</div>
+                <div class="paragraph">
+                    I am an Android Developer with more than 1 year of hands-on experience in designing, developing, and
+                    delivering robust and
+                    user-friendly Android applications. I specialize in creating efficient mobile solutions that align
+                    with user needs and
+                    business goals, ensuring a seamless and engaging experience.
+
+                    In addition to my expertise in Android development, I am also proficient in Angular for frontend
+                    development, enabling
+                    me to build dynamic and interactive web applications with clean and maintainable code. My knowledge
+                    extends across
+                    various architectures like MVVM and MVI, and I am skilled in leveraging modern tools such as Jetpack
+                    Compose, Retrofit,
+                    OkHttp, Room, and Datastore for efficient app development.
+
+                    I am deeply passionate about crafting intuitive, scalable, and high-performing applications,
+                    focusing on delivering
+                    quality while optimizing performance. My commitment to continuous learning drives me to explore
+                    emerging technologies,
+                    keeping me up-to-date with industry trends and enhancing my technical skills.
+
+                    I thrive in collaborative environments and take pride in solving complex problems, whether working
+                    independently or as
+                    part of a team. My ultimate goal is to contribute to impactful projects that not only meet but
+                    exceed user expectations,
+                    all while fostering innovation and delivering value to stakeholders.
+                </div>
+                <div class="tags">
+                    <span>Key Points : </span>
+                    <span class="badge">Android</span>
+                    <span class="badge">Angular</span>
+                    <span class="badge">MVI</span>
+                    <span class="badge">MVVM</span>
+                    <span class="badge">Network handling</span>
+                    <span class="badge">Room</span>
+                    <span class="badge">TypeScript</span>
                 </div>
             </div>
-            <div class="row">
-                <h2 style="text-align: center; font-size: 30px; color: rgb(56, 96, 129); display: flex; justify-content: center;">Just a showcase, nothing much :)</h2>
+
+            <div class="section" id="experience">
+                <div class="heading">Experience</div>
+                <div class="sub-heading">Android (Kotlin)</div>
+                <div class="paragraph">
+                    I have a strong foundation in Object-Oriented Programming and Android architecture patterns,
+                    including MVVM and MVI,
+                    which I leverage to build robust and scalable applications. My expertise extends to modern UI
+                    development using Jetpack
+                    Compose and efficient network request handling with Retrofit and OkHttp. I am skilled in database
+                    management with tools
+                    like Room, SharedPreferences, and Datastore, and have hands-on experience with Kotlin Coroutines for
+                    seamless background
+                    processing. Additionally, I am proficient in SDK development, enabling the creation of modular and
+                    reusable components,
+                    and have a solid understanding of dependency injection and modular architecture. My knowledge of
+                    Android Jetpack
+                    libraries and lifecycle-aware components further supports my ability to create efficient and
+                    maintainable applications.
+                    I am experienced with version control tools like Git and project management tools like Jira, which
+                    aid in collaborative
+                    development. Focused on delivering user-friendly applications with smooth performance, I am eager to
+                    embrace new
+                    challenges and contribute to innovative projects.
+                </div>
+                <div class="tags">
+                    <span>Key Points : </span>
+                    <span class="badge">Android</span>
+                    <span class="badge">MVI</span>
+                    <span class="badge">MVVM</span>
+                    <span class="badge">Network handling</span>
+                    <span class="badge">Room</span>
+                    <span class="badge">Jetpack compose</span>
+                </div>
+                <div class="sub-heading">Angular (Framework)</div>
+                <div class="paragraph">
+                    I am proficient in building reusable components and modules in Angular, enabling efficient and
+                    maintainable codebases.
+                    With experience in Angular Material, I create modern, responsive, and visually appealing user
+                    interfaces. I am skilled
+                    in implementing state management and handling dynamic data using RxJS, ensuring seamless application
+                    behavior. My
+                    expertise extends to integrating RESTful APIs, allowing the development of dynamic and scalable
+                    applications.
+                    Additionally, I have a strong understanding of TypeScript and component-driven architecture, which
+                    supports the creation
+                    of robust and well-structured Angular applications.
+                </div>
+                <div class="tags">
+                    <span>Key Points : </span>
+                    <span class="badge">Angular</span>
+                    <span class="badge">Modules</span>
+                    <span class="badge">Material</span>
+                    <span class="badge">Network handling</span>
+                    <span class="badge">RxJS</span>
+                    <span class="badge">RESTful API</span>
+                </div>
+            </div>
+
+            <div class="section" id="education">
+                <div class="heading">Education</div>
+                <div class="sub-heading">Bachelor's of Technology in Computer Science Engineering (2020-2024)</div>
+            </div>
+
+            <div class="section" id="projects">
+                <div class="heading">Projects</div>
+                <div class="paragraph">
+                    Below is list of some of my personal project developed by me throughout this journey in different
+                    technologies including Android, Angular, Bootstrap 5, C, etc
+                </div>
+
+
+                <!-- Zynance - Easy Expense Tracker -->
+                <div class="sub-heading">Zynance - Easy Expense Tracker Android Application</div>
+                <div class="paragraph">
+                    Zynance is an Android application designed for managing expenses. Users can perform CRUD operations
+                    on their expenses
+                    and expense categories. Additionally, the app provides various views to track expenses, including
+                    bar charts, pie
+                    charts, and a tabular view. With support for Room, Coroutines, and the MVVM architecture, this app
+                    ensures a clean and
+                    efficient approach to managing personal finances.</br>
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/Zynance
+                        </span>
+                        <a class="icon-copy" title="Visit repository" href="https://github.com/shyamkanth/Zynance"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Clone</span>
+                        <span class="code-content" id="zynanace">
+                            https://github.com/shyamkanth/Zynance.git
+                        </span>
+                        <span class="icon-copy" title="Copy to clipboard" onclick="copyToClipboard('zynanace')">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                        </span>
+                    </div>
+                    <div class="tags">
+                        <span>Technology used : </span>
+                        <span class="badge">Room</span>
+                        <span class="badge">Coroutines</span>
+                        <span class="badge">MVVM Architecture</span>
+                        <span class="badge">Charts</span>
+                    </div>
+                </div>
+
+                <!-- Hey ToDo - Classic Todo Application -->
+                <div class="sub-heading">Hey ToDo - A Classic ToDo Android Application</div>
+                <div class="paragraph">
+                    Hey Todo is an Android application that allows users to manage their tasks in real-time. Users can
+                    create, read, update,
+                    and delete tasks with ease. It provides a simple and intuitive interface for task management,
+                    ensuring users can stay on
+                    top of their to-dos with minimal effort.
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/Hey-Todo
+                        </span>
+                        <a class="icon-copy" title="Visit repository" href="https://github.com/shyamkanth/Hey-Todo"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Clone</span>
+                        <span class="code-content" id="heytodo">
+                            https://github.com/shyamkanth/Hey-Todo.git
+                        </span>
+                        <span class="icon-copy" title="Copy to clipboard" onclick="copyToClipboard('heytodo')">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                        </span>
+                    </div>
+                    <div class="tags">
+                        <span>Technology used : </span>
+                        <span class="badge">Kotlin</span>
+                        <span class="badge">Coroutines</span>
+                        <span class="badge">MVVM Architecture</span>
+                        <span class="badge">Room</span>
+                    </div>
+                </div>
+
+                <!-- BotBook - A Browser Notebook -->
+                <div class="sub-heading">BotBook - A Browser Notebook</div>
+                <div class="paragraph">
+                    A simple browser-based notebook built using HTML, CSS, JavaScript, and Bootstrap that allows users
+                    to create, edit,
+                    delete, and save multiple notes in real-time. The data is stored locally using localStorage,
+                    ensuring that your notes
+                    persist even after the browser is closed.
+                    <div class="code">
+                        <span class="title">See Live</span>
+                        <span class="code-content">
+                            https://shyamkanth.github.io/BotBook/
+                        </span>
+                        <a class="icon-copy" title="See in action" href="https://shyamkanth.github.io/BotBook/"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/BotBook
+                        </span>
+                        <a class="icon-copy" title="Visit repository" href="https://github.com/shyamkanth/BotBook"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Clone</span>
+                        <span class="code-content" id="botbook">
+                            https://github.com/shyamkanth/BotBook.git
+                        </span>
+                        <span class="icon-copy" title="Copy to clipboard" onclick="copyToClipboard('botbook')">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                        </span>
+                    </div>
+                    <div class="tags">
+                        <span>Technology used : </span>
+                        <span class="badge">HTML5</span>
+                        <span class="badge">CSS3</span>
+                        <span class="badge">JavaScript</span>
+                        <span class="badge">localStorage</span>
+                    </div>
+                </div>
+
+                <!-- APIHub - Api Documenttion Portal -->
+                <div class="sub-heading">ApiHub - An API Documentation Portal</div>
+                <div class="paragraph">
+                    An API documentation portal built using the Angular framework that allows you to manage and track
+                    all your APIs locally
+                    in your browser. Everything is stored in localStorage, ensuring complete data privacy without any
+                    external dependencies.
+                    You can create multiple registries and document any number of APIs within them. The portal features
+                    a user-friendly
+                    interface designed for ease of use, making API management seamless and efficient.
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/ApiHub
+                        </span>
+                        <a class="icon-copy" title="Visit repository" href="https://github.com/shyamkanth/ApiHub"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Clone</span>
+                        <span class="code-content" id="apihub">
+                            https://github.com/shyamkanth/ApiHub.git
+                        </span>
+                        <span class="icon-copy" title="Copy to clipboard" onclick="copyToClipboard('apihub')">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                        </span>
+                    </div>
+                    <div class="tags">
+                        <span>Technology used : </span>
+                        <span class="badge">Angular</span>
+                        <span class="badge">localStorage</span>
+                    </div>
+                </div>
+
+                <!-- Calculator in c -->
+                <div class="sub-heading">Calculator - A Multifunctional Calculator in C</div>
+                <div class="paragraph">
+                    This project is a multifunctional calculator written in C, capable of performing 18 diverse
+                    operations, making it a
+                    versatile tool for both basic and advanced calculations. It supports arithmetic operations like
+                    addition, subtraction,
+                    multiplication, and division, along with advanced mathematical functions such as square, square
+                    root, factorial, sine,
+                    cosine, tangent, natural logarithm, and log base 10. Additionally, it includes powerful matrix
+                    operations like
+                    determinant calculation, finding minors and cofactors, computing the adjoint and inverse of a
+                    matrix, and solving
+                    systems of linear equations with three variables. Designed for efficiency and functionality, this
+                    calculator serves as a
+                    comprehensive solution for various computational needs.
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/ApiHub-GEAJSNAS-A
+                        </span>
+                        <a class="icon-copy" title="Visit repository" href="https://github.com/shyamkanth/ApiHub"
+                            target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Visit</span>
+                        <span class="code-content">
+                            https://github.com/shyamkanth/Calculator-in-c
+                        </span>
+                        <a class="icon-copy" title="Visit repository"
+                            href="https://github.com/shyamkanth/Calculator-in-c" target="_blank">
+                            <span class="material-symbols-outlined">
+                                arrow_outward
+                            </span>
+                        </a>
+                    </div>
+                    <div class="code">
+                        <span class="title">Clone</span>
+                        <span class="code-content" id="c">
+                            https://github.com/shyamkanth/Calculator-in-c.git
+                        </span>
+                        <span class="icon-copy" title="Copy to clipboard" onclick="copyToClipboard('c')">
+                            <span class="material-symbols-outlined">
+                                content_copy
+                            </span>
+                        </span>
+                    </div>
+                    <div class="tags">
+                        <span>Technology used : </span>
+                        <span class="badge">C</span>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
-    </main>
-    <!--Main Body ends-->
-    <!--Footer starts-->
-    <footer class="bg-dark" style="color: white;padding: 20px 50px;">
-        <div class="row">
-            <div class="col-xl-4">
-                <p style="font-size: 25px;">For any query contact me.</p>
-                <a href="mailto:shyamkanth8050@gmail.com"><button class="btn btn-info" style="padding: 10px 100px; color: white;">Contact me</button></a>
-                <p style="margin-top: 88px;">2022 copyright &#169; all right reserved.</p>
+
+        <div class="sidebar">
+            <div class="menu">
+                <a class="menu-item" href="#introduction">Introduction</a>
+                <a class="menu-item" href="#experience">Experience</a>
+                <a class="menu-item" href="#education">Education</a>
+                <a class="menu-item" href="#projects">Projects</a>
             </div>
-            <div class="col-xl-4">
-                <p style="font-size: 25px;">More from me</p>
-                <ul id="more">
-                    <li>
-                        <a href="https://youtube.com/@DevelopersByte" target="_blank">Educator at YouTube. Click to see</a>
-                    </li>
-                    <li>
-                        <a href="https://shyamkanth.blogspot.com" target="_blank">Click here to learn with me.</a>
-                    </li>
-                    <li><a href="https://shyamkanth.blogspot.com/p/unlocking-world-of-c-and-c-coding-your.html" target="_blank">Click here to see programs</a></li>
-                    <li><a href="https://shyamkanth.blogspot.com/p/academic-excellence-your-source-for-cse.html" target="_blank">Click here to view Question library.</a></li>
-                    <li><a href="https://shyamkanth.blogspot.com/search/label/Data-Structure" target="_blank">Dive dep into Data Structure</a></li>
-                </ul>
+
+            <div class="connect">
+                <span class="sub-heading">Connect</span>
+                <div class="connect-item">
+                    <img class="connect-img" src="./images/github.png" alt="Github">
+                    <a class="connect-link" href="https://github.com/shyamkanth" target="_blank">/shyamkanth</a>
+                </div>
+                <div class="connect-item">
+                    <img class="connect-img" src="./images/linkedin.png" alt="Linkedin">
+                    <a class="connect-link" href="https://www.linkedin.com/in/shyam-sunder-kanth-0a8934182/"
+                        target="_blank">/shyam-sunder-kanth-0a8934182</a>
+                </div>
+                <div class="connect-item">
+                    <img class="connect-img" src="./images/gmail.png" alt="Gmail">
+                    <a class="connect-link" href="mailto:shyamkanth0805@gmail.com">Shyam Sunder Kanth</a>
+                </div>
             </div>
-            <div class="col-xl-4">
-                <p style="font-size: 25px;">Should we end now :( </p>
-                <p>Felling sad to see you go :( Hope we meet again :)</p>
-                <p style="font-size: 30px;font-family: sans-serif;color: #d6a829;">Thank You !</p> 
+
+            <div class="connect">
+                <span class="sub-heading">Other Links</span>
+                <div class="connect-item">
+                    <img class="connect-img" src="./images/youtube.png" alt="YouTube">
+                    <a class="connect-link" href="https://www.youtube.com/@DevelopersByte">DevelopersByte</a>
+                </div>
+                <div class="connect-item">
+                    <img class="connect-img" src="./images/blogger.png" alt="Blogger">
+                    <a class="connect-link" href="https://shyamkanth.blogspot.com" target="_blank">/shyamkanth</a>
+                </div>
             </div>
         </div>
-    </footer>
-    <!--Footer ends-->
+    </div>
+    </div>
+
 </body>
-<!--Body ends-->
+
 </html>
+
+
+
+<!-- 
+
+
+-->
