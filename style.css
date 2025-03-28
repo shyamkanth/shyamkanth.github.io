@@ -163,10 +163,14 @@ body, html{
 
 @media (max-width: 900px) {
     #topbar{
+        padding: 10px;
         height: fit-content;
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+    }
+    #main{
+        padding: 10px;
     }
     #title{
         align-items: center;
@@ -175,7 +179,7 @@ body, html{
         display: none;
     }
     #name{
-    font-size: 30px;
+    font-size: 24px;
     }
     #bio{
         font-size: 16px;
