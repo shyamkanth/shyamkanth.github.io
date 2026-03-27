@@ -1,0 +1,366 @@
+{
+  "blogs": [
+    {
+      "id": "understanding-kotlin-coroutines",
+      "title": "Understanding Kotlin Coroutines: From Basics to Advanced",
+      "author": "Shyam Sunder Kanth",
+      "date": "2024-03-15",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      "tags": ["kotlin", "android", "coroutines", "async"],
+      "excerpt": "A comprehensive guide to Kotlin coroutines, exploring structured concurrency, exception handling, and real-world use cases.",
+      "readTime": "8 min read",
+      "content": [
+        {
+          "type": "heading",
+          "text": "What are Coroutines?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kotlin coroutines are a powerful abstraction for managing asynchronous code in a simpler, more readable way. Unlike traditional callbacks or threads, coroutines provide a lightweight alternative that can be suspended and resumed without blocking threads."
+        },
+        {
+          "type": "heading",
+          "text": "Why Use Coroutines?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Before coroutines, Android developers relied on callbacks or RxJava for asynchronous operations. These approaches often led to callback hell and made code harder to understand. Coroutines solve this problem by allowing you to write asynchronous code in a sequential, synchronous-looking manner."
+        },
+        {
+          "type": "heading",
+          "level": "h3",
+          "text": "Key Benefits"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Lightweight - thousands of coroutines can run on a single thread",
+            "Non-blocking - suspending a coroutine doesn't block threads",
+            "Readable - sequential code without deep nesting",
+            "Structured concurrency - automatic cancellation and lifecycle management"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Getting Started"
+        },
+        {
+          "type": "paragraph",
+          "text": "Let's start with a simple example of launching a coroutine:"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "viewModelScope.launch {\n    val user = fetchUser(userId)\n    updateUI(user)\n}\n\nsuspend fun fetchUser(id: Int): User {\n    return withContext(Dispatchers.IO) {\n        // Network call\n        api.getUser(id)\n    }\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "In this example, `launch` creates a new coroutine in the viewModelScope. The `suspend` function can be paused without blocking the thread. `withContext(Dispatchers.IO)` switches to an IO dispatcher for the network call."
+        },
+        {
+          "type": "heading",
+          "text": "Structured Concurrency"
+        },
+        {
+          "type": "paragraph",
+          "text": "One of the most powerful features of Kotlin coroutines is structured concurrency. This principle ensures that all coroutines launched in a scope are cancelled when the scope is destroyed. This prevents memory leaks and ensures proper lifecycle management."
+        },
+        {
+          "type": "image",
+          "src": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+          "alt": "Kotlin code"
+        },
+        {
+          "type": "heading",
+          "text": "Exception Handling"
+        },
+        {
+          "type": "paragraph",
+          "text": "Coroutines provide elegant exception handling mechanisms:"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "try {\n    val result = supervisorScope {\n        async { fetchData1() }\n        async { fetchData2() }\n    }\n} catch (e: Exception) {\n    handleError(e)\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "Use `supervisorScope` when you want one failure to not affect other coroutines. This is different from `coroutineScope` where any failure cancels all children."
+        },
+        {
+          "type": "heading",
+          "text": "Conclusion"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kotlin coroutines have become an essential tool for modern Android development. By mastering structured concurrency, exception handling, and context switching, you can write more efficient and maintainable asynchronous code."
+        }
+      ]
+    },
+    {
+      "id": "jetpack-compose-state-management",
+      "title": "State Management in Jetpack Compose",
+      "author": "Shyam Sunder Kanth",
+      "date": "2024-03-08",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      "tags": ["android", "jetpack-compose", "ui", "state"],
+      "excerpt": "Master the art of managing state in Jetpack Compose with practical examples and best practices.",
+      "readTime": "10 min read",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introduction to Compose State"
+        },
+        {
+          "type": "paragraph",
+          "text": "Jetpack Compose is a declarative UI toolkit for Android that fundamentally changes how we think about state. Unlike the imperative XML-based approach, Compose makes state the center of UI composition."
+        },
+        {
+          "type": "heading",
+          "text": "Understanding Recomposition"
+        },
+        {
+          "type": "paragraph",
+          "text": "In Compose, when state changes, the framework automatically re-executes the composable function with the new state. This process is called recomposition, and it's optimized to only update UI elements that actually changed."
+        },
+        {
+          "type": "heading",
+          "level": "h3",
+          "text": "How Recomposition Works"
+        },
+        {
+          "type": "list",
+          "items": [
+            "State changes trigger recomposition",
+            "Compose compares old and new trees (skipping unchanged branches)",
+            "Only changed elements are re-rendered",
+            "The UI automatically stays in sync with state"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Using remember() and mutableStateOf()"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "@Composable\nfun Counter() {\n    var count by remember { mutableStateOf(0) }\n    \n    Column {\n        Text(\"Count: $count\")\n        Button(onClick = { count++ }) {\n            Text(\"Increment\")\n        }\n    }\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "`remember` ensures the state persists across recompositions, and `mutableStateOf` creates an observable state holder. When count changes, Compose automatically recomposes the function."
+        },
+        {
+          "type": "heading",
+          "text": "Lifting State Up"
+        },
+        {
+          "type": "paragraph",
+          "text": "A key principle in Compose is lifting state to the highest level where it's needed. This makes components reusable and testable."
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "@Composable\nfun ParentComponent() {\n    var selectedTab by remember { mutableStateOf(0) }\n    \n    Column {\n        TabRow(selectedTabIndex = selectedTab) {\n            Tab(selected = selectedTab == 0, onClick = { selectedTab = 0 })\n            Tab(selected = selectedTab == 1, onClick = { selectedTab = 1 })\n        }\n        \n        when (selectedTab) {\n            0 -> HomeTab()\n            1 -> ProfileTab()\n        }\n    }\n}"
+        },
+        {
+          "type": "heading",
+          "text": "State and ViewModel Integration"
+        },
+        {
+          "type": "paragraph",
+          "text": "For production apps, combine Compose with ViewModels and state management libraries like MVI or MVVM patterns."
+        },
+        {
+          "type": "heading",
+          "text": "Best Practices"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Keep state as local as possible",
+            "Use ViewModel for persistent state across config changes",
+            "Separate state from presentation logic",
+            "Use collectAsStateWithLifecycle for Flow-based state",
+            "Avoid storing mutable objects directly in state"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "angular-performance-optimization",
+      "title": "Angular Performance Optimization Tips",
+      "author": "Shyam Sunder Kanth",
+      "date": "2024-02-28",
+      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      "tags": ["angular", "typescript", "performance", "web"],
+      "excerpt": "Learn essential techniques to optimize your Angular applications for better performance and user experience.",
+      "readTime": "7 min read",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Performance Matters"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every millisecond counts in web applications. Slow applications lead to higher bounce rates, poor user satisfaction, and reduced conversions. Let's explore key optimization strategies for Angular apps."
+        },
+        {
+          "type": "heading",
+          "text": "1. Lazy Loading Routes"
+        },
+        {
+          "type": "paragraph",
+          "text": "Instead of loading all modules upfront, lazy load feature modules only when their routes are accessed. This significantly reduces initial bundle size."
+        },
+        {
+          "type": "code",
+          "language": "typescript",
+          "text": "const routes: Routes = [\n  {\n    path: 'admin',\n    loadChildren: () => import('./admin/admin.module')\n      .then(m => m.AdminModule),\n    canActivate: [AdminGuard]\n  }\n];"
+        },
+        {
+          "type": "heading",
+          "text": "2. Change Detection Optimization"
+        },
+        {
+          "type": "paragraph",
+          "text": "By default, Angular runs change detection on every event. Use OnPush strategy to detect changes only when inputs change or events fire."
+        },
+        {
+          "type": "code",
+          "language": "typescript",
+          "text": "@Component({\n  selector: 'app-user-card',\n  templateUrl: './user-card.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush\n})\nexport class UserCardComponent {\n  @Input() user!: User;\n}"
+        },
+        {
+          "type": "heading",
+          "text": "3. Code Splitting"
+        },
+        {
+          "type": "paragraph",
+          "text": "Use dynamic imports to split your code into smaller chunks that load on demand."
+        },
+        {
+          "type": "heading",
+          "text": "4. Tree Shaking"
+        },
+        {
+          "type": "paragraph",
+          "text": "Write modular code and use ES6 modules to enable tree shaking during the build process. This removes unused code from your final bundle."
+        },
+        {
+          "type": "heading",
+          "text": "5. Image Optimization"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Use WebP format with fallbacks",
+            "Implement lazy loading with IntersectionObserver",
+            "Compress images with tools like TinyPNG",
+            "Use responsive images with srcset"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "6. RxJS Optimization"
+        },
+        {
+          "type": "paragraph",
+          "text": "Unsubscribe from observables to prevent memory leaks. Use the async pipe or takeUntil pattern."
+        },
+        {
+          "type": "code",
+          "language": "typescript",
+          "text": "private destroy$ = new Subject<void>();\n\nngOnInit() {\n  this.userService.getUser()\n    .pipe(takeUntil(this.destroy$))\n    .subscribe(user => this.user = user);\n}\n\nngOnDestroy() {\n  this.destroy$.next();\n  this.destroy$.complete();\n}"
+        },
+        {
+          "type": "heading",
+          "text": "Conclusion"
+        },
+        {
+          "type": "paragraph",
+          "text": "Optimizing Angular applications requires a multi-faceted approach. Start by profiling your app with Chrome DevTools, identify bottlenecks, and apply these techniques strategically for maximum impact."
+        }
+      ]
+    },
+    {
+      "id": "room-database-best-practices",
+      "title": "Room Database Best Practices for Android",
+      "author": "Shyam Sunder Kanth",
+      "date": "2024-02-15",
+      "thumbnail": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=400&fit=crop",
+      "tags": ["android", "room", "database", "kotlin"],
+      "excerpt": "Master the Room persistence library with proven patterns and best practices for robust data storage.",
+      "readTime": "9 min read",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Why Room?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Room provides an abstraction layer over SQLite, offering compile-time verification, type safety, and boilerplate reduction. It's the recommended way to handle local data storage in Android."
+        },
+        {
+          "type": "heading",
+          "text": "Database Architecture"
+        },
+        {
+          "type": "paragraph",
+          "text": "A well-designed Room database should follow the repository pattern and be accessed through a single source of truth."
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "@Entity(tableName = \"users\")\ndata class User(\n    @PrimaryKey val id: String,\n    val name: String,\n    val email: String,\n    @ColumnInfo(name = \"created_at\") val createdAt: Long\n)\n\n@Dao\ninterface UserDao {\n    @Insert(onConflict = OnConflictStrategy.REPLACE)\n    suspend fun insertUser(user: User)\n    \n    @Query(\"SELECT * FROM users WHERE id = :id\")\n    fun getUser(id: String): Flow<User>\n    \n    @Delete\n    suspend fun deleteUser(user: User)\n}"
+        },
+        {
+          "type": "heading",
+          "text": "Async Operations with Coroutines"
+        },
+        {
+          "type": "paragraph",
+          "text": "Always perform database operations on appropriate dispatchers using coroutines. Room suspends functions run on Dispatchers.IO by default."
+        },
+        {
+          "type": "heading",
+          "text": "Using Flow for Reactive Updates"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "@Dao\ninterface UserDao {\n    @Query(\"SELECT * FROM users\")\n    fun getAllUsers(): Flow<List<User>>\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "Flow ensures that your UI automatically updates whenever the database changes. This is more efficient than polling or using LiveData."
+        },
+        {
+          "type": "heading",
+          "text": "Best Practices"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Use suspend functions for insert/update/delete operations",
+            "Return Flow for queries to get reactive updates",
+            "Implement proper indexing for frequently queried columns",
+            "Use migrations for schema changes",
+            "Keep your database version manageable",
+            "Test your DAOs with in-memory databases",
+            "Use Type Converters for complex objects"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Testing"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "@get:Rule\nval instantExecutorRule = InstantTaskExecutorRule()\n\n@Test\nfun insertAndRetrieveUser() = runTest {\n    val user = User(\"1\", \"John\", \"john@email.com\", System.currentTimeMillis())\n    userDao.insertUser(user)\n    \n    val retrieved = userDao.getUser(\"1\").first()\n    assertEquals(user, retrieved)\n}"
+        }
+      ]
+    }
+  ]
+}

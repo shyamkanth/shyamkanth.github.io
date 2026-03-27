@@ -133,6 +133,10 @@ body {
   display: none;
 }
 
+/* ============================================
+   NAVIGATION LINKS
+   ============================================ */
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -147,10 +151,292 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   transition: color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .nav-link:hover {
   color: var(--accent);
 }
+
+/* ============================================
+   DROPDOWN MENU
+   ============================================ */
+
+.nav-dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-icon {
+  font-size: 18px;
+  transition: transform 0.3s;
+}
+
+.nav-dropdown:hover .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 180px;
+  margin-top: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.25s ease;
+  z-index: 999;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 12px 18px;
+  color: var(--text-mid);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.dropdown-item:first-child {
+  border-radius: 5px 5px 0 0;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 5px 5px;
+}
+
+.dropdown-item:hover {
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+}
+
+/* ============================================
+   HAMBURGER MENU
+   ============================================ */
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  z-index: 1001;
+}
+
+.hamburger-line {
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(9px, 9px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* ============================================
+   MOBILE SIDEBAR
+   ============================================ */
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 998;
+  backdrop-filter: blur(4px);
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  z-index: 999;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sidebar-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.sidebar-close-btn:hover {
+  background: rgba(var(--accent-rgb), 0.1);
+  color: var(--accent);
+}
+
+.sidebar-close-btn .material-symbols-outlined {
+  font-size: 24px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex: 1;
+}
+
+.sidebar-link {
+  padding: 14px 24px;
+  color: var(--text-mid);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  background: rgba(var(--accent-rgb), 0.08);
+  color: var(--accent);
+  padding-left: 32px;
+}
+
+/* ============================================
+   SIDEBAR DROPDOWN
+   ============================================ */
+
+.sidebar-dropdown {
+  position: relative;
+}
+
+.sidebar-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-dropdown-toggle .dropdown-icon {
+  font-size: 18px;
+  transition: transform 0.3s;
+  margin-left: auto;
+}
+
+.sidebar-dropdown-toggle.active .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.sidebar-dropdown-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: rgba(var(--accent-rgb), 0.04);
+}
+
+.sidebar-dropdown-menu.active {
+  max-height: 400px;
+}
+
+.sidebar-dropdown-item {
+  padding: 12px 24px 12px 48px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: block;
+  transition: all 0.2s;
+}
+
+.sidebar-dropdown-item:hover {
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+  padding-left: 56px;
+}
+
+/* ============================================
+   THEME SWITCHER
+   ============================================ */
 
 .nav-cta {
   font-size: 13px;
@@ -1490,6 +1776,10 @@ body {
   animation: fadeInUp 0.8s ease 0.35s both;
 }
 
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
 @media (max-width: 1024px) {
   .full-text {
     display: none;
@@ -1529,10 +1819,37 @@ body {
   }
 }
 
+@media (max-width: 900px) {
+  .dropdown-menu {
+    position: fixed;
+  }
+
+  .nav-links {
+    gap: 1.5rem;
+  }
+
+  .dropdown-item {
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-links {
     display: none;
   }
+
+  .hamburger-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .theme-switcher {
+    margin-left: auto;
+    margin-right: 12px;
+  }
+
   .hero-section {
     padding: 96px 0 64px;
   }
@@ -1577,6 +1894,34 @@ body {
   }
   .hero-actions {
     flex-direction: column;
+  }
+
+  .hamburger-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hamburger-line {
+    width: 20px;
+  }
+
+  .mobile-sidebar {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .sidebar-nav {
+    padding: 16px 0;
+  }
+
+  .sidebar-link {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .sidebar-dropdown-item {
+    padding: 10px 20px 10px 44px;
+    font-size: 12px;
   }
 }
 

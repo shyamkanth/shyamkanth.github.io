@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shyam Sunder Kanth - Android & Angular Developer</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="/images/icon.png" />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap"
       rel="stylesheet"
@@ -28,13 +29,101 @@
           </span>
         </div>
         <div class="nav-links">
-          <a href="#about" class="nav-link">About</a>
-          <a href="#skills" class="nav-link">Stack</a>
-          <a href="#experience" class="nav-link">Experience</a>
-          <a href="#projects" class="nav-link">Projects</a>
-          <a href="#fun" class="nav-link">Fun</a>
+          <div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">
+              About
+              <span class="material-symbols-outlined dropdown-icon"
+                >expand_more</span
+              >
+            </button>
+            <div class="dropdown-menu">
+              <a href="#about" class="dropdown-item">Strength</a>
+              <a href="#skills" class="dropdown-item">Technical Stack</a>
+              <a href="#experience" class="dropdown-item">Experience</a>
+            </div>
+          </div>
+          <!-- Projects Dropdown -->
+          <div class="nav-dropdown">
+            <button class="nav-link dropdown-toggle">
+              Projects
+              <span class="material-symbols-outlined dropdown-icon"
+                >expand_more</span
+              >
+            </button>
+            <div class="dropdown-menu">
+              <a href="#projects" class="dropdown-item">All Projects</a>
+              <a href="#fun" class="dropdown-item">Just For Fun</a>
+            </div>
+          </div>
+          <a href="/blogs/" class="nav-link">BLOGS</a>
           <a href="#contact" class="nav-link">CONTACT</a>
         </div>
+
+        <!-- Hamburger Menu -->
+        <button
+          class="hamburger-btn"
+          id="hamburgerBtn"
+          aria-label="Toggle menu"
+        >
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Mobile Sidebar Menu -->
+        <div class="mobile-sidebar" id="mobileSidebar">
+          <div class="sidebar-header">
+            <button
+              class="sidebar-close-btn"
+              id="sidebarCloseBtn"
+              aria-label="Close menu"
+            >
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <nav class="sidebar-nav">
+            <div class="sidebar-dropdown">
+              <button
+                class="sidebar-link sidebar-dropdown-toggle"
+                data-dropdown="about-dropdown"
+              >
+                About
+                <span class="material-symbols-outlined dropdown-icon"
+                  >expand_more</span
+                >
+              </button>
+              <div class="sidebar-dropdown-menu" id="about-dropdown">
+                <a href="#about" class="sidebar-dropdown-item">About</a>
+                <a href="#skills" class="sidebar-dropdown-item">Stack</a>
+                <a href="#experience" class="sidebar-dropdown-item"
+                  >Experience</a
+                >
+              </div>
+            </div>
+            <!-- Sidebar Dropdown -->
+            <div class="sidebar-dropdown">
+              <button
+                class="sidebar-link sidebar-dropdown-toggle"
+                data-dropdown="projects-dropdown"
+              >
+                Projects
+                <span class="material-symbols-outlined dropdown-icon"
+                  >expand_more</span
+                >
+              </button>
+              <div class="sidebar-dropdown-menu" id="projects-dropdown">
+                <a href="#projects" class="sidebar-dropdown-item"
+                  >All Projects</a
+                >
+                <a href="#fun" class="sidebar-dropdown-item">Fun</a>
+              </div>
+            </div>
+            <a href="/blogs/" class="sidebar-link">BLOGS</a>
+            <a href="#contact" class="sidebar-link">CONTACT</a>
+          </nav>
+        </div>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <div class="theme-switcher">
           <button class="theme-btn android active" data-theme="android">
             <span class="theme-dot"></span>
@@ -311,6 +400,7 @@
             BUILT WITH KOTLIN & ANGULAR / DESIGNED IN DARK MODE
           </div>
           <div class="footer-links">
+            <a href="blogs/" class="footer-link">Blogs</a>
             <a
               href="https://github.com/shyamkanth"
               target="_blank"
