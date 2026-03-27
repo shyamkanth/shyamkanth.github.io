@@ -126,6 +126,13 @@ body {
   cursor: pointer;
 }
 
+#name-big {
+  display: inline;
+}
+#name-small {
+  display: none;
+}
+
 .nav-links {
   display: flex;
   align-items: center;
@@ -1513,6 +1520,12 @@ body {
   }
   .project-grid {
     grid-template-columns: 1fr;
+  }
+  #name-big {
+    display: none;
+  }
+  #name-small {
+    display: inline;
   }
 }
 
