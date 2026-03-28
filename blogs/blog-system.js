@@ -1,12 +1,7 @@
-// Blog System - Handles all blog functionality
 let allBlogs = [];
 let filteredBlogs = [];
 let selectedTag = "all";
 let sortOrder = "newest"; // 'newest' or 'oldest'
-
-// ============================================
-// DATA LOADING
-// ============================================
 
 async function loadBlogs() {
   try {
@@ -29,10 +24,6 @@ function getAllUniqueTags() {
   return Array.from(tags).sort();
 }
 
-// ============================================
-// SORT FUNCTIONALITY
-// ============================================
-
 function sortBlogs(blogs) {
   const sorted = [...blogs];
   sorted.sort((a, b) => {
@@ -40,18 +31,14 @@ function sortBlogs(blogs) {
     const dateB = new Date(b.date).getTime();
 
     if (sortOrder === "newest") {
-      return dateB - dateA; // Newest first (descending)
+      return dateB - dateA;
     } else {
-      return dateA - dateB; // Oldest first (ascending)
+      return dateA - dateB; 
     }
   });
 
   return sorted;
 }
-
-// ============================================
-// SEARCH & FILTER
-// ============================================
 
 function initializeSearchAndFilter() {
   const searchInput = document.getElementById("searchInput");
@@ -61,7 +48,6 @@ function initializeSearchAndFilter() {
   const tagsContainer = document.querySelector(".tags-filter-container");
   const sortBtns = document.querySelectorAll(".sort-btn");
 
-  // Initialize sticky search bar
   initializeStickySearchBar();
 
   if (searchInput) {
@@ -90,7 +76,6 @@ function initializeSearchAndFilter() {
     });
   });
 
-  // Sort functionality
   sortBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
       sortBtns.forEach((b) => b.classList.remove("active"));
@@ -100,7 +85,6 @@ function initializeSearchAndFilter() {
     });
   });
 
-  // Horizontal tag scrolling
   if (tagScrollBtn && tagsContainer) {
     tagScrollBtn.addEventListener("click", () => {
       tagsContainer.scrollBy({
@@ -123,7 +107,6 @@ function initializeStickySearchBar() {
     const navbarHeight = navbar ? navbar.offsetHeight : 68;
     const currentScroll = window.scrollY;
 
-    // Check if scroll position is below the original position of search section
     if (currentScroll > initialTop - navbarHeight) {
       searchSection.classList.add("sticky");
       searchSection.style.top = navbarHeight + "px";
@@ -147,15 +130,10 @@ function filterBlogs(searchQuery, tagFilter) {
     return matchesSearch && matchesTag;
   });
 
-  // Apply sorting
   filteredBlogs = sortBlogs(filteredBlogs);
 
   renderBlogsGrid();
 }
-
-// ============================================
-// RENDERING
-// ============================================
 
 function renderBlogsGrid() {
   const grid = document.getElementById("blogsGrid");
@@ -200,7 +178,6 @@ function renderBlogsGrid() {
     )
     .join("");
 
-  // Add click event to cards
   document.querySelectorAll(".blog-card").forEach((card, index) => {
     card.addEventListener("click", () => {
       const blogId = filteredBlogs[index].id;
@@ -224,7 +201,6 @@ function renderTagsFilter() {
     )
     .join("");
 
-  // Re-initialize click handlers for newly created buttons
   const tagFilterBtns = document.querySelectorAll(".tag-filter-btn");
   const searchInput = document.getElementById("searchInput");
 
@@ -242,17 +218,12 @@ function renderTagsFilter() {
 function initializeBlogSystem() {
   loadBlogs().then(() => {
     filteredBlogs = allBlogs;
-    // Apply initial sorting
     filteredBlogs = sortBlogs(filteredBlogs);
     renderBlogsGrid();
     renderTagsFilter();
     initializeSearchAndFilter();
   });
 }
-
-// ============================================
-// ARTICLE PAGE
-// ============================================
 
 async function loadAndRenderArticle() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -275,7 +246,6 @@ async function loadAndRenderArticle() {
   renderRelatedArticles(article, blogs);
   renderTableOfContents(article);
 
-  // Update page title and meta tags
   document.title = `${article.title} - Shyam Sunder Kanth`;
 }
 
@@ -311,7 +281,6 @@ function renderArticle(article) {
     <div class="article-body">
   `;
 
-  // Render content blocks
   article.content.forEach((block, index) => {
     switch (block.type) {
       case "heading":
@@ -369,12 +338,10 @@ function renderArticle(article) {
   htmlContent += "</div>";
   container.innerHTML = htmlContent;
 
-  // Highlight code blocks
   container.querySelectorAll("pre code").forEach((block) => {
     hljs.highlightElement(block);
   });
 
-  // Add copy functionality to code blocks
   container.querySelectorAll(".copy-code-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const codeIndex = parseInt(btn.getAttribute("data-code-index"));
@@ -423,7 +390,6 @@ function renderRelatedArticles(currentArticle, allArticles) {
   const relatedGrid = document.getElementById("relatedArticlesGrid");
   if (!relatedGrid) return;
 
-  // Find related articles by matching tags
   const related = allArticles
     .filter(
       (article) =>
@@ -456,10 +422,6 @@ function renderRelatedArticles(currentArticle, allArticles) {
     )
     .join("");
 }
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
 
 function formatDate(dateString) {
   const options = { year: "numeric", month: "long", day: "numeric" };

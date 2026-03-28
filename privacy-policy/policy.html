@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy — Shyam Sunder Kanth</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../images/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a class="nav-brand" href="/">
+          <div class="brand-icon">
+            <span class="material-symbols-outlined">terminal</span>
+          </div>
+          <span class="brand-name">SHYAM SUNDER KANTH</span>
+        </a>
+        <a href="/privacy-policy/" class="nav-back">
+          <span class="material-symbols-outlined">arrow_back</span>
+          All Policies
+        </a>
+      </div>
+    </nav>
+
+    <div class="page-wrapper" id="page-wrapper">
+      <div class="container" style="padding-top: 80px; padding-bottom: 80px">
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 640px;
+          "
+        >
+          <div
+            class="skeleton"
+            style="height: 80px; width: 80px; border-radius: 12px"
+          ></div>
+          <div class="skeleton" style="height: 32px; width: 55%"></div>
+          <div class="skeleton" style="height: 14px; width: 80%"></div>
+          <div class="skeleton" style="height: 14px; width: 60%"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="brand-dot"></div>
+            <span class="footer-brand-text">SHYAM.DEV © 2025</span>
+          </div>
+          <div class="footer-tech">
+            PRIVACY FIRST / ALL DATA STAYS ON YOUR DEVICE
+          </div>
+          <div class="footer-links">
+            <a href="/" class="footer-link">Portfolio</a>
+            <a href="/privacy-policy/" class="footer-link">All Policies</a>
+            <a
+              href="https://github.com/shyamkanth"
+              target="_blank"
+              class="footer-link"
+              >GitHub</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      function getParam(name) {
+        return new URLSearchParams(window.location.search).get(name);
+      }
+
+      function buildSectionHTML(sec, idx) {
+        const num = `${String(idx + 1).padStart(2, "0")} //`;
+        let inner = "";
+
+        if (sec.subsections) {
+          inner = `
+            <div class="subsections">
+              ${sec.subsections
+                .map(
+                  (sub) => `
+                <div class="subsection">
+                  <p class="subsection-title">${sub.subtitle}</p>
+                  <p class="subsection-text">${sub.content}</p>
+                </div>`,
+                )
+                .join("")}
+            </div>`;
+        } else if (sec.list) {
+          const content = sec.content
+            ? `<p class="section-text">${sec.content}</p>`
+            : "";
+          inner = `
+            ${content}
+            <ul class="section-list" role="list">
+              ${sec.list
+                .map(
+                  (item) => `
+                <li class="section-list-item" role="listitem">
+                  <span class="list-bullet" aria-hidden="true"></span>
+                  <span>${item}</span>
+                </li>`,
+                )
+                .join("")}
+            </ul>`;
+        } else {
+          inner = `<p class="section-text">${sec.content || ""}</p>`;
+        }
+
+        const contactBlock = sec.contactEmail
+          ? `<div class="contact-block">
+               <span class="material-symbols-outlined">mail</span>
+               <a href="mailto:${sec.contactEmail}" class="contact-email">${sec.contactEmail}</a>
+             </div>`
+          : "";
+
+        return `
+          <div class="policy-section" id="${sec.id}">
+            <p class="section-num">${num}</p>
+            <h2 class="section-title">${sec.title}</h2>
+            ${inner}
+            ${contactBlock}
+          </div>`;
+      }
+
+      function buildTOC(sections) {
+        return sections
+          .map(
+            (sec, i) => `
+          <li class="toc-item" id="toc-${sec.id}">
+            <a href="#${sec.id}">
+              <span class="toc-num">${String(i + 1).padStart(2, "0")}</span>
+              ${sec.title}
+            </a>
+          </li>`,
+          )
+          .join("");
+      }
+
+      function renderNotFound() {
+        document.getElementById("page-wrapper").innerHTML = `
+          <div class="container">
+            <div class="not-found">
+              <div class="not-found-code">404</div>
+              <h2>Policy Not Found</h2>
+              <p>The privacy policy you're looking for doesn't exist or has been moved.</p>
+              <a href="/privacy-policy/" class="btn-back">
+                <span class="material-symbols-outlined">arrow_back</span>
+                View All Policies
+              </a>
+            </div>
+          </div>`;
+      }
+
+      function renderPolicy(policy) {
+        document.title = `${policy.appName} — Privacy Policy`;
+
+        const heroHTML = `
+          <section class="policy-hero">
+            <div class="container">
+              <div class="hero-inner animate-up">
+                <div class="hero-emoji-block" aria-hidden="true">${policy.emoji}</div>
+                <div class="hero-text">
+                  <div class="hero-breadcrumb">
+                    <a href="/privacy-policy/">Privacy Policies</a>
+                    <span class="sep">/</span>
+                    <span>${policy.appName}</span>
+                  </div>
+                  <h1 class="hero-app-name">
+                    ${policy.appName
+                      .split(" ")
+                      .map((w, i) =>
+                        i === policy.appName.split(" ").length - 1
+                          ? `<span>${w}</span>`
+                          : w,
+                      )
+                      .join(" ")}
+                  </h1>
+                  <p class="hero-tagline">${policy.tagline}</p>
+                  <div class="hero-tags">
+                    ${policy.tags.map((t) => `<span class="hero-tag">${t}</span>`).join("")}
+                  </div>
+                  <div class="hero-info-row">
+                    <span class="info-chip">
+                      <span class="material-symbols-outlined">calendar_today</span>
+                      Effective ${policy.effectiveDate}
+                    </span>
+                    <span class="info-chip">
+                      <span class="material-symbols-outlined">update</span>
+                      Updated ${policy.lastUpdated}
+                    </span>
+                    <span class="info-chip">
+                      <span class="material-symbols-outlined">smartphone</span>
+                      ${policy.platform}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="container">
+              <div class="detail-layout">
+                <!-- TOC -->
+                <aside class="toc-sidebar" aria-label="Table of contents">
+                  <p class="toc-label">Contents</p>
+                  <ul class="toc-list" id="toc-list">
+                    ${buildTOC(policy.sections)}
+                  </ul>
+                </aside>
+
+                <!-- Content -->
+                <article class="policy-content" id="policy-content">
+                  ${policy.sections.map((sec, i) => buildSectionHTML(sec, i)).join("")}
+                </article>
+              </div>
+            </div>
+          </section>`;
+
+        document.getElementById("page-wrapper").innerHTML = heroHTML;
+
+        const sectionEls = document.querySelectorAll(".policy-section");
+        const tocItems = document.querySelectorAll(".toc-item");
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const id = entry.target.id;
+                tocItems.forEach((item) => item.classList.remove("active"));
+                const active = document.getElementById(`toc-${id}`);
+                if (active) active.classList.add("active");
+              }
+            });
+          },
+          { rootMargin: "-20% 0px -70% 0px" },
+        );
+
+        sectionEls.forEach((el) => observer.observe(el));
+      }
+
+      async function init() {
+        const id = getParam("id");
+        if (!id) {
+          renderNotFound();
+          return;
+        }
+
+        try {
+          const res = await fetch("data/policy-data.json");
+          const policies = await res.json();
+          const policy = policies.find((p) => p.id === id);
+          if (!policy) {
+            renderNotFound();
+            return;
+          }
+          renderPolicy(policy);
+        } catch (err) {
+          renderNotFound();
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "password-vault",
+    "appName": "Password Vault",
+    "tagline": "Local-first password manager with AES encryption",
+    "emoji": "🔐",
+    "platform": "Android",
+    "version": "1.0",
+    "effectiveDate": "September 9, 2025",
+    "lastUpdated": "September 9, 2025",
+    "tags": ["ANDROID", "LOCAL STORAGE", "AES ENCRYPTION"],
+    "contact": "shyamsunderkanth+passwordvault@gmail.com",
+    "color": "#00ff87",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "content": "Welcome to Password Vault. Your privacy is important to us. This Privacy Policy explains how our app handles your information, including what data we collect, how we use it, and your rights regarding that data."
+      },
+      {
+        "id": "information-we-collect",
+        "title": "Information We Collect",
+        "subsections": [
+          {
+            "subtitle": "Personal Data",
+            "content": "We do not collect, store, or share any personal data such as your name, email address, or phone number."
+          },
+          {
+            "subtitle": "Passwords and Sensitive Information",
+            "content": "All passwords, usernames, notes, and related information you store in Password Vault are saved locally on your device. This data is encrypted and never uploaded to our servers."
+          },
+          {
+            "subtitle": "Usage Data",
+            "content": "We may collect anonymous usage information such as app performance, error logs, and crash reports to improve the quality and stability of the app."
+          }
+        ]
+      },
+      {
+        "id": "how-we-use",
+        "title": "How We Use Information",
+        "list": [
+          "To ensure secure storage of your passwords locally on your device.",
+          "To provide features such as password strength checking and vault management.",
+          "To analyze app performance and fix bugs or crashes."
+        ]
+      },
+      {
+        "id": "data-security",
+        "title": "Data Security",
+        "content": "Your data security is our priority. Password Vault uses strong encryption methods to protect your saved information. Since the data never leaves your device, you are in full control of your information."
+      },
+      {
+        "id": "data-sharing",
+        "title": "Data Sharing",
+        "content": "We do not share, sell, or transmit your personal information or stored passwords to any third parties."
+      },
+      {
+        "id": "third-party",
+        "title": "Third-Party Services",
+        "content": "Password Vault may use third-party libraries such as Firebase for crash reporting. These services collect only non-identifiable information to help improve app stability."
+      },
+      {
+        "id": "your-rights",
+        "title": "Your Rights",
+        "content": "Since all your data is stored locally on your device, you may manage, delete, or back up your information at any time through the app's settings."
+      },
+      {
+        "id": "changes",
+        "title": "Changes to This Privacy Policy",
+        "content": "We may update this Privacy Policy from time to time. Changes will be posted within the app and on this page with an updated effective date."
+      },
+      {
+        "id": "contact",
+        "title": "Contact Us",
+        "content": "If you have any questions or concerns about this Privacy Policy or the app, please contact us at:",
+        "contactEmail": "shyamsunderkanth+passwordvault@gmail.com"
+      }
+    ]
+  },
+  {
+    "id": "japnaam",
+    "appName": "Japnaam",
+    "tagline": "Spiritual jaap tracker with aartis and chalisa collection",
+    "emoji": "🕉️",
+    "platform": "Android",
+    "version": "1.0",
+    "effectiveDate": "September 9, 2025",
+    "lastUpdated": "September 9, 2025",
+    "tags": ["ANDROID", "LOCAL STORAGE", "OFFLINE FIRST"],
+    "contact": "shyamsunderkanth+japnaam@gmail.com",
+    "color": "#00ff87",
+    "sections": [
+      {
+        "id": "introduction",
+        "title": "Introduction",
+        "content": "Welcome to Japnaam. Your privacy is important to us. This Privacy Policy explains how our app manages your data, including what information we collect, how we use it, and your rights regarding that information."
+      },
+      {
+        "id": "information-we-collect",
+        "title": "Information We Collect",
+        "content": "Japnaam is designed to help you track your jaap (chant counts), access a wide list of aartis, and manage your spiritual practices. We do not collect or store any personal information such as your name, email, or phone number. All your jaap counts, preferences, and notes are stored locally on your device. This information is never uploaded to our servers."
+      },
+      {
+        "id": "usage-data",
+        "title": "Usage Data",
+        "content": "We may collect anonymous usage information such as crash reports and app performance data. This is done only to improve the stability and experience of the app. No personal or sensitive information is collected in this process."
+      },
+      {
+        "id": "how-we-use",
+        "title": "How We Use Information",
+        "list": [
+          "Track and display your jaap counts.",
+          "Provide you access to aartis and related spiritual content.",
+          "Enhance your app experience with personalized features.",
+          "Fix bugs and improve app performance through crash reports."
+        ]
+      },
+      {
+        "id": "data-security",
+        "title": "Data Security",
+        "content": "We prioritize your privacy and data security. All jaap counts and related data are stored locally, ensuring that you remain in full control of your information. Since the app does not require internet to function, your data stays private."
+      },
+      {
+        "id": "data-sharing",
+        "title": "Data Sharing",
+        "content": "Japnaam does not share, sell, or transmit your personal information or jaap counts to any third parties."
+      },
+      {
+        "id": "third-party",
+        "title": "Third-Party Services",
+        "content": "The app may use third-party libraries, such as Firebase, for crash reporting. These services collect only non-identifiable information necessary for improving the app's stability."
+      },
+      {
+        "id": "changes",
+        "title": "Changes to This Privacy Policy",
+        "content": "We may update this Privacy Policy from time to time. Updates will be reflected in the app and on this page with a revised effective date."
+      },
+      {
+        "id": "contact",
+        "title": "Contact Us",
+        "content": "If you have any questions or concerns about this Privacy Policy or the app, please contact us at:",
+        "contactEmail": "shyamsunderkanth+japnaam@gmail.com"
+      }
+    ]
+  }
+]

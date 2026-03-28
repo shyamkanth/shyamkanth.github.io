@@ -68,10 +68,6 @@ body {
   padding: 0 2.5rem;
 }
 
-/* ============================================
-   NAVBAR
-   ============================================ */
-
 .navbar {
   position: fixed;
   top: 0;
@@ -86,7 +82,7 @@ body {
 .nav-container {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 0 2.5rem;
+  padding: 0 1rem;
   height: 68px;
   display: flex;
   align-items: center;
@@ -97,6 +93,32 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
+}
+
+.nav-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+.nav-back:hover {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.3);
+}
+
+.nav-back .material-symbols-outlined {
+  font-size: 18px;
 }
 
 .brand-icon {
@@ -169,10 +191,6 @@ body {
   background: var(--accent);
 }
 
-/* ============================================
-   BLOG HERO
-   ============================================ */
-
 .blog-hero {
   min-height: 25vh;
   display: flex;
@@ -212,10 +230,6 @@ body {
   margin: 0 auto;
   line-height: 1.7;
 }
-
-/* ============================================
-   SEARCH SECTION - WITH STICKY BEHAVIOR
-   ============================================ */
 
 .blog-search-section {
   padding: 40px 0 30px;
@@ -316,18 +330,14 @@ body {
   font-size: 18px;
 }
 
-/* ============================================
-   SORT SECTION
-   ============================================ */
-
 .sort-section {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding-top: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
+  padding-top: 20px;
+  padding-bottom: 20px;
   justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
 .sort-label {
@@ -394,16 +404,10 @@ body {
   transform: translateY(2px);
 }
 
-/* ============================================
-   TAGS FILTER - HORIZONTAL SCROLL
-   ============================================ */
-
 .tags-filter-wrapper {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-top: 24px;
-  margin-bottom: 48px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border);
 }
@@ -467,7 +471,6 @@ body {
   gap: 8px;
 }
 
-/* Tag Scroll Button */
 .tag-scroll-btn {
   background: rgba(var(--accent-rgb), 0.1);
   border: 1px solid rgba(var(--accent-rgb), 0.2);
@@ -492,10 +495,6 @@ body {
 .tag-scroll-btn .material-symbols-outlined {
   font-size: 20px;
 }
-
-/* ============================================
-   BLOG GRID
-   ============================================ */
 
 .blogs-grid {
   display: grid;
@@ -695,20 +694,6 @@ body {
   max-width: 400px;
 }
 
-/* ============================================
-   ARTICLE TOP BAR (BACK BUTTON)
-   ============================================ */
-
-.article-top-bar {
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border);
-  background: rgba(8, 9, 9, 0.95);
-  backdrop-filter: blur(10px);
-  z-index: 50;
-  margin-top: 68px;
-  margin-bottom: 20px;
-}
-
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -741,16 +726,12 @@ body {
   padding: 0 2.5rem;
 }
 
-/* ============================================
-   ARTICLE PAGE
-   ============================================ */
-
 .article-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 2.5rem 60px;
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 60px;
 }
 
@@ -832,6 +813,8 @@ body {
 .article-body {
   padding: 0;
   line-height: 1.9;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .article-heading {
@@ -860,6 +843,8 @@ body {
   font-size: 16px;
   color: var(--text-mid);
   margin-bottom: 20px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .article-code-block {
@@ -868,6 +853,8 @@ body {
   border-radius: 8px;
   margin: 32px 0;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .code-header {
@@ -914,12 +901,17 @@ body {
 }
 
 .article-code-block pre {
-  margin: 0;
-  padding: 16px;
+  display: block;
+  width: 100%;
   overflow-x: auto;
+  white-space: pre;
+  padding: 16px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .article-code-block code {
+  display: inline-block;
+  min-width: 100%;
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.6;
@@ -935,6 +927,9 @@ body {
   border-radius: 8px;
   border: 1px solid var(--border);
   margin-bottom: 12px;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .article-figure figcaption {
@@ -955,6 +950,8 @@ body {
   position: relative;
   color: var(--text-mid);
   font-size: 16px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .article-list li::before {
@@ -982,10 +979,6 @@ body {
   font-size: 14px;
   font-family: var(--font-mono);
 }
-
-/* ============================================
-   TABLE OF CONTENTS
-   ============================================ */
 
 .article-sidebar {
   position: sticky;
@@ -1037,16 +1030,14 @@ body {
   border-left: 2px solid transparent;
   padding-left: 12px;
   transition: all 0.2s;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .toc-link:hover {
   color: var(--accent);
   border-left-color: var(--accent);
 }
-
-/* ============================================
-   RELATED ARTICLES
-   ============================================ */
 
 .related-articles {
   padding: 80px 0;
@@ -1149,10 +1140,6 @@ body {
   gap: 8px;
 }
 
-/* ============================================
-   FOOTER
-   ============================================ */
-
 .footer {
   padding: 32px 0;
   border-top: 1px solid var(--border);
@@ -1207,13 +1194,14 @@ body {
   color: var(--accent);
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+.article-toc {
+  padding: 16px;
+  margin-bottom: 40px;
+}
 
 @media (max-width: 1024px) {
   .article-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 40px;
   }
 
@@ -1224,6 +1212,10 @@ body {
   .blogs-grid {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+  }
+  .article-toc {
+    padding: 16px;
+    margin-bottom: 40px;
   }
 }
 
@@ -1248,7 +1240,7 @@ body {
   }
 
   .blog-search-section {
-    padding: 30px 0 20px;
+    padding: 20px 0 20px;
   }
 
   .blog-search-section.sticky {
@@ -1275,6 +1267,11 @@ body {
 
   .contact-form-container {
     padding: 28px;
+  }
+
+  .article-code-block pre {
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
   .timeline-item {
@@ -1316,10 +1313,6 @@ body {
     padding: 70px 1.25rem 40px;
   }
 
-  .article-top-bar {
-    top: 68px;
-  }
-
   .article-sidebar {
     position: static;
   }
@@ -1327,6 +1320,14 @@ body {
   .blogs-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+
+  .article-toc {
+    padding: 16px;
+    margin-bottom: 40px;
+  }
+  .copy-code-btn {
+    display: none;
   }
 }
 
@@ -1337,6 +1338,28 @@ body {
     padding: 0 1.25rem;
   }
 
+  body {
+    font-size: 16px;
+  }
+
+  .brand-name {
+    display: none;
+  }
+  .article-code-block pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .article-container {
+    padding: 20px 1.5rem 30px !important;
+    gap: 20px;
+    margin-top: 75px !important;
+  }
+
+  .blog-hero {
+    margin-top: 20px;
+  }
+
   .blog-hero-subtitle {
     font-size: 14px;
   }
@@ -1345,7 +1368,6 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    padding-bottom: 20px;
   }
 
   .sort-buttons-group {
@@ -1365,39 +1387,79 @@ body {
   }
 
   .article-title {
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 1.3;
+    margin-bottom: 16px;
   }
 
   .article-heading {
-    font-size: 20px;
-    margin-top: 32px;
+    font-size: 18px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+  }
+
+  .article-body h3 {
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 12px;
   }
 
   .article-meta {
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    font-size: 12px;
   }
 
   .article-paragraph {
     font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 16px;
   }
 
   .article-code-block {
-    margin: 20px 0;
+    margin: 16px 0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    padding: 8px 12px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .code-language {
+    font-size: 11px;
+  }
+
+  .copy-code-btn {
+    display: none;
+    padding: 8px 12px;
+    font-size: 11px;
+    justify-content: center;
+  }
+
+  .article-code-block pre {
+    padding: 12px;
+    font-size: 11px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .article-code-block code {
-    font-size: 12px;
+    font-size: 11px;
+    line-height: 1.5;
   }
 
   .tags-filter-wrapper {
     gap: 6px;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .tag-filter-btn {
-    padding: 8px 14px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 11px;
   }
 
   .tag-scroll-btn {
@@ -1407,20 +1469,117 @@ body {
 
   .article-cover-image {
     height: 200px;
+    margin-bottom: 20px;
   }
 
-  .back-link {
+  .article-header {
+    margin-bottom: 30px;
+  }
+
+  .article-tags {
+    gap: 4px;
+  }
+
+  .article-tag {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .article-list {
+    margin: 16px 0;
+    padding: 0;
+  }
+
+  .article-list li {
+    padding-left: 20px;
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+
+  .article-list li::before {
+    font-size: 14px;
+  }
+
+  .article-quote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 0 16px 16px;
+    margin: 20px 0;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .article-quote footer {
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  .article-figure {
+    margin: 20px 0;
+  }
+
+  .article-image {
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .article-figure figcaption {
     font-size: 12px;
   }
 
-  .article-container {
-    padding: 60px 1.25rem 30px;
+  .back-link {
+    font-size: 11px;
+    padding: 12px 1.25rem;
+    padding-left: 0px;
+  }
+
+  .article-toc {
+    padding: 16px;
+    margin-bottom: 40px;
+  }
+
+  .toc-title {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .toc-link {
+    font-size: 12px;
+    padding: 4px 0;
+    padding-left: 8px;
+  }
+
+  .section-title {
+    font-size: 24px;
+    padding-bottom: 10px;
+    margin-bottom: 32px;
+  }
+
+  .related-grid {
+    gap: 16px;
+  }
+
+  .blog-card-small {
+    border-radius: 6px;
+  }
+
+  .blog-card-image-small {
+    height: 120px;
+  }
+
+  .blog-card-content-small {
+    padding: 16px;
+  }
+
+  .blog-card-title-small {
+    font-size: 14px;
+    margin: 8px 0;
+  }
+
+  .blog-card-link-small {
+    font-size: 11px;
+    margin-top: 6px;
   }
 }
-
-/* ============================================
-   SYNTAX HIGHLIGHTING (Highlight.js)
-   ============================================ */
 
 .hljs {
   background: var(--bg) !important;

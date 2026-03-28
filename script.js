@@ -153,7 +153,6 @@ const personalProjects = [
   },
   {
     name: "PayDay - EMI Reminder App",
-    name: "PayDay - EMI Reminder App",
     role: "Android Developer",
     duration: "In Progress",
     tags: ["KOTLIN", "ROOM", "MVVM", "DEPENDENCY INJECTION", "HILT"],
@@ -405,7 +404,7 @@ function switchProfile(platform) {
   if (heroTitle) heroTitle.textContent = isAndroid ? "ENGINEER" : "DEVELOPER";
   if (heroBadge)
     heroBadge.textContent = isAndroid
-      ? "Available for select projects"
+      ? "Open to new opportunities"
       : "Open to frontend opportunities";
   if (heroDesc)
     heroDesc.innerHTML = isAndroid
@@ -515,16 +514,10 @@ function initSmoothScroll() {
       e.preventDefault();
       const target = document.querySelector(href);
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-
-      // Close sidebar if open
       closeMobileSidebar();
     });
   });
 }
-
-/* ============================================
-   HAMBURGER MENU & SIDEBAR
-   ============================================ */
 
 function initHamburgerMenu() {
   const hamburgerBtn = document.getElementById("hamburgerBtn");
@@ -544,14 +537,13 @@ function initHamburgerMenu() {
     closeMobileSidebar();
   });
 
-  // Close sidebar when clicking on links
-  document
-    .querySelectorAll(".sidebar-link:not(.sidebar-dropdown-toggle)")
-    .forEach((link) => {
-      link.addEventListener("click", () => {
-        closeMobileSidebar();
-      });
-    });
+  // Close sidebar when any nav link or dropdown item is clicked
+  mobileSidebar.addEventListener("click", (e) => {
+    const clicked = e.target.closest(
+      ".sidebar-dropdown-item, .sidebar-link:not(.sidebar-dropdown-toggle)",
+    );
+    if (clicked) closeMobileSidebar();
+  });
 }
 
 function openMobileSidebar() {
@@ -576,10 +568,6 @@ function closeMobileSidebar() {
   document.body.style.overflow = "auto";
 }
 
-/* ============================================
-   SIDEBAR DROPDOWN
-   ============================================ */
-
 function initSidebarDropdown() {
   const dropdownToggles = document.querySelectorAll(".sidebar-dropdown-toggle");
 
@@ -589,7 +577,6 @@ function initSidebarDropdown() {
       const dropdownId = toggle.getAttribute("data-dropdown");
       const dropdownMenu = document.getElementById(dropdownId);
 
-      // Close other dropdowns
       document.querySelectorAll(".sidebar-dropdown-menu").forEach((menu) => {
         if (menu.id !== dropdownId) {
           menu.classList.remove("active");
@@ -597,7 +584,6 @@ function initSidebarDropdown() {
         }
       });
 
-      // Toggle current dropdown
       dropdownMenu.classList.toggle("active");
       toggle.classList.toggle("active");
     });
@@ -619,4 +605,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initSmoothScroll();
   initHamburgerMenu();
   initSidebarDropdown();
+  document.dispatchEvent(new Event("sidebarReady"));
 });
