@@ -33,7 +33,7 @@ function sortBlogs(blogs) {
     if (sortOrder === "newest") {
       return dateB - dateA;
     } else {
-      return dateA - dateB; 
+      return dateA - dateB;
     }
   });
 
@@ -238,7 +238,8 @@ async function loadAndRenderArticle() {
   const article = blogs.find((b) => b.id === articleId);
 
   if (!article) {
-    window.location.href = "index.html";
+    // window.location.href = "index.html";
+    renderNotFound();
     return;
   }
 
@@ -247,6 +248,21 @@ async function loadAndRenderArticle() {
   renderTableOfContents(article);
 
   document.title = `${article.title} - Shyam Sunder Kanth`;
+}
+
+function renderNotFound() {
+  document.getElementById("main").innerHTML = `
+          <div class="container">
+            <div class="not-found">
+              <div class="not-found-code">404</div>
+              <h2>Article Not Found</h2>
+              <p>The article you're looking for doesn't exist or has been moved.</p>
+              <a href="/blogs/" class="btn-back">
+                <span class="material-symbols-outlined">arrow_back</span>
+                View All Articles
+              </a>
+            </div>
+          </div>`;
 }
 
 function renderArticle(article) {

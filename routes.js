@@ -27,6 +27,7 @@ const navRoutes = [
     label: "More",
     dropdown: [
       { label: "Blogs", href: "/blogs/" },
+      { label: "Announcements", href: "/announcements/" },
       { label: "Privacy Policies", href: "/privacy-policy/" },
     ],
   },
@@ -119,7 +120,40 @@ function renderFooterLinks() {
     .join("");
 }
 
+function handleRouting() {
+  const path = window.location.pathname;
+  if (path === "/" || path === "/index.html") return;
+  const allInternalRoutes = [];
+  [...navRoutes, ...footerRoutes].forEach((route) => {
+    if (route.href && !route.external) allInternalRoutes.push(route.href);
+    if (route.dropdown) {
+      route.dropdown.forEach((child) => {
+        if (!child.external) allInternalRoutes.push(child.href);
+      });
+    }
+  });
+
+  allInternalRoutes.push("/content-builder/", "/oops/");
+
+  const cleanPath = path.endsWith("/") ? path : path + "/";
+
+  const isValid = allInternalRoutes.some((route) => {
+    const cleanRoute = route.endsWith("/") ? route : route + "/";
+    const absoluteRoute = cleanRoute.startsWith("/")
+      ? cleanRoute
+      : "/" + cleanRoute;
+    return cleanPath === absoluteRoute;
+  });
+
+  const isActualFile = path.split("/").pop().includes(".");
+
+  if (!isValid && !isActualFile) {
+    window.location.href = "/oops/";
+  }
+}
+
 function initRoutes() {
+  handleRouting();
   renderNavLinks();
   renderSidebarLinks();
   renderFooterLinks();

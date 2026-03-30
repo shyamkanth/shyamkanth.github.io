@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Article - Shyam Sunder Kanth</title>
-    <link rel="stylesheet" href="blog-style.css" />
+    <title>Announcement - Shyam Sunder Kanth</title>
+    <link rel="stylesheet" href="announcement-style.css" />
     <link rel="icon" href="/images/icon.png" />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap"
@@ -19,10 +19,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="blog-system.js" defer></script>
+    <script src="announcement-system.js" defer></script>
     <script src="../cabinet.js" defer></script>
   </head>
-  <body class="theme-android">
+  <body>
     <nav class="navbar">
       <div class="nav-container">
         <a class="nav-brand" href="/">
@@ -31,30 +31,22 @@
           </div>
           <span class="brand-name">SHYAM SUNDER KANTH</span>
         </a>
-        <a href="/blogs/" class="nav-back">
+        <a href="/announcements/" class="nav-back">
           <span class="material-symbols-outlined">arrow_back</span>
-          All Articles
+          All Announcements
         </a>
       </div>
     </nav>
 
     <main id="main">
-      <section
-        class="article-container"
-        style="
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 2.5rem;
-          margin-top: 100px;
-        "
-      >
+      <section class="article-container" style="margin-top: 100px">
         <article id="articleContent" class="article-content"></article>
 
         <aside class="article-sidebar">
           <div class="article-toc">
             <h3 class="toc-title">
               <span class="material-symbols-outlined">list</span>
-              Table of Contents
+              Contents
             </h3>
             <ul id="tocList" class="toc-list"></ul>
           </div>
@@ -64,7 +56,7 @@
       <section class="related-articles">
         <div class="container">
           <h2 class="section-title">
-            More <span class="highlight">Articles</span>
+            More <span class="highlight">Announcements</span>
           </h2>
           <div id="relatedArticlesGrid" class="related-grid"></div>
         </div>
@@ -99,7 +91,7 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        loadAndRenderArticle();
+        loadAndRenderAnnouncement();
       });
     </script>
   </body>

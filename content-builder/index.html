@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Builder — Shyam.dev</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="/images/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <script src="../cabinet.js" defer></script>
+  </head>
+  <body>
+    <!-- ── TOP NAV ──────────────────────────────────────────────── -->
+    <nav class="topnav">
+      <div class="topnav-brand">
+        <div class="brand-icon">
+          <span class="material-symbols-outlined mi">terminal</span>
+        </div>
+        <span>Content Builder</span>
+      </div>
+
+      <!-- Mode switcher -->
+      <div class="topnav-center">
+        <button class="mode-btn active" data-mode="blog">
+          <span class="material-symbols-outlined mi">article</span>
+          <span class="mode-label">Blog</span>
+        </button>
+        <button class="mode-btn" data-mode="announcement">
+          <span class="material-symbols-outlined mi">campaign</span>
+          <span class="mode-label">Announcement</span>
+        </button>
+        <button class="mode-btn" data-mode="privacy">
+          <span class="material-symbols-outlined mi">policy</span>
+          <span class="mode-label">Privacy Policy</span>
+        </button>
+      </div>
+
+      <div class="topnav-actions">
+        <!-- Import JSON button — always accessible -->
+        <button class="btn btn-import" id="importBtn" title="Import JSON">
+          <span class="material-symbols-outlined mi">upload_file</span>
+          <span class="import-label">Import</span>
+        </button>
+        <button class="btn btn-ghost" id="clearBtn">
+          <span class="material-symbols-outlined mi">delete_sweep</span>
+          <span>Clear</span>
+        </button>
+        <button class="btn btn-primary" id="generateBtn">
+          <span class="material-symbols-outlined mi">auto_awesome</span>
+          <span>JSON</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── LAYOUT ────────────────────────────────────────────────── -->
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar">
+        <!-- Meta fields -->
+        <div class="sidebar-section">
+          <p class="sidebar-heading">Post Details</p>
+          <div id="metaFields"></div>
+        </div>
+
+        <!-- Block types -->
+        <div class="sidebar-section">
+          <p class="sidebar-heading">Content Blocks</p>
+          <div class="block-types-grid" id="blockTypesBtns"></div>
+        </div>
+      </aside>
+
+      <!-- MOBILE OVERLAY -->
+      <div class="sidebar-overlay-mob" id="sidebarOverlayMob"></div>
+
+      <!-- CANVAS -->
+      <main class="main-canvas">
+        <div id="canvas"></div>
+      </main>
+    </div>
+
+    <!-- ── MOBILE SIDEBAR TOGGLE ─────────────────────────────────── -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Open sidebar">
+      <span class="material-symbols-outlined mi">add</span>
+    </button>
+
+    <!-- ── WELCOME DIALOG ─────────────────────────────────────────── -->
+    <div class="modal-overlay" id="welcomeOverlay">
+      <div class="modal welcome-modal">
+        <div class="welcome-header">
+          <div class="welcome-brand-icon">
+            <span class="material-symbols-outlined mi">terminal</span>
+          </div>
+          <h2 class="welcome-title">Content Builder</h2>
+          <p class="welcome-sub">What would you like to do?</p>
+        </div>
+
+        <div class="welcome-actions">
+          <button class="welcome-action-card" id="welcomeNewBtn">
+            <div class="wac-icon">
+              <span class="material-symbols-outlined mi">add_box</span>
+            </div>
+            <div class="wac-text">
+              <span class="wac-label">Start Fresh</span>
+              <span class="wac-desc"
+                >Begin a new blog, announcement, or privacy policy from
+                scratch</span
+              >
+            </div>
+            <span class="material-symbols-outlined mi wac-arrow"
+              >arrow_forward</span
+            >
+          </button>
+
+          <div class="welcome-divider"><span>or</span></div>
+
+          <button
+            class="welcome-action-card welcome-action-import"
+            id="welcomeImportBtn"
+          >
+            <div class="wac-icon wac-icon-import">
+              <span class="material-symbols-outlined mi">upload_file</span>
+            </div>
+            <div class="wac-text">
+              <span class="wac-label">Import JSON</span>
+              <span class="wac-desc"
+                >Paste an existing JSON object to edit a blog, announcement, or
+                privacy policy</span
+              >
+            </div>
+            <span class="material-symbols-outlined mi wac-arrow"
+              >arrow_forward</span
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="restrictedOverlay">
+      <div class="modal welcome-modal" style="border-color: #ff4466">
+        <div
+          class="welcome-header"
+          style="
+            background: linear-gradient(
+              160deg,
+              rgba(221, 0, 49, 0.1) 0%,
+              transparent 60%
+            );
+          "
+        >
+          <div
+            class="welcome-brand-icon"
+            style="
+              background: #dd0031;
+              box-shadow: 0 0 32px rgba(221, 0, 49, 0.3);
+            "
+          >
+            <span class="material-symbols-outlined mi" style="color: #fff"
+              >gpp_maybe</span
+            >
+          </div>
+          <h2 class="welcome-title">Access Restricted</h2>
+          <p class="welcome-sub" style="color: #ff4466">
+            Direct URL Navigation Detected
+          </p>
+        </div>
+
+        <div class="welcome-actions">
+          <div
+            class="import-hint"
+            style="
+              background: rgba(221, 0, 49, 0.05);
+              border-color: rgba(221, 0, 49, 0.2);
+              color: #edf2ee;
+              margin-bottom: 24px;
+            "
+          >
+            <span class="material-symbols-outlined mi" style="color: #ff4466"
+              >lock</span
+            >
+            For security and to ensure data integrity, this page can only be
+            accessed via the official dashboard navigation.
+          </div>
+
+          <button
+            class="welcome-action-card"
+            onclick="window.location.href = '/'"
+          >
+            <div
+              class="wac-icon"
+              style="
+                background: rgba(255, 255, 255, 0.05);
+                border-color: var(--border);
+                color: var(--text);
+              "
+            >
+              <span class="material-symbols-outlined mi">home</span>
+            </div>
+            <div class="wac-text">
+              <span class="wac-label">Back to Home</span>
+              <span class="wac-desc"
+                >Return to the main portal to launch the builder
+                correctly.</span
+              >
+            </div>
+            <span class="material-symbols-outlined mi wac-arrow"
+              >arrow_forward</span
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── IMPORT MODAL ──────────────────────────────────────────── -->
+    <div class="modal-overlay" id="importOverlay">
+      <div class="modal import-modal">
+        <div class="modal-header">
+          <span class="modal-title">
+            <span class="material-symbols-outlined mi">upload_file</span>
+            Import JSON
+          </span>
+          <button class="modal-close" id="importModalClose">
+            <span class="material-symbols-outlined mi">close</span>
+          </button>
+        </div>
+
+        <div class="modal-body import-modal-body">
+          <div class="import-hint">
+            <span class="material-symbols-outlined mi">info</span>
+            Paste a blog post, announcement, or privacy policy JSON object. The
+            type will be auto-detected and fields pre-filled.
+          </div>
+
+          <div class="import-textarea-wrap">
+            <textarea
+              id="importJsonInput"
+              class="import-textarea"
+              placeholder='{ "title": "...", "content": [...] }&#10;&#10;or&#10;&#10;{ "appName": "...", "sections": [...] }'
+              spellcheck="false"
+            ></textarea>
+            <div class="import-textarea-actions">
+              <button
+                class="import-clear-btn"
+                id="importClearInputBtn"
+                title="Clear"
+              >
+                <span class="material-symbols-outlined mi">backspace</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="import-error" id="importError" style="display: none">
+            <span class="material-symbols-outlined mi">error</span>
+            <span id="importErrorMsg">Invalid JSON</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="importCancelBtn">
+            <span class="material-symbols-outlined mi">close</span>
+            <span>Cancel</span>
+          </button>
+          <button class="btn btn-primary" id="importConfirmBtn">
+            <span class="material-symbols-outlined mi">download_done</span>
+            <span>Import & Fill</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OUTPUT MODAL ──────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <div class="modal-header">
+          <span class="modal-title">
+            <span class="material-symbols-outlined mi">data_object</span>
+            Generated JSON Object
+          </span>
+          <button class="modal-close" id="modalClose">
+            <span class="material-symbols-outlined mi">close</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Generating animation -->
+          <div class="modal-generating" id="modalGenerating">
+            <div class="generating-spinner"></div>
+            <div class="generating-steps">
+              <div class="gen-step">
+                <div class="gen-step-dot"></div>
+                <span>Reading meta fields...</span>
+              </div>
+              <div class="gen-step">
+                <div class="gen-step-dot"></div>
+                <span>Processing content blocks...</span>
+              </div>
+              <div class="gen-step">
+                <div class="gen-step-dot"></div>
+                <span>Generating ID from title...</span>
+              </div>
+              <div class="gen-step">
+                <div class="gen-step-dot"></div>
+                <span>Serialising to JSON...</span>
+              </div>
+              <div class="gen-step">
+                <div class="gen-step-dot"></div>
+                <span>Formatting output...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output -->
+          <div id="modalOutput" style="display: none">
+            <div class="output-code-wrapper">
+              <pre class="output-code" id="outputCode"></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <span class="copy-success" id="copySuccess">
+            <span class="material-symbols-outlined mi">check_circle</span>
+            Copied to clipboard!
+          </span>
+          <div style="display: flex; gap: 10px; margin-left: auto">
+            <button class="btn btn-ghost" id="copyBtn">
+              <span class="material-symbols-outlined mi">content_copy</span>
+              <span>Copy JSON</span>
+            </button>
+            <button class="btn btn-primary" onclick="hideModal()">
+              <span class="material-symbols-outlined mi">check</span>
+              <span>Done</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TOAST ─────────────────────────────────────────────────── -->
+    <div class="toast" id="toast">
+      <span class="material-symbols-outlined mi">check_circle</span>
+      <span>Done</span>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

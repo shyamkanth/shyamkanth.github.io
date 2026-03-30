@@ -1,0 +1,190 @@
+{
+  "announcements": [
+    {
+      "id": "password-vault-v2-release",
+      "title": "Password Vault v2.0 — AES-256 Upgrade & New Bin Feature",
+      "author": "Shyam Sunder Kanth",
+      "date": "2025-09-09",
+      "thumbnail": "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&h=400&fit=crop",
+      "type": "RELEASE",
+      "priority": "info",
+      "excerpt": "Password Vault 2.0 ships with AES-256 encryption, a new deleted-passwords bin, and improved backup/restore via SAF.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "What's New in v2.0"
+        },
+        {
+          "type": "paragraph",
+          "text": "Password Vault 2.0 is a major update focused on security hardening and usability improvements. After months of feedback from early users, we've addressed the most-requested features and patched several edge cases."
+        },
+        {
+          "type": "heading",
+          "text": "Highlights"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Upgraded encryption from AES-128 to AES-256 for stronger local security",
+            "New Bin feature — deleted passwords are recoverable for 30 days",
+            "Improved backup & restore using Android Storage Access Framework (SAF)",
+            "Password strength meter now shows entropy score",
+            "Minor UI polish across the vault list and detail screens"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Migration Note"
+        },
+        {
+          "type": "paragraph",
+          "text": "Existing vaults will be automatically re-encrypted on first launch after the update. This is a one-time process and may take a few seconds depending on the number of stored entries."
+        },
+        {
+          "type": "quote",
+          "text": "All your data stays on-device. No cloud, no telemetry, no surprises.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Download"
+        },
+        {
+          "type": "paragraph",
+          "text": "The update is live on the Google Play Store. Search for Password Vault or use the link in the Projects section of the portfolio."
+        }
+      ]
+    },
+    {
+      "id": "japnaam-v1-launch",
+      "title": "Japnaam is Now Live on Google Play",
+      "author": "Shyam Sunder Kanth",
+      "date": "2025-09-09",
+      "thumbnail": "https://play-lh.googleusercontent.com/83MTuaHZ4aTBW7Dm07XlkuYc4P3uZWlbaZ-Y8rBbqtphoiBKxlZsREdGAc9IrObtb_xnhJ5OU27UfRzVPpuQiEY=w240-h480",
+      "type": "RELEASE",
+      "priority": "info",
+      "excerpt": "Japnaam — the offline spiritual companion for tracking jaap counts, aartis, and chalisas — is officially available on the Play Store.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introducing Japnaam"
+        },
+        {
+          "type": "paragraph",
+          "text": "Japnaam is a simple, distraction-free app built for people who want to keep a daily spiritual practice. It works fully offline and stores everything locally on your device."
+        },
+        {
+          "type": "heading",
+          "text": "Core Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Track jaap counts for multiple mantras",
+            "Browse a curated collection of aartis and chalisas",
+            "All data stored locally — no account required",
+            "Clean, minimal UI with no ads"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Tech Stack"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "// Built with\nKotlin + MVVM\nRoom Database\nJetpack Compose\nCoroutines + Flow"
+        },
+        {
+          "type": "paragraph",
+          "text": "Japnaam is available for free on Google Play. No in-app purchases, no subscriptions."
+        }
+      ]
+    },
+    {
+      "id": "portfolio-privacy-policy-section",
+      "title": "Privacy Policy Section Added to Portfolio",
+      "author": "Shyam Sunder Kanth",
+      "date": "2025-09-15",
+      "thumbnail": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop",
+      "type": "UPDATE",
+      "priority": "info",
+      "excerpt": "The portfolio now includes a dedicated Privacy Policies section covering all published apps — fully JSON-driven and easy to maintain.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Why a Privacy Policy Section?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Google Play requires a publicly accessible privacy policy for every app. Instead of hosting separate static pages, I built a unified, JSON-driven privacy policy system directly into the portfolio."
+        },
+        {
+          "type": "heading",
+          "text": "How It Works"
+        },
+        {
+          "type": "list",
+          "items": [
+            "All policies live in a single policy-data.json file",
+            "Adding a new policy = adding one JSON object, zero HTML changes",
+            "Listing page auto-generates cards for every policy",
+            "Detail page renders sections, subsections, lists, and contact blocks dynamically",
+            "Fully responsive and matches the portfolio's dark theme"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "You can find it under the 'More' menu in the portfolio navigation, or directly at /privacy-policy/."
+        }
+      ]
+    },
+    {
+      "id": "payday-app-in-progress",
+      "title": "PayDay EMI Reminder App — In Development",
+      "author": "Shyam Sunder Kanth",
+      "date": "2025-10-01",
+      "thumbnail": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=400&fit=crop",
+      "type": "NEWS",
+      "priority": "warning",
+      "excerpt": "PayDay, an Android app for tracking EMIs and payment reminders, is currently under active development.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "What is PayDay?"
+        },
+        {
+          "type": "paragraph",
+          "text": "PayDay is an upcoming Android application designed to help users track their EMIs, loan repayments, and recurring payment deadlines. The goal is a simple, local-first app with smart notifications."
+        },
+        {
+          "type": "heading",
+          "text": "Planned Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Add and manage multiple EMIs with due dates",
+            "Local push notifications before payment dates",
+            "Monthly summary dashboard",
+            "No login, no cloud — fully offline",
+            "Export to CSV"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Stack"
+        },
+        {
+          "type": "code",
+          "language": "kotlin",
+          "text": "// Planned tech stack\nKotlin + Hilt\nRoom + DataStore\nMVVM + Clean Architecture\nWorkManager (notifications)\nJetpack Compose"
+        },
+        {
+          "type": "paragraph",
+          "text": "Expected release: Q1 2026. Follow the GitHub profile for updates."
+        }
+      ]
+    }
+  ]
+}
