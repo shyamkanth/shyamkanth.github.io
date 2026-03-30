@@ -14,8 +14,6 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
       rel="stylesheet"
     />
-    <script src="announcement-system.js" defer></script>
-    <script src="../cabinet.js" defer></script>
   </head>
   <body>
     <nav class="navbar">
@@ -41,7 +39,8 @@
               Announcements & <span class="highlight">Updates</span>
             </h1>
             <p class="blog-hero-subtitle">
-              App releases, project updates, and news from my development journey
+              App releases, project updates, and news from my development
+              journey
             </p>
           </div>
         </div>
@@ -102,7 +101,9 @@
           <div id="announcementsGrid" class="blogs-grid"></div>
 
           <div id="noResults" class="no-results" style="display: none">
-            <span class="material-symbols-outlined no-results-icon">campaign</span>
+            <span class="material-symbols-outlined no-results-icon"
+              >campaign</span
+            >
             <h3>No announcements found</h3>
             <p>Try adjusting your search or filters</p>
           </div>
@@ -119,8 +120,18 @@
           </div>
           <div class="footer-links">
             <a href="/" class="footer-link">Portfolio</a>
-            <a href="https://github.com/shyamkanth" target="_blank" class="footer-link">GitHub</a>
-            <a href="https://www.linkedin.com/in/shyam-sunder-kanth/" target="_blank" class="footer-link">LinkedIn</a>
+            <a
+              href="https://github.com/shyamkanth"
+              target="_blank"
+              class="footer-link"
+              >GitHub</a
+            >
+            <a
+              href="https://www.linkedin.com/in/shyam-sunder-kanth/"
+              target="_blank"
+              class="footer-link"
+              >LinkedIn</a
+            >
           </div>
         </div>
       </div>
@@ -131,5 +142,7 @@
         initializeAnnouncementSystem();
       });
     </script>
+    <script src="announcement-system.js"></script>
+    <script src="../cabinet.min.js"></script>
   </body>
 </html>

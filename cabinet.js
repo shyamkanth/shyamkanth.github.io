@@ -1,50 +1,8 @@
 // cabinet.js — command palette
 (function () {
-  // ── PUBLIC COMMANDS (always visible) ──────────────────────────────────────
-  const PUBLIC_COMMANDS = [
-    {
-      label: "Portfolio",
-      desc: "View portfolio",
-      icon: "docs",
-      action: () => _go("/"),
-    },
-    {
-      label: "Privacy Policy",
-      desc: "View app privacy policies",
-      icon: "policy",
-      action: () => _go("/privacy-policy/"),
-    },
-    {
-      label: "Announcements",
-      desc: "View all announcements",
-      icon: "campaign",
-      action: () => _go("/announcements/"),
-    },
-    {
-      label: "Blog",
-      desc: "Read articles and insights",
-      icon: "article",
-      action: () => _go("/blogs/"),
-    },
-  ];
-
-  const SECRET_PREFIX = "v0id.run";
-  const SECRET_COMMANDS = [
-    {
-      label: "Content Builder",
-      desc: "Create blog posts & announcements",
-      icon: "construction",
-      action: () => _go("/content-builder/"),
-    },
-    // ── Add more secret commands below ──────────────────────────────────────
-    // {
-    //   label:  "My Secret Page",
-    //   desc:   "Description",
-    //   icon:   "lock",
-    //   action: () => _go("/my-secret-page/"),
-    // },
-  ];
-
+  document.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
   // ── HELPERS ────────────────────────────────────────────────────────────────
   function _go(p) {
     window.location.href = p;
@@ -203,17 +161,17 @@
   }
 
   function _parse(raw) {
-    const prefixLower = SECRET_PREFIX.toLowerCase();
+    const prefixLower = GHOST_KEY.toLowerCase();
     if (raw.toLowerCase().startsWith(prefixLower)) {
-      const q = raw.slice(SECRET_PREFIX.length);
+      const q = raw.slice(GHOST_KEY.length);
       const ql = q.toLowerCase().trim();
       const items = ql
-        ? SECRET_COMMANDS.filter(
+        ? GHOST_COMMANDS.filter(
             (c) =>
               c.label.toLowerCase().includes(ql) ||
               c.desc.toLowerCase().includes(ql),
           )
-        : [...SECRET_COMMANDS];
+        : [...GHOST_COMMANDS];
       return {
         isSecret: true,
         query: q,
@@ -301,6 +259,55 @@
       });
     });
   }
+
+  /**
+   * Command Pallette options start
+   * Make sure to obfuscate the code and update in cabinet.min.js to test.
+   * Code obfuscated using : https://codebeautify.org/javascript-obfuscator
+   */
+  const PUBLIC_COMMANDS = [
+    {
+      label: "Portfolio",
+      desc: "View portfolio",
+      icon: "docs",
+      action: () => _go("/"),
+    },
+    {
+      label: "Privacy Policy",
+      desc: "View app privacy policies",
+      icon: "policy",
+      action: () => _go("/privacy-policy/"),
+    },
+    {
+      label: "Announcements",
+      desc: "View all announcements",
+      icon: "campaign",
+      action: () => _go("/announcements/"),
+    },
+    {
+      label: "Blog",
+      desc: "Read articles and insights",
+      icon: "article",
+      action: () => _go("/blogs/"),
+    },
+  ];
+
+  const GHOST_KEY = "v0id.run";
+  const GHOST_COMMANDS = [
+    {
+      label: "Content Builder",
+      desc: "Create blog posts & announcements",
+      icon: "construction",
+      action: () => _go("/content-builder/"),
+    },
+    // ── Add more secret commands below ──
+  ];
+
+  /**
+   * Command Pallette options end
+   * Make sure to obfuscate the code and update in cabinet.min.js to test.
+   * Code obfuscated using : https://codebeautify.org/javascript-obfuscator
+   */
 
   // Just update the active highlight — no DOM rebuild
   function _setActive(i) {
