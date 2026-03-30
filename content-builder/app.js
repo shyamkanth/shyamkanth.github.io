@@ -1,36 +1,219 @@
 (function () {
-  // 1. Apply lock immediately
   document.body.classList.add("locked");
-
   document.addEventListener("DOMContentLoaded", () => {
     const referrer = document.referrer;
     const isInternal = referrer.includes(window.location.origin);
-
-    // Check if we are in local development (optional, remove for production)
     const isLocal =
       window.location.hostname === "127.0.0.1" ||
       window.location.hostname === "localhost";
-
-    if (!isInternal) {
-      // Show the restricted modal
-      const restrictedOverlay = document.getElementById("restrictedOverlay");
-      restrictedOverlay.classList.add("show");
-
-      // Remove welcome dialog if it exists to avoid overlap
+    if (!isInternal && !isLocal) {
+      document.getElementById("restrictedOverlay").classList.add("show");
       document.getElementById("welcomeOverlay")?.classList.remove("show");
     } else {
-      // Allowed: Unlock the UI
       document.body.classList.remove("locked");
     }
   });
 })();
 
-// ... rest of your existing code ...
+// ══════════════════════════════════════════════════════════════════
+// TEMPLATES
+// ══════════════════════════════════════════════════════════════════
+const TEMPLATES = {
+  blog: {
+    meta: {
+      title: "Your Blog Post Title",
+      author: "Shyam Sunder Kanth",
+      date: new Date().toISOString().split("T")[0],
+      thumbnail:
+        "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      tags: ["kotlin", "android"],
+      readTime: "8 min read",
+      excerpt:
+        "A short summary of what this post is about. This appears on the blog listing card.",
+    },
+    content: [
+      { type: "heading", text: "Introduction", level: "h2" },
+      {
+        type: "paragraph",
+        text: "Start with a compelling introduction that sets the context for your readers. Explain what they'll learn and why it matters.",
+      },
+      { type: "heading", text: "Section One", level: "h2" },
+      {
+        type: "paragraph",
+        text: "Describe the first major concept here. Keep paragraphs focused and readable.",
+      },
+      {
+        type: "list",
+        items: ["Key point one", "Key point two", "Key point three"],
+      },
+      { type: "heading", text: "Code Example", level: "h2" },
+      {
+        type: "code",
+        language: "kotlin",
+        text: '// Your code snippet here\nfun main() {\n    println("Hello, World!")\n}',
+      },
+      { type: "heading", text: "Conclusion", level: "h2" },
+      {
+        type: "paragraph",
+        text: "Wrap up the key takeaways and next steps for the reader.",
+      },
+    ],
+  },
+
+  announcement: {
+    meta: {
+      title: "App Name vX.X — Feature Highlight",
+      author: "Shyam Sunder Kanth",
+      date: new Date().toISOString().split("T")[0],
+      thumbnail:
+        "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&h=400&fit=crop",
+      type: "RELEASE",
+      priority: "info",
+      excerpt:
+        "Short description of this release or update shown on the announcements card.",
+    },
+    content: [
+      { type: "heading", text: "What's New", level: "h2" },
+      {
+        type: "paragraph",
+        text: "Summarise the release in one or two sentences. What changed, and why does it matter?",
+      },
+      { type: "heading", text: "Highlights", level: "h2" },
+      {
+        type: "list",
+        items: [
+          "New feature or improvement one",
+          "New feature or improvement two",
+          "Bug fix or performance improvement",
+          "UI or UX enhancement",
+        ],
+      },
+      { type: "heading", text: "Migration Note", level: "h2" },
+      {
+        type: "paragraph",
+        text: "If users need to do anything on their end (clear cache, re-authenticate, update settings), mention it here.",
+      },
+      {
+        type: "quote",
+        text: "A memorable quote or mission statement about the release.",
+        author: "Shyam Sunder Kanth",
+      },
+      { type: "heading", text: "Download", level: "h2" },
+      {
+        type: "paragraph",
+        text: "The update is live on the Google Play Store. Search for the app or use the link in the Projects section.",
+      },
+    ],
+  },
+
+  privacy: {
+    meta: {
+      id: "your-app-id",
+      appName: "Your App Name",
+      tagline: "Short description of what the app does",
+      emoji: "📱",
+      platform: "Android",
+      version: "1.0",
+      effectiveDate: new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      lastUpdated: new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      tags: ["ANDROID", "LOCAL STORAGE"],
+      contact: "you+appname@gmail.com",
+      color: "#00ff87",
+    },
+    sections: [
+      {
+        type: "pp-section",
+        id: "introduction",
+        title: "Introduction",
+        content:
+          "Welcome to [App Name]. Your privacy is important to us. This Privacy Policy explains how our app handles your information, including what data we collect, how we use it, and your rights regarding that data.",
+      },
+      {
+        type: "pp-section-sub",
+        id: "information-we-collect",
+        title: "Information We Collect",
+        subsections: [
+          {
+            subtitle: "Personal Data",
+            content:
+              "We do not collect, store, or share any personal data such as your name, email address, or phone number.",
+          },
+          {
+            subtitle: "Usage Data",
+            content:
+              "We may collect anonymous usage information such as app performance, error logs, and crash reports to improve the quality and stability of the app.",
+          },
+        ],
+      },
+      {
+        type: "pp-section-list",
+        id: "how-we-use",
+        title: "How We Use Information",
+        content: "",
+        list: [
+          "To provide core app functionality.",
+          "To analyze app performance and fix bugs or crashes.",
+        ],
+      },
+      {
+        type: "pp-section",
+        id: "data-security",
+        title: "Data Security",
+        content:
+          "Your data security is our priority. All data is stored locally on your device and never uploaded to our servers. You are in full control of your information at all times.",
+      },
+      {
+        type: "pp-section",
+        id: "data-sharing",
+        title: "Data Sharing",
+        content:
+          "We do not share, sell, or transmit your personal information to any third parties.",
+      },
+      {
+        type: "pp-section",
+        id: "third-party",
+        title: "Third-Party Services",
+        content:
+          "The app may use third-party libraries such as Firebase for crash reporting. These services collect only non-identifiable information to help improve app stability.",
+      },
+      {
+        type: "pp-section",
+        id: "your-rights",
+        title: "Your Rights",
+        content:
+          "Since all your data is stored locally on your device, you may manage, delete, or back up your information at any time through the app's settings.",
+      },
+      {
+        type: "pp-section",
+        id: "changes",
+        title: "Changes to This Privacy Policy",
+        content:
+          "We may update this Privacy Policy from time to time. Changes will be posted within the app and on this page with an updated effective date.",
+      },
+      {
+        type: "pp-contact",
+        id: "contact",
+        title: "Contact Us",
+        content:
+          "If you have any questions or concerns about this Privacy Policy or the app, please contact us at:",
+        contactEmail: "you+appname@gmail.com",
+      },
+    ],
+  },
+};
 
 // ══════════════════════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════════════════════
-let mode = "blog"; // "blog" | "announcement" | "privacy"
+let mode = "blog";
 let blocks = [];
 let dragSrc = null;
 let blockCounter = 0;
@@ -256,6 +439,85 @@ function showWelcomeDialog() {
     overlay.classList.remove("show");
     showImportModal();
   });
+
+  // Template cards
+  document.querySelectorAll(".welcome-template-card").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tpl = btn.dataset.template;
+      overlay.classList.remove("show");
+      loadTemplate(tpl);
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// LOAD TEMPLATE
+// ══════════════════════════════════════════════════════════════════
+function loadTemplate(templateKey) {
+  const tpl = TEMPLATES[templateKey];
+  if (!tpl) return;
+
+  // Switch mode
+  const targetMode = templateKey; // "blog" | "announcement" | "privacy"
+  if (targetMode !== mode) {
+    mode = targetMode;
+    blocks = [];
+    document
+      .querySelectorAll(".mode-btn")
+      .forEach((b) => b.classList.toggle("active", b.dataset.mode === mode));
+    renderMeta();
+    renderBlockTypes();
+  } else {
+    blocks = [];
+  }
+
+  // Fill meta fields
+  if (mode === "privacy") {
+    _fillMetaFields(tpl.meta, mode);
+    fillPrivacyBlocks({ sections: tpl.sections });
+  } else {
+    _fillMetaFields(tpl.meta, mode);
+    fillContentBlocks(tpl.content || []);
+  }
+
+  renderCanvas();
+
+  const names = {
+    blog: "Article",
+    announcement: "Announcement",
+    privacy: "Privacy Policy",
+  };
+  showToast(
+    `${names[templateKey]} template loaded — ${blocks.length} blocks ready`,
+  );
+}
+
+// shared meta filler used by both template and import
+function _fillMetaFields(metaObj, targetMode) {
+  const cfg = MODES[targetMode];
+  cfg.metaFields.forEach((f) => {
+    if (f.type === "tags") {
+      const input = document.getElementById("tags-bare-input");
+      if (input && Array.isArray(metaObj.tags)) {
+        input._tags = [...metaObj.tags];
+        renderTagChips(input._tags);
+      }
+    } else if (f.type === "select") {
+      const el = document.getElementById(`meta-${f.id}`);
+      if (el && metaObj[f.id] !== undefined) {
+        // set matching option
+        const opt = Array.from(el.options).find(
+          (o) => o.value.toLowerCase() === String(metaObj[f.id]).toLowerCase(),
+        );
+        if (opt) el.value = opt.value;
+      }
+    } else {
+      const el = document.getElementById(`meta-${f.id}`);
+      if (el && metaObj[f.id] !== undefined && metaObj[f.id] !== null) {
+        el.value = metaObj[f.id];
+      }
+    }
+  });
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -281,13 +543,10 @@ function bindImportModal() {
       hideImportError();
       hideImportDetected();
     });
-
   document.getElementById("importOverlay").addEventListener("click", (e) => {
     if (e.target === document.getElementById("importOverlay"))
       hideImportModal();
   });
-
-  // Live detect type as user types/pastes
   document.getElementById("importJsonInput").addEventListener("input", () => {
     const val = document.getElementById("importJsonInput").value.trim();
     hideImportError();
@@ -298,11 +557,8 @@ function bindImportModal() {
     try {
       const obj = JSON.parse(val);
       const detected = detectImportType(obj);
-      if (detected) {
-        showImportDetected(detected);
-      } else {
-        hideImportDetected();
-      }
+      if (detected) showImportDetected(detected);
+      else hideImportDetected();
     } catch (e) {
       hideImportDetected();
     }
@@ -316,11 +572,9 @@ function showImportModal() {
   document.getElementById("importOverlay").classList.add("show");
   setTimeout(() => document.getElementById("importJsonInput").focus(), 300);
 }
-
 function hideImportModal() {
   document.getElementById("importOverlay").classList.remove("show");
 }
-
 function showImportError(msg) {
   const el = document.getElementById("importError");
   document.getElementById("importErrorMsg").textContent = msg;
@@ -337,8 +591,7 @@ function showImportDetected(type) {
     existing.id = "importDetectedBadge";
     existing.className = "import-detected";
     existing.innerHTML = `<span class="material-symbols-outlined mi">check_circle</span><span></span>`;
-    const body = document.querySelector(".import-modal-body");
-    body.appendChild(existing);
+    document.querySelector(".import-modal-body").appendChild(existing);
   }
   const labels = {
     blog: "Blog Post",
@@ -354,36 +607,27 @@ function hideImportDetected() {
   if (el) el.style.display = "none";
 }
 
-// ── Detect which mode this JSON belongs to ──────────────────────
 function detectImportType(obj) {
-  // Privacy: has appName or sections (with subsections / contactEmail patterns)
   if (obj.appName || obj.sections || obj.effectiveDate || obj.lastUpdated)
     return "privacy";
-  // Announcement: has type field with RELEASE/UPDATE/NEWS or priority
   if (obj.type && ["RELEASE", "UPDATE", "NEWS"].includes(obj.type))
     return "announcement";
   if (obj.priority && ["info", "warning", "critical"].includes(obj.priority))
     return "announcement";
-  // Blog: has content array and readTime or tags with content blocks
   if (obj.content && Array.isArray(obj.content)) {
-    // if it has readTime it's definitely blog
     if (obj.readTime) return "blog";
-    // if content blocks look like blog blocks — heading/paragraph/code
     if (obj.content.length > 0) return "blog";
   }
-  // If has title + excerpt, likely blog or announcement — default blog
   if (obj.title && obj.excerpt) return "blog";
   return null;
 }
 
-// ── Main import handler ─────────────────────────────────────────
 function doImport() {
   const raw = document.getElementById("importJsonInput").value.trim();
   if (!raw) {
     showImportError("Please paste a JSON object first.");
     return;
   }
-
   let obj;
   try {
     obj = JSON.parse(raw);
@@ -391,16 +635,12 @@ function doImport() {
     showImportError("Invalid JSON — " + e.message);
     return;
   }
-
   const detectedMode = detectImportType(obj);
   if (!detectedMode) {
-    showImportError(
-      "Could not detect content type. Make sure it's a blog, announcement, or privacy policy object.",
-    );
+    showImportError("Could not detect content type.");
     return;
   }
 
-  // Switch mode if needed
   if (detectedMode !== mode) {
     mode = detectedMode;
     blocks = [];
@@ -415,57 +655,23 @@ function doImport() {
 
   hideImportModal();
 
-  // Fill meta fields
   if (mode === "privacy") {
-    fillPrivacyMeta(obj);
+    _fillMetaFields(obj, mode);
     fillPrivacyBlocks(obj);
   } else {
-    fillBlogAnnouncementMeta(obj, mode);
+    _fillMetaFields(obj, mode);
     fillContentBlocks(obj.content || []);
   }
 
   renderCanvas();
+  const labels = {
+    blog: "Blog Post",
+    announcement: "Announcement",
+    privacy: "Privacy Policy",
+  };
   showToast(
-    `Imported ${detectedMode === "privacy" ? "Privacy Policy" : detectedMode === "announcement" ? "Announcement" : "Blog Post"} — ${blocks.length} block${blocks.length !== 1 ? "s" : ""} loaded`,
+    `Imported ${labels[detectedMode]} — ${blocks.length} block${blocks.length !== 1 ? "s" : ""} loaded`,
   );
-}
-
-// ── Fill meta for blog / announcement ──────────────────────────
-function fillBlogAnnouncementMeta(obj, targetMode) {
-  const cfg = MODES[targetMode];
-  cfg.metaFields.forEach((f) => {
-    if (f.type === "tags") {
-      const input = document.getElementById("tags-bare-input");
-      if (input && Array.isArray(obj.tags)) {
-        input._tags = [...obj.tags];
-        renderTagChips(input._tags);
-      }
-    } else {
-      const el = document.getElementById(`meta-${f.id}`);
-      if (el && obj[f.id] !== undefined && obj[f.id] !== null) {
-        el.value = obj[f.id];
-      }
-    }
-  });
-}
-
-// ── Fill meta for privacy ───────────────────────────────────────
-function fillPrivacyMeta(obj) {
-  const cfg = MODES.privacy;
-  cfg.metaFields.forEach((f) => {
-    if (f.type === "tags") {
-      const input = document.getElementById("tags-bare-input");
-      if (input && Array.isArray(obj.tags)) {
-        input._tags = [...obj.tags];
-        renderTagChips(input._tags);
-      }
-    } else {
-      const el = document.getElementById(`meta-${f.id}`);
-      if (el && obj[f.id] !== undefined && obj[f.id] !== null) {
-        el.value = obj[f.id];
-      }
-    }
-  });
 }
 
 // ── Fill blog/announcement content blocks ──────────────────────
@@ -474,7 +680,6 @@ function fillContentBlocks(contentArray) {
   contentArray.forEach((item) => {
     const id = ++blockCounter;
     let data = {};
-
     switch (item.type) {
       case "heading":
         data = { text: item.text || "", level: item.level || "h2" };
@@ -513,8 +718,6 @@ function fillPrivacyBlocks(obj) {
   sections.forEach((section) => {
     const id = ++blockCounter;
     let type, data;
-
-    // Detect section type from shape
     if (section.contactEmail !== undefined) {
       type = "pp-contact";
       data = {
@@ -552,7 +755,6 @@ function fillPrivacyBlocks(obj) {
         content: section.content || "",
       };
     }
-
     blocks.push({ id, type, data });
   });
 }
@@ -576,7 +778,6 @@ function bindTopNav() {
       setDefaultDate();
     });
   });
-
   document.getElementById("clearBtn").addEventListener("click", () => {
     if (blocks.length === 0) return;
     if (confirm("Clear all blocks?")) {
@@ -584,7 +785,6 @@ function bindTopNav() {
       renderCanvas();
     }
   });
-
   document
     .getElementById("generateBtn")
     .addEventListener("click", generateOutput);
@@ -599,43 +799,21 @@ function renderMeta() {
   container.innerHTML = cfg.metaFields
     .map((f) => {
       if (f.type === "input" || f.type === "date") {
-        return `
-          <div class="meta-field">
-            <label class="meta-label" for="meta-${f.id}">${f.label}</label>
-            <input class="meta-input" id="meta-${f.id}" type="${f.type === "date" ? "date" : "text"}"
-              placeholder="${f.placeholder || ""}" value="${f.defaultVal || ""}" />
-          </div>`;
+        return `<div class="meta-field"><label class="meta-label" for="meta-${f.id}">${f.label}</label><input class="meta-input" id="meta-${f.id}" type="${f.type === "date" ? "date" : "text"}" placeholder="${f.placeholder || ""}" value="${f.defaultVal || ""}" /></div>`;
       }
       if (f.type === "textarea") {
-        return `
-          <div class="meta-field">
-            <label class="meta-label" for="meta-${f.id}">${f.label}</label>
-            <textarea class="meta-textarea" id="meta-${f.id}" placeholder="${f.placeholder || ""}"></textarea>
-          </div>`;
+        return `<div class="meta-field"><label class="meta-label" for="meta-${f.id}">${f.label}</label><textarea class="meta-textarea" id="meta-${f.id}" placeholder="${f.placeholder || ""}"></textarea></div>`;
       }
       if (f.type === "select") {
-        return `
-          <div class="meta-field">
-            <label class="meta-label" for="meta-${f.id}">${f.label}</label>
-            <select class="meta-select" id="meta-${f.id}">
-              ${f.options.map((o) => `<option value="${o}">${o}</option>`).join("")}
-            </select>
-          </div>`;
+        return `<div class="meta-field"><label class="meta-label" for="meta-${f.id}">${f.label}</label><select class="meta-select" id="meta-${f.id}">${f.options.map((o) => `<option value="${o}">${o}</option>`).join("")}</select></div>`;
       }
       if (f.type === "tags") {
-        return `
-          <div class="meta-field">
-            <label class="meta-label">${f.label}</label>
-            <div class="tags-input-wrapper" id="tags-wrapper" onclick="document.getElementById('tags-bare-input').focus()">
-              <input class="tags-bare-input" id="tags-bare-input" placeholder="${f.placeholder || ""}" />
-            </div>
-          </div>`;
+        return `<div class="meta-field"><label class="meta-label">${f.label}</label><div class="tags-input-wrapper" id="tags-wrapper" onclick="document.getElementById('tags-bare-input').focus()"><input class="tags-bare-input" id="tags-bare-input" placeholder="${f.placeholder || ""}" /></div></div>`;
       }
       return "";
     })
     .join("");
 
-  // Tags logic
   const tagsInput = document.getElementById("tags-bare-input");
   if (tagsInput) {
     tagsInput._tags = [];
@@ -687,14 +865,10 @@ function renderBlockTypes() {
   const types = BLOCK_TYPES[mode] || BLOCK_TYPES.blog;
   container.innerHTML = types
     .map(
-      (bt) => `
-    <button class="block-type-btn" data-type="${bt.type}" title="Add ${bt.label}">
-      <span class="material-symbols-outlined mi">${bt.icon}</span>
-      <span>${bt.label}</span>
-    </button>`,
+      (bt) =>
+        `<button class="block-type-btn" data-type="${bt.type}" title="Add ${bt.label}"><span class="material-symbols-outlined mi">${bt.icon}</span><span>${bt.label}</span></button>`,
     )
     .join("");
-
   container.querySelectorAll(".block-type-btn").forEach((btn) => {
     btn.addEventListener("click", () => addBlock(btn.dataset.type));
   });
@@ -706,12 +880,7 @@ function renderBlockTypes() {
 function renderCanvas() {
   const canvas = document.getElementById("canvas");
   if (blocks.length === 0) {
-    canvas.innerHTML = `
-      <div class="canvas-empty" id="canvasEmpty">
-        <span class="material-symbols-outlined mi">add_box</span>
-        <h3>Start Building</h3>
-        <p>Click a block type in the sidebar to add content. Drag to reorder.</p>
-      </div>`;
+    canvas.innerHTML = `<div class="canvas-empty" id="canvasEmpty"><span class="material-symbols-outlined mi">add_box</span><h3>Start Building</h3><p>Click a block type in the sidebar to add content. Drag to reorder.</p></div>`;
   } else {
     canvas.innerHTML = `<div class="blocks-list" id="blocksList"></div>`;
     const list = document.getElementById("blocksList");
@@ -724,14 +893,12 @@ function addBlock(type) {
   const id = ++blockCounter;
   const block = { id, type, data: defaultData(type) };
   blocks.push(block);
-
   const canvas = document.getElementById("canvas");
   const empty = document.getElementById("canvasEmpty");
   if (empty) {
     canvas.innerHTML = `<div class="blocks-list" id="blocksList"></div>`;
     initDragDrop();
   }
-
   const list = document.getElementById("blocksList");
   const el = createBlockEl(block);
   list.appendChild(el);
@@ -787,23 +954,17 @@ function createBlockEl(block) {
   el.className = "block-item";
   el.dataset.id = block.id;
   el.draggable = true;
-
   const allTypes = [...BLOCK_TYPES.blog, ...BLOCK_TYPES.privacy];
   const bt = allTypes.find((b) => b.type === block.type);
-  const label = bt?.label || block.type;
-
   el.innerHTML = `
     <div class="block-header" title="Drag to reorder">
       <span class="drag-handle"><span class="material-symbols-outlined mi">drag_indicator</span></span>
-      <span class="block-type-label">${label}</span>
+      <span class="block-type-label">${bt?.label || block.type}</span>
       <div class="block-actions">
-        <button class="block-action-btn delete" title="Delete block">
-          <span class="material-symbols-outlined mi">delete</span>
-        </button>
+        <button class="block-action-btn delete" title="Delete block"><span class="material-symbols-outlined mi">delete</span></button>
       </div>
     </div>
     <div class="block-body">${buildBlockBody(block)}</div>`;
-
   el.querySelector(".block-action-btn.delete").addEventListener("click", () => {
     blocks = blocks.filter((b) => b.id !== block.id);
     el.style.animation = "blockOut 0.2s ease forwards";
@@ -812,7 +973,6 @@ function createBlockEl(block) {
       if (blocks.length === 0) renderCanvas();
     }, 200);
   });
-
   bindBlockInputs(el, block);
   return el;
 }
@@ -828,176 +988,32 @@ try {
 function buildBlockBody(block) {
   switch (block.type) {
     case "heading":
-      return `
-        <div class="block-row">
-          <select class="block-select" data-field="level" style="max-width:90px">
-            <option value="h2" ${block.data.level === "h2" ? "selected" : ""}>H2</option>
-            <option value="h3" ${block.data.level === "h3" ? "selected" : ""}>H3</option>
-          </select>
-          <input class="block-input" data-field="text" placeholder="Heading text..." value="${esc(block.data.text)}" />
-        </div>`;
-
+      return `<div class="block-row"><select class="block-select" data-field="level" style="max-width:90px"><option value="h2" ${block.data.level === "h2" ? "selected" : ""}>H2</option><option value="h3" ${block.data.level === "h3" ? "selected" : ""}>H3</option></select><input class="block-input" data-field="text" placeholder="Heading text..." value="${esc(block.data.text)}" /></div>`;
     case "paragraph":
       return `<textarea class="block-textarea" data-field="text" placeholder="Write your paragraph...">${esc(block.data.text)}</textarea>`;
-
     case "code":
-      return `
-        <select class="block-select" data-field="language">
-          ${[
-            "kotlin",
-            "java",
-            "typescript",
-            "javascript",
-            "python",
-            "xml",
-            "json",
-            "bash",
-            "plaintext",
-          ]
-            .map(
-              (l) =>
-                `<option value="${l}" ${block.data.language === l ? "selected" : ""}>${l}</option>`,
-            )
-            .join("")}
-        </select>
-        <textarea class="block-code-area" data-field="text" placeholder="Paste your code here...">${esc(block.data.text)}</textarea>`;
-
+      return `<select class="block-select" data-field="language">${["kotlin", "java", "typescript", "javascript", "python", "xml", "json", "bash", "plaintext"].map((l) => `<option value="${l}" ${block.data.language === l ? "selected" : ""}>${l}</option>`).join("")}</select><textarea class="block-code-area" data-field="text" placeholder="Paste your code here...">${esc(block.data.text)}</textarea>`;
     case "list":
-      return `
-        <div class="list-items" data-list-container>
-          ${(block.data.items || [""])
-            .map(
-              (item, i) => `
-            <div class="list-item-row" data-index="${i}">
-              <input class="block-input" data-field="items" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" />
-              <button class="list-item-remove" data-remove-index="${i}" title="Remove">
-                <span class="material-symbols-outlined mi">remove</span>
-              </button>
-            </div>`,
-            )
-            .join("")}
-        </div>
-        <button class="add-list-item-btn" data-add-item>
-          <span class="material-symbols-outlined mi">add</span> Add Item
-        </button>`;
-
+      return `<div class="list-items" data-list-container>${(block.data.items || [""]).map((item, i) => `<div class="list-item-row" data-index="${i}"><input class="block-input" data-field="items" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" /><button class="list-item-remove" data-remove-index="${i}" title="Remove"><span class="material-symbols-outlined mi">remove</span></button></div>`).join("")}</div><button class="add-list-item-btn" data-add-item><span class="material-symbols-outlined mi">add</span> Add Item</button>`;
     case "quote":
-      return `
-        <label class="field-label">Quote Text</label>
-        <textarea class="block-textarea" data-field="text" placeholder="Quote text...">${esc(block.data.text)}</textarea>
-        <label class="field-label">Author (optional)</label>
-        <input class="block-input" data-field="author" placeholder="Author name..." value="${esc(block.data.author)}" />`;
-
+      return `<label class="field-label">Quote Text</label><textarea class="block-textarea" data-field="text" placeholder="Quote text...">${esc(block.data.text)}</textarea><label class="field-label">Author (optional)</label><input class="block-input" data-field="author" placeholder="Author name..." value="${esc(block.data.author)}" />`;
     case "image":
-      return `
-        <label class="field-label">Image URL</label>
-        <input class="block-input" data-field="src" placeholder="https://..." value="${esc(block.data.src)}" />
-        <label class="field-label">Alt Text / Caption</label>
-        <input class="block-input" data-field="alt" placeholder="Describe the image..." value="${esc(block.data.alt)}" />`;
-
+      return `<label class="field-label">Image URL</label><input class="block-input" data-field="src" placeholder="https://..." value="${esc(block.data.src)}" /><label class="field-label">Alt Text / Caption</label><input class="block-input" data-field="alt" placeholder="Describe the image..." value="${esc(block.data.alt)}" />`;
     case "pp-section":
-      return `
-        <div class="block-row">
-          <div style="flex:1">
-            <label class="field-label">Section ID</label>
-            <input class="block-input" data-field="id" placeholder="data-security" value="${esc(block.data.id)}" />
-          </div>
-          <div style="flex:2">
-            <label class="field-label">Section Title</label>
-            <input class="block-input" data-field="title" placeholder="Data Security" value="${esc(block.data.title)}" />
-          </div>
-        </div>
-        <label class="field-label">Content</label>
-        <textarea class="block-textarea" data-field="content" placeholder="Section content...">${esc(block.data.content)}</textarea>`;
-
+      return `<div class="block-row"><div style="flex:1"><label class="field-label">Section ID</label><input class="block-input" data-field="id" placeholder="data-security" value="${esc(block.data.id)}" /></div><div style="flex:2"><label class="field-label">Section Title</label><input class="block-input" data-field="title" placeholder="Data Security" value="${esc(block.data.title)}" /></div></div><label class="field-label">Content</label><textarea class="block-textarea" data-field="content" placeholder="Section content...">${esc(block.data.content)}</textarea>`;
     case "pp-section-list":
-      return `
-        <div class="block-row">
-          <div style="flex:1">
-            <label class="field-label">Section ID</label>
-            <input class="block-input" data-field="id" placeholder="how-we-use" value="${esc(block.data.id)}" />
-          </div>
-          <div style="flex:2">
-            <label class="field-label">Section Title</label>
-            <input class="block-input" data-field="title" placeholder="How We Use Information" value="${esc(block.data.title)}" />
-          </div>
-        </div>
-        <label class="field-label">Intro Content (optional)</label>
-        <textarea class="block-textarea" data-field="content" placeholder="Optional intro paragraph before the list...">${esc(block.data.content)}</textarea>
-        <label class="field-label">List Items</label>
-        <div class="list-items" data-list-container>
-          ${(block.data.list || [""])
-            .map(
-              (item, i) => `
-            <div class="list-item-row" data-index="${i}">
-              <input class="block-input" data-field="list" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" />
-              <button class="list-item-remove" data-remove-index="${i}" title="Remove">
-                <span class="material-symbols-outlined mi">remove</span>
-              </button>
-            </div>`,
-            )
-            .join("")}
-        </div>
-        <button class="add-list-item-btn" data-add-item>
-          <span class="material-symbols-outlined mi">add</span> Add Item
-        </button>`;
-
+      return `<div class="block-row"><div style="flex:1"><label class="field-label">Section ID</label><input class="block-input" data-field="id" placeholder="how-we-use" value="${esc(block.data.id)}" /></div><div style="flex:2"><label class="field-label">Section Title</label><input class="block-input" data-field="title" placeholder="How We Use Information" value="${esc(block.data.title)}" /></div></div><label class="field-label">Intro Content (optional)</label><textarea class="block-textarea" data-field="content" placeholder="Optional intro paragraph before the list...">${esc(block.data.content)}</textarea><label class="field-label">List Items</label><div class="list-items" data-list-container>${(block.data.list || [""]).map((item, i) => `<div class="list-item-row" data-index="${i}"><input class="block-input" data-field="list" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" /><button class="list-item-remove" data-remove-index="${i}" title="Remove"><span class="material-symbols-outlined mi">remove</span></button></div>`).join("")}</div><button class="add-list-item-btn" data-add-item><span class="material-symbols-outlined mi">add</span> Add Item</button>`;
     case "pp-section-sub":
-      return `
-        <div class="block-row">
-          <div style="flex:1">
-            <label class="field-label">Section ID</label>
-            <input class="block-input" data-field="id" placeholder="information-we-collect" value="${esc(block.data.id)}" />
-          </div>
-          <div style="flex:2">
-            <label class="field-label">Section Title</label>
-            <input class="block-input" data-field="title" placeholder="Information We Collect" value="${esc(block.data.title)}" />
-          </div>
-        </div>
-        <label class="field-label">Subsections</label>
-        <div class="subsections-container" data-subsections-container>
-          ${(block.data.subsections || []).map((sub, i) => buildSubsectionRow(sub, i)).join("")}
-        </div>
-        <button class="add-list-item-btn" data-add-subsection>
-          <span class="material-symbols-outlined mi">add</span> Add Subsection
-        </button>`;
-
+      return `<div class="block-row"><div style="flex:1"><label class="field-label">Section ID</label><input class="block-input" data-field="id" placeholder="information-we-collect" value="${esc(block.data.id)}" /></div><div style="flex:2"><label class="field-label">Section Title</label><input class="block-input" data-field="title" placeholder="Information We Collect" value="${esc(block.data.title)}" /></div></div><label class="field-label">Subsections</label><div class="subsections-container" data-subsections-container>${(block.data.subsections || []).map((sub, i) => buildSubsectionRow(sub, i)).join("")}</div><button class="add-list-item-btn" data-add-subsection><span class="material-symbols-outlined mi">add</span> Add Subsection</button>`;
     case "pp-contact":
-      return `
-        <div class="block-row">
-          <div style="flex:1">
-            <label class="field-label">Section ID</label>
-            <input class="block-input" data-field="id" placeholder="contact" value="${esc(block.data.id)}" />
-          </div>
-          <div style="flex:2">
-            <label class="field-label">Section Title</label>
-            <input class="block-input" data-field="title" placeholder="Contact Us" value="${esc(block.data.title)}" />
-          </div>
-        </div>
-        <label class="field-label">Content</label>
-        <textarea class="block-textarea" data-field="content" placeholder="If you have any questions...">${esc(block.data.content)}</textarea>
-        <label class="field-label">Contact Email</label>
-        <input class="block-input" data-field="contactEmail" placeholder="you+appname@gmail.com" value="${esc(block.data.contactEmail)}" />`;
-
+      return `<div class="block-row"><div style="flex:1"><label class="field-label">Section ID</label><input class="block-input" data-field="id" placeholder="contact" value="${esc(block.data.id)}" /></div><div style="flex:2"><label class="field-label">Section Title</label><input class="block-input" data-field="title" placeholder="Contact Us" value="${esc(block.data.title)}" /></div></div><label class="field-label">Content</label><textarea class="block-textarea" data-field="content" placeholder="If you have any questions...">${esc(block.data.content)}</textarea><label class="field-label">Contact Email</label><input class="block-input" data-field="contactEmail" placeholder="you+appname@gmail.com" value="${esc(block.data.contactEmail)}" />`;
     default:
       return "";
   }
 }
 
 function buildSubsectionRow(sub, i) {
-  return `
-    <div class="pp-subsection-row" data-sub-index="${i}" style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;">Subsection ${i + 1}</span>
-        <button class="block-action-btn delete" data-remove-sub="${i}" title="Remove subsection" style="width:24px;height:24px;">
-          <span class="material-symbols-outlined mi">remove</span>
-        </button>
-      </div>
-      <label class="field-label" style="margin-top:0">Subtitle</label>
-      <input class="block-input" data-sub-field="subtitle" data-sub-index="${i}" placeholder="Personal Data" value="${esc(sub.subtitle)}" />
-      <label class="field-label">Content</label>
-      <textarea class="block-textarea" data-sub-field="content" data-sub-index="${i}" placeholder="Subsection content...">${esc(sub.content)}</textarea>
-    </div>`;
+  return `<div class="pp-subsection-row" data-sub-index="${i}" style="background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:12px;margin-bottom:8px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;">Subsection ${i + 1}</span><button class="block-action-btn delete" data-remove-sub="${i}" title="Remove subsection" style="width:24px;height:24px;"><span class="material-symbols-outlined mi">remove</span></button></div><label class="field-label" style="margin-top:0">Subtitle</label><input class="block-input" data-sub-field="subtitle" data-sub-index="${i}" placeholder="Personal Data" value="${esc(sub.subtitle)}" /><label class="field-label">Content</label><textarea class="block-textarea" data-sub-field="content" data-sub-index="${i}" placeholder="Subsection content...">${esc(sub.content)}</textarea></div>`;
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1012,16 +1028,11 @@ function bindBlockInputs(el, block) {
         ? "input"
         : "change";
     input.addEventListener(evt, () => {
-      if (field === "items") {
-        block.data.items[parseInt(idx)] = input.value;
-      } else if (field === "list") {
-        block.data.list[parseInt(idx)] = input.value;
-      } else {
-        block.data[field] = input.value;
-      }
+      if (field === "items") block.data.items[parseInt(idx)] = input.value;
+      else if (field === "list") block.data.list[parseInt(idx)] = input.value;
+      else block.data[field] = input.value;
     });
   });
-
   el.querySelectorAll("[data-sub-field]").forEach((input) => {
     const field = input.dataset.subField;
     const idx = parseInt(input.dataset.subIndex);
@@ -1035,7 +1046,6 @@ function bindBlockInputs(el, block) {
       block.data.subsections[idx][field] = input.value;
     });
   });
-
   const addSubBtn = el.querySelector("[data-add-subsection]");
   if (addSubBtn) {
     addSubBtn.addEventListener("click", () => {
@@ -1051,14 +1061,11 @@ function bindBlockInputs(el, block) {
       bindSubsectionRow(row, block, i);
     });
   }
-
   el.querySelectorAll("[data-remove-sub]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const i = parseInt(btn.dataset.removeSub);
-      removeSubsection(el, block, i);
-    });
+    btn.addEventListener("click", () =>
+      removeSubsection(el, block, parseInt(btn.dataset.removeSub)),
+    );
   });
-
   const addBtn = el.querySelector("[data-add-item]");
   if (addBtn) {
     addBtn.addEventListener("click", () => {
@@ -1070,11 +1077,7 @@ function bindBlockInputs(el, block) {
       const row = document.createElement("div");
       row.className = "list-item-row";
       row.dataset.index = i;
-      row.innerHTML = `
-        <input class="block-input" data-field="${isPrivacyList ? "list" : "items"}" data-index="${i}" placeholder="List item ${i + 1}..." />
-        <button class="list-item-remove" data-remove-index="${i}" title="Remove">
-          <span class="material-symbols-outlined mi">remove</span>
-        </button>`;
+      row.innerHTML = `<input class="block-input" data-field="${isPrivacyList ? "list" : "items"}" data-index="${i}" placeholder="List item ${i + 1}..." /><button class="list-item-remove" data-remove-index="${i}" title="Remove"><span class="material-symbols-outlined mi">remove</span></button>`;
       const newInput = row.querySelector("input");
       newInput.addEventListener("input", () => {
         arr[i] = newInput.value;
@@ -1087,7 +1090,6 @@ function bindBlockInputs(el, block) {
       newInput.focus();
     });
   }
-
   el.querySelectorAll("[data-remove-index]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const i = parseInt(btn.dataset.removeIndex);
@@ -1110,12 +1112,14 @@ function bindSubsectionRow(row, block, i) {
     });
   });
   const removeBtn = row.querySelector("[data-remove-sub]");
-  if (removeBtn) {
-    removeBtn.addEventListener("click", () => {
-      const idx = parseInt(removeBtn.dataset.removeSub);
-      removeSubsection(row.closest(".block-item"), block, idx);
-    });
-  }
+  if (removeBtn)
+    removeBtn.addEventListener("click", () =>
+      removeSubsection(
+        row.closest(".block-item"),
+        block,
+        parseInt(removeBtn.dataset.removeSub),
+      ),
+    );
 }
 
 function removeSubsection(el, block, idx) {
@@ -1125,9 +1129,9 @@ function removeSubsection(el, block, idx) {
   container.innerHTML = block.data.subsections
     .map((sub, i) => buildSubsectionRow(sub, i))
     .join("");
-  container.querySelectorAll(".pp-subsection-row").forEach((row, i) => {
-    bindSubsectionRow(row, block, i);
-  });
+  container
+    .querySelectorAll(".pp-subsection-row")
+    .forEach((row, i) => bindSubsectionRow(row, block, i));
 }
 
 function removeListItem(el, block, idx) {
@@ -1136,13 +1140,8 @@ function removeListItem(el, block, idx) {
   const container = el.querySelector("[data-list-container]");
   container.innerHTML = block.data.items
     .map(
-      (item, i) => `
-    <div class="list-item-row" data-index="${i}">
-      <input class="block-input" data-field="items" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" />
-      <button class="list-item-remove" data-remove-index="${i}" title="Remove">
-        <span class="material-symbols-outlined mi">remove</span>
-      </button>
-    </div>`,
+      (item, i) =>
+        `<div class="list-item-row" data-index="${i}"><input class="block-input" data-field="items" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" /><button class="list-item-remove" data-remove-index="${i}" title="Remove"><span class="material-symbols-outlined mi">remove</span></button></div>`,
     )
     .join("");
   container.querySelectorAll("input").forEach((inp) => {
@@ -1163,13 +1162,8 @@ function removePrivacyListItem(el, block, idx) {
   const container = el.querySelector("[data-list-container]");
   container.innerHTML = block.data.list
     .map(
-      (item, i) => `
-    <div class="list-item-row" data-index="${i}">
-      <input class="block-input" data-field="list" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" />
-      <button class="list-item-remove" data-remove-index="${i}" title="Remove">
-        <span class="material-symbols-outlined mi">remove</span>
-      </button>
-    </div>`,
+      (item, i) =>
+        `<div class="list-item-row" data-index="${i}"><input class="block-input" data-field="list" data-index="${i}" placeholder="List item ${i + 1}..." value="${esc(item)}" /><button class="list-item-remove" data-remove-index="${i}" title="Remove"><span class="material-symbols-outlined mi">remove</span></button></div>`,
     )
     .join("");
   container.querySelectorAll("input").forEach((inp) => {
@@ -1198,7 +1192,6 @@ function initDragDrop() {
     item.addEventListener("drop", onDrop);
   });
 }
-
 function onDragStart(e) {
   dragSrc = this;
   this.classList.add("dragging");
@@ -1207,9 +1200,11 @@ function onDragStart(e) {
 }
 function onDragEnd() {
   this.classList.remove("dragging");
-  document.querySelectorAll(".block-item").forEach((el) => {
-    el.classList.remove("drag-target-above", "drag-target-below");
-  });
+  document
+    .querySelectorAll(".block-item")
+    .forEach((el) =>
+      el.classList.remove("drag-target-above", "drag-target-below"),
+    );
   dragSrc = null;
 }
 function onDragOver(e) {
@@ -1235,7 +1230,6 @@ function onDrop(e) {
   const tgtId = parseInt(this.dataset.id);
   const above = this.classList.contains("drag-target-above");
   const srcIdx = blocks.findIndex((b) => b.id === srcId);
-  const tgtIdx = blocks.findIndex((b) => b.id === tgtId);
   const [moved] = blocks.splice(srcIdx, 1);
   const newIdx = blocks.findIndex((b) => b.id === tgtId);
   blocks.splice(above ? newIdx : newIdx + 1, 0, moved);
@@ -1255,17 +1249,13 @@ async function generateOutput() {
     showToast("Please add a title first");
     return;
   }
-
   showModal();
   await runGeneratingAnimation();
-
   const obj = buildObject();
   const json = JSON.stringify(obj, null, 2);
-
   document.getElementById("modalGenerating").style.display = "none";
   document.getElementById("modalOutput").style.display = "block";
   document.getElementById("outputCode").textContent = json;
-
   document.getElementById("copyBtn").onclick = () => {
     navigator.clipboard.writeText(json).then(() => {
       const msg = document.getElementById("copySuccess");
@@ -1288,10 +1278,8 @@ async function runGeneratingAnimation() {
 
 function buildObject() {
   if (mode === "privacy") return buildPrivacyObject();
-
   const cfg = MODES[mode];
   const obj = {};
-
   const title = document.getElementById("meta-title")?.value.trim() || "";
   obj.id = title
     .toLowerCase()
@@ -1299,16 +1287,13 @@ function buildObject() {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .substring(0, 60);
-
   cfg.metaFields.forEach((f) => {
-    if (f.type === "tags") {
-      obj[f.id] = getTags();
-    } else {
+    if (f.type === "tags") obj[f.id] = getTags();
+    else {
       const el = document.getElementById(`meta-${f.id}`);
       if (el) obj[f.id] = el.value.trim();
     }
   });
-
   obj.content = blocks.map((block) => {
     const out = { type: block.type };
     switch (block.type) {
@@ -1337,23 +1322,19 @@ function buildObject() {
     }
     return out;
   });
-
   return obj;
 }
 
 function buildPrivacyObject() {
   const cfg = MODES.privacy;
   const obj = {};
-
   cfg.metaFields.forEach((f) => {
-    if (f.type === "tags") {
-      obj[f.id] = getTags();
-    } else {
+    if (f.type === "tags") obj[f.id] = getTags();
+    else {
       const el = document.getElementById(`meta-${f.id}`);
       if (el) obj[f.id] = el.value.trim();
     }
   });
-
   obj.sections = blocks.map((block) => {
     const section = {};
     switch (block.type) {
@@ -1386,7 +1367,6 @@ function buildPrivacyObject() {
     }
     return section;
   });
-
   return obj;
 }
 
@@ -1401,11 +1381,9 @@ function showModal() {
     .forEach((s) => s.classList.remove("active", "done"));
   document.getElementById("modalOverlay").classList.add("show");
 }
-
 function hideModal() {
   document.getElementById("modalOverlay").classList.remove("show");
 }
-
 document.getElementById("modalClose").addEventListener("click", hideModal);
 document.getElementById("modalOverlay").addEventListener("click", (e) => {
   if (e.target === document.getElementById("modalOverlay")) hideModal();
@@ -1439,11 +1417,9 @@ function esc(str) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
-
 function delay(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
-
 function showToast(msg) {
   const toast = document.getElementById("toast");
   toast.querySelector("span:last-child").textContent = msg;

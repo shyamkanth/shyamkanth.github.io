@@ -28,11 +28,7 @@
     },
   ];
 
-  // ── SECRET COMMANDS ────────────────────────────────────────────────────────
-  // Type "shyam>" in the search box to unlock these.
-  // After the prefix, keep typing to filter within secret commands.
-  // e.g.  "shyam> content"  →  shows only Content Builder
-  const SECRET_PREFIX = "shyam>";
+  const SECRET_PREFIX = "v0id.run";
   const SECRET_COMMANDS = [
     {
       label: "Content Builder",
@@ -68,6 +64,11 @@
         padding-top:30vh;
         opacity:0;animation:_cpFi .18s ease forwards;
       }
+      @media (max-width: 480px) {
+        #_cp_ov {
+          padding-top: 15vh;
+        }
+      }
       @keyframes _cpFi{from{opacity:0}to{opacity:1}}
       #_cp_bx {
         width:100%;max-width:580px;margin:0 16px;
@@ -80,7 +81,7 @@
       }
       @keyframes _cpSi{from{transform:scale(0.95) translateY(-10px)}to{transform:scale(1) translateY(0)}}
       #_cp_iw {
-        display:flex;align-items:center;gap:12px;
+        display:flex;align-items:center;gap:12px; justify-content:space-between;
         padding:16px 20px;
         border-bottom:1px solid rgba(255,255,255,0.07);
       }
@@ -90,7 +91,7 @@
         font-variation-settings:'FILL' 0,'wght' 400;
       }
       #_cp_in {
-        flex:1;background:none;border:none;outline:none;
+        width:100%;background:none;border:none;outline:none;
         font-family:'Plus Jakarta Sans',sans-serif;
         font-size:17px;font-weight:500;color:#edf2ee;
         caret-color:#00ff87;letter-spacing:.01em;
@@ -248,7 +249,7 @@
       if (isSecret) {
         esc.style.display = "none";
         badge.style.display = "block";
-        badge.textContent = "⚡ SECRET MODE";
+        badge.textContent = "⚡ GHOST MODE";
       } else {
         esc.style.display = "";
         badge.style.display = "none";
@@ -410,7 +411,7 @@
     if (e.key === "Escape" && _isOpen) _close();
   });
 
-  // ── TRIGGER: 2-finger 5-second long press (mobile) ────────────────────────
+  // ── TRIGGER: 2-finger 2-second long press (mobile) ────────────────────────
   let _pressTimer;
   let _touchStartX, _touchStartY;
   document.addEventListener("touchstart", (e) => {
@@ -419,7 +420,7 @@
       _touchStartY = e.touches[0].clientY;
       _pressTimer = setTimeout(() => {
         _isOpen ? _close() : _show();
-      }, 3000);
+      }, 2000);
     }
   });
   document.addEventListener("touchend", () => clearTimeout(_pressTimer));

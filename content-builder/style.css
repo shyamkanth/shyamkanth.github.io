@@ -1349,3 +1349,87 @@ body.locked .topnav,
 body.locked .sidebar-toggle {
   display: none !important;
 }
+
+/* ── WELCOME TEMPLATE GRID ───────────────────────────────────────── */
+/* Add this block to the bottom of style.css */
+
+.welcome-template-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.welcome-template-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-align: center;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+}
+.welcome-template-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(var(--accent-rgb), 0.05) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+.welcome-template-card:hover::before {
+  opacity: 1;
+}
+.welcome-template-card:hover {
+  border-color: rgba(var(--accent-rgb), 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.wtc-icon {
+  font-size: 28px;
+  color: var(--accent);
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 400;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.welcome-template-card:hover .wtc-icon {
+  opacity: 1;
+}
+
+.wtc-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-family: var(--font);
+}
+
+.wtc-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 480px) {
+  .welcome-template-grid {
+    grid-template-columns: 1fr;
+  }
+  .wtc-desc {
+    display: none;
+  }
+}
