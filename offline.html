@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline — Connectivity Issue</title>
+    <link rel="icon" href="/images/icon.png" />
+
+    <style>
+      :root {
+        --bg: #0a0c0b;
+        --text: #edf2ee;
+        --text-muted: #7a9080;
+        --accent: #00ff87;
+        --accent-rgb: 0, 255, 135;
+        --border: rgba(255, 255, 255, 0.1);
+        --font-mono: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+        --font-sans:
+          "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        overflow: hidden;
+      }
+
+      .error-page {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px;
+      }
+
+      .error-content {
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .error-icon-wrap {
+        margin-bottom: 24px;
+        display: inline-flex;
+        padding: 24px;
+        background: rgba(var(--accent-rgb), 0.05);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+      }
+
+      .error-title {
+        font-size: clamp(40px, 8vw, 72px);
+        font-family: var(--font-mono);
+        font-weight: 800;
+        letter-spacing: -2px;
+        margin-bottom: 12px;
+        background: linear-gradient(to bottom, var(--text), var(--text-muted));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .error-subtitle {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .error-desc {
+        color: var(--text-muted);
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        font-family: var(--font-mono);
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 280px;
+        background: var(--accent);
+        color: #000;
+        padding: 16px 28px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-page">
+      <div class="error-content">
+        <div class="error-icon-wrap">
+          <img
+            src="/images/no-wifi.png"
+            alt="No internet"
+            style="width: 24px; height: 24px; display: block"
+          />
+        </div>
+
+        <h1 class="error-title">OFFLINE</h1>
+        <h2 class="error-subtitle">Signal Lost.</h2>
+
+        <p class="error-desc">
+          It seems you've wandered into a dead zone. Check your network or move
+          to a better area.
+        </p>
+
+        <button class="btn-primary" onclick="window.location.reload()">
+          Try Again
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
