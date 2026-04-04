@@ -101,16 +101,6 @@ const industrialProjects = [
 
 const personalProjects = [
   {
-    name: "Lumina Habit - Habit Tracker",
-    role: "Web Developer",
-    duration: "2 Days",
-    tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
-    description:
-      "Lumina is a fully offline, browser-based habit tracking application built with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no accounts, no cloud. Open the file in a browser and you're up and running.",
-    link: "/projects/lumina/",
-    image: "/images/lumina.png",
-  },
-  {
     name: "PasswordVault - Password Manager",
     role: "Android Developer",
     duration: "2 months",
@@ -162,6 +152,26 @@ const personalProjects = [
     image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
   },
   {
+    name: "Lumina Habit - Habit Tracker",
+    role: "Web Developer",
+    duration: "2 Days",
+    tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
+    description:
+      "Lumina is a fully offline, browser-based habit tracking application built with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no accounts, no cloud. Open the file in a browser and you're up and running.",
+    link: "/projects/lumina/",
+    image: "/images/lumina.png",
+  },
+  {
+    name: "BotBook : Browser Note Companion",
+    role: "Front End Developer",
+    duration: "2 Days",
+    tags: ["HTML", "CSS", "JAVASCRIPT"],
+    description:
+      "A sleek, browser-based notebook built with HTML, CSS, and JavaScript that lets you create, edit, and manage notes effortlessly. Your notes are stored locally in your browser using `localStorage`, ensuring privacy and persistence across sessions.",
+    link: "/projects/botbook/",
+    image: "/images/botbook.png",
+  },
+  {
     name: "PayDay - EMI Reminder App",
     role: "Android Developer",
     duration: "In Progress",
@@ -174,22 +184,6 @@ const personalProjects = [
 ];
 
 const funProjects = [
-  {
-    name: "BotBook : Browser Text Editor",
-    tags: ["HTML", "CSS", "JAVASCRIPT"],
-    description:
-      "A fully functional rich text editor that runs entirely in the browser. Supports formatting, live preview, and local save — no backend required.",
-    link: "https://shyamkanth.github.io/BotBook/",
-    emoji: "✏️",
-  },
-  {
-    name: "Hey Todo : A todo application",
-    tags: ["KOTLIN", "ROOM", "COROUTINES"],
-    description:
-      "Hey Todo is an Android application that allows users to manage their tasks in real-time. Users can create, read, update, and delete tasks with ease.",
-    link: "https://github.com/shyamkanth/Hey-Todo",
-    emoji: "✏️",
-  },
   {
     name: "Multifunctional Calculator in C",
     tags: ["C"],
@@ -204,6 +198,14 @@ const funProjects = [
     description:
       "A cool Notepad built using Bootstrap and JS having Mac Interface. Must check out. ",
     link: "https://shyamkanth.github.io/Mac-UI-Notepad/",
+    emoji: "✏️",
+  },
+  {
+    name: "Hey Todo : A todo application",
+    tags: ["KOTLIN", "ROOM", "COROUTINES"],
+    description:
+      "Hey Todo is an Android application that allows users to manage their tasks in real-time. Users can create, read, update, and delete tasks with ease.",
+    link: "https://github.com/shyamkanth/Hey-Todo",
     emoji: "✏️",
   },
 ];

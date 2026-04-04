@@ -253,6 +253,74 @@
           "text": "Open command pallete pressing CTRL + /  or on phone touch and hold screen three fingers for five seciond and select Lumina from the options available.  Also Lumina Habit is available in the Projects section of the portfolio. Open index.html in any browser — no build step, no dependencies to install."
         }
       ]
+    },
+    {
+      "id": "botbook-v2-minimalist-notes-architecture",
+      "title": "Botbook v2 — Redefining Minimalist Note-Taking with Data Sovereignty",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-04-04",
+      "thumbnail": "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&h=400&fit=crop",
+      "type": "UPDATE",
+      "priority": "info",
+      "excerpt": "Botbook v2 emerges with a refined, high-contrast minimalist UI, focused entirely on speed and portability. Now featuring full JSON-based import/export for total control over your digital thoughts.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "The Evolution of Botbook"
+        },
+        {
+          "type": "paragraph",
+          "text": "Botbook v2 is the successor to our original lightweight note-taking tool. This version strips away the noise to focus on a 'write-first' philosophy. Built with an obsession for typography and white space, it transforms the browser into a focused sanctuary for your ideas, utilizing advanced CSS grid systems and a refined dark-mode palette."
+        },
+        {
+          "type": "heading",
+          "text": "Enhanced Feature Set"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Ultra-minimalist interface with a focus on typography and readability",
+            "Instant-save architecture using a optimized localStorage engine",
+            "New: 'Export All' feature to download your entire library as a single, portable JSON file",
+            "New: 'Import Notes' engine to restore backups or merge notes across different devices",
+            "Categorized 'Notebooks' with dynamic color-coding for visual organization",
+            "Global search functionality that filters through content in real-time as you type",
+            "Markdown support for rich-text formatting without the heavy overhead",
+            "Reading time estimates and word count tracking for long-form entries",
+            "Auto-backup prompts to ensure your local data is never lost",
+            "Fully responsive layout optimized for seamless writing on mobile or desktop"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "The UI Philosophy"
+        },
+        {
+          "type": "paragraph",
+          "text": "The interface leverages a monochrome-plus-one accent system, ensuring that the UI never distracts from the content. By utilizing modern CSS features like backdrop-filters and custom properties, Botbook v2 achieves a 'glass-morphism' aesthetic that feels integrated into the modern web while maintaining a lightning-fast performance profile."
+        },
+        {
+          "type": "quote",
+          "text": "Your notes shouldn't be trapped in a cloud. They should be in your pocket, in your control, and in your style.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Data Portability First"
+        },
+        {
+          "type": "paragraph",
+          "text": "The standout feature of v2 is the Import/Export suite. Recognizing that users need to move between browsers and devices, you can now generate a full encrypted backup of your notes library. Simply drag and drop your exported JSON file into any new instance of Botbook to pick up exactly where you left off."
+        },
+        {
+          "type": "heading",
+          "text": "Get Started"
+        },
+        {
+          "type": "paragraph",
+          "text": "Botbook v2 is live within the local ecosystem. Access it via the global command palette (CTRL + /) or navigate to the Projects section of the portfolio. Just like Lumina, it is a single-entry point application—open the index.html and start writing immediately."
+        }
+      ]
     }
   ]
 }

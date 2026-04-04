@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BotBook - Minimal Note Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../../images/icon.png"
+  </head>
+  <body>
+    <div class="app" id="app">
+      <div class="sidebar">
+        <div class="sidebar-inner">
+          <div class="brand">
+            <div class="brand-icon">◈</div>
+            <div class="brand-text">
+              <h1>BOTBOOK</h1>
+              <p>Note Companion</p>
+            </div>
+          </div>
+
+          <div class="sidebar-top">
+            <button class="btn-new-note" id="btn-new-note-desktop">
+              <span class="material-symbols-outlined" style="font-size:18px">add</span>
+              New Note
+            </button>
+          </div>
+
+          <div class="notes-header">Your Notes</div>
+          <div class="notes-list" id="notes-list-desktop"></div>
+
+          <div class="sidebar-footer">
+            <button class="btn-footer" id="btn-export-all-desktop">
+              <span class="material-symbols-outlined">download</span>Export all
+            </button>
+            <button class="btn-footer" id="btn-import-all-desktop">
+              <span class="material-symbols-outlined">upload</span>Import
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-container" id="editor-container">
+        <div class="no-editor" id="no-editor">
+          <span class="material-symbols-outlined">edit_note</span>
+          <div>
+            <h2>Welcome to BotBook</h2>
+            <p>Select a note or create one to begin</p>
+          </div>
+        </div>
+
+        <div id="editor-wrapper" style="display:none;flex:1;flex-direction:column;height:100%">
+          <div class="editor-header">
+            <button class="btn-back" id="btn-back">
+              <span class="material-symbols-outlined">arrow_back_ios_new</span>
+            </button>
+            <div class="editor-title-wrap">
+              <div class="editor-title" id="editor-title"></div>
+            </div>
+            <div class="editor-header-actions">
+              <div class="save-badge" id="save-badge">
+                <span class="material-symbols-outlined">sync_saved_locally</span>
+                <span>Saved</span>
+              </div>
+              <button class="action-icon-btn" id="btn-export-note" title="Export note">
+                <span class="material-symbols-outlined">download</span>
+              </button>
+              <button class="action-icon-btn danger" id="btn-delete-note" title="Delete note">
+                <span class="material-symbols-outlined">delete_forever</span>
+              </button>
+            </div>
+          </div>
+          <div class="notepad" id="notepad">
+            <div class="line-numbers" id="line-numbers"><span class="active-line">1</span></div>
+            <div class="content-wrap">
+              <div class="content empty" id="content" contenteditable="true" spellcheck="false"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="mobile-nav" id="mobile-nav">
+      <button class="mobile-nav-btn" id="mob-notes-btn" onclick="showNotesSheet()">
+        <span class="material-symbols-outlined">notes</span>
+        Notes
+      </button>
+      <button class="mobile-nav-btn primary" id="mob-new-btn" onclick="openCreateModal()">
+        <span class="material-symbols-outlined">add</span>
+        New
+      </button>
+      <button class="mobile-nav-btn" id="mob-more-btn" onclick="showMoreSheet()">
+        <span class="material-symbols-outlined">more_horiz</span>
+        More
+      </button>
+    </nav>
+
+    <div class="sheet-overlay" id="notes-sheet-overlay" onclick="closeNotesSheet()"></div>
+    <div class="bottom-sheet" id="notes-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h3>Your Notes</h3>
+        <div class="sheet-close" onclick="closeNotesSheet()">
+          <span class="material-symbols-outlined">close</span>
+        </div>
+      </div>
+      <div class="sheet-notes-list" id="notes-list-mobile"></div>
+    </div>
+
+    <div class="sheet-overlay" id="more-sheet-overlay" onclick="closeMoreSheet()"></div>
+    <div class="bottom-sheet" id="more-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <h3>Options</h3>
+        <div class="sheet-close" onclick="closeMoreSheet()">
+          <span class="material-symbols-outlined">close</span>
+        </div>
+      </div>
+      <div style="padding:16px 12px;display:flex;flex-direction:column;gap:8px;">
+        <button class="btn-footer" style="justify-content:flex-start;gap:12px;padding:14px 16px;font-size:14px;" onclick="closeMoreSheet();handleExportAll()">
+          <span class="material-symbols-outlined" style="font-size:20px">download</span>Export All Notes
+        </button>
+        <button class="btn-footer" style="justify-content:flex-start;gap:12px;padding:14px 16px;font-size:14px;" onclick="closeMoreSheet();openImportModal()">
+          <span class="material-symbols-outlined" style="font-size:20px">upload</span>Import Notes
+        </button>
+        <button class="btn-footer" style="justify-content:flex-start;gap:12px;padding:14px 16px;font-size:14px;" onclick="closeMoreSheet();openInfoModal()">
+          <span class="material-symbols-outlined" style="font-size:20px">info</span>About BotBook
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="create-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-header"><h2>New Note</h2></div>
+        <div class="modal-body">
+          <form id="create-form">
+            <div class="form-group">
+              <label for="note-title">Title</label>
+              <input type="text" id="note-title" placeholder="My awesome note..." required maxlength="100" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal('create-modal')">Cancel</button>
+          <button type="submit" class="btn-primary" form="create-form">Create</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-header"><h2>Rename Note</h2></div>
+        <div class="modal-body">
+          <form id="edit-form">
+            <div class="form-group">
+              <label for="edit-title">New Title</label>
+              <input type="text" id="edit-title" placeholder="Note title..." required maxlength="100" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal('edit-modal')">Cancel</button>
+          <button type="submit" class="btn-primary" form="edit-form">Rename</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="delete-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-header"><h2>Delete Note</h2></div>
+        <div class="modal-body">
+          <div class="delete-warning"><strong>Warning:</strong> This cannot be undone</div>
+          <p id="delete-note-name"></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+          <button class="btn-danger" onclick="handleDeleteNote(event)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="import-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-header"><h2>Import Notes</h2></div>
+        <div class="modal-body">
+          <p>Select a JSON file exported from BotBook.</p>
+          <form id="import-form">
+            <div class="form-group">
+              <label for="import-file">JSON File</label>
+              <input type="file" id="import-file" accept=".json" required />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" onclick="closeModal('import-modal')">Cancel</button>
+          <button type="submit" class="btn-primary" form="import-form">Import</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="info-modal">
+      <div class="modal-content">
+        <div class="modal-handle"></div>
+        <div class="modal-header"><h2>About BotBook</h2></div>
+        <div class="modal-body">
+          <p><strong>Privacy First:</strong> All notes are stored locally in your browser.</p>
+          <p><strong>Keyboard Shortcuts:</strong></p>
+          <div class="shortcut-box">
+            <div>Ctrl + M → New note</div>
+            <div>Ctrl + E → Export all</div>
+            <div>Ctrl + I → Import</div>
+            <div>Ctrl + S → Save</div>
+          </div>
+          <p style="margin-top:14px">Made with ❤️</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-primary" onclick="closeModal('info-modal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
