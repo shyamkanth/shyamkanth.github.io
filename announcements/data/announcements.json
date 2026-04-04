@@ -185,6 +185,74 @@
           "text": "Expected release: Q1 2026. Follow the GitHub profile for updates."
         }
       ]
+    },
+    {
+      "id": "lumina-habit-a-beautiful-static-habit-tracker-built-with-van",
+      "title": "Lumina Habit — A Beautiful Static Habit Tracker Built with Vanilla JS",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-04-04",
+      "thumbnail": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=400&fit=crop",
+      "type": "RELEASE",
+      "priority": "info",
+      "excerpt": "Lumina Habit is a fully static, localStorage-powered habit tracking web app with a dark green aesthetic, session logging, journaling, analytics, and data import/export — no backend required.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introducing Lumina Habit"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lumina Habit is a fully client-side habit tracking web app built with vanilla HTML, CSS, and JavaScript. There is no backend, no database, and no login — everything lives in your browser's localStorage. It was designed to feel premium while staying completely offline-capable."
+        },
+        {
+          "type": "heading",
+          "text": "Key Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Create and manage habits with custom icons, colors, and unit types",
+            "Daily check-in system with streak tracking and completion stats",
+            "Session logging with duration, intensity, and reflection notes",
+            "GitHub-style consistency heatmap across the past year",
+            "Daily journal with mood tagging and timestamped entries",
+            "Analytics page with weekly bar chart, activity rhythm, and peak time insight",
+            "Full data export and import via JSON backup files",
+            "Activity log that records every action taken in the app",
+            "Responsive design with mobile bottom navigation and desktop nav",
+            "Profile setup with name persistence across all pages"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Tech Stack"
+        },
+        {
+          "type": "paragraph",
+          "text": "The app is structured as a multi-page static site with a shared global script handling the data store, activity logging, toast notifications, and navigation. Each page — Dashboard, Habits, Stats, and Settings — has its own HTML, CSS, and JS file. Styling is done with Tailwind CSS via CDN, and all state is persisted through a structured localStorage API."
+        },
+        {
+          "type": "quote",
+          "text": "No server. No cloud. No excuses. Just you and your habits.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Avoidance Habits Support"
+        },
+        {
+          "type": "paragraph",
+          "text": "Unlike most habit trackers that only support building positive habits, Lumina Habit includes dedicated unit types for avoidance habits — tracking days cigarette-free, days alcohol-free, urges resisted, and more. The unit catalogue spans seven categories covering time, volume, distance, exercise, content, avoidance, and completion."
+        },
+        {
+          "type": "heading",
+          "text": "Try It"
+        },
+        {
+          "type": "paragraph",
+          "text": "Open command pallete pressing CTRL + /  or on phone touch and hold screen three fingers for five seciond and select Lumina from the options available.  Also Lumina Habit is available in the Projects section of the portfolio. Open index.html in any browser — no build step, no dependencies to install."
+        }
+      ]
     }
   ]
 }

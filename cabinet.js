@@ -297,6 +297,18 @@
       icon: "article",
       action: () => _go("/blogs/"),
     },
+    {
+      label: "Lumina Habit",
+      desc: "Your personal browser based habit tracker",
+      icon: "tactic",
+      action: () => _go("/projects/lumina/"),
+    },
+    {
+      label: "BotBook",
+      desc: "Your browser based notebook for quick access.",
+      icon: "tactic",
+      action: () => _go("/projects/botbook/"),
+    },
   ];
 
   const GHOST_KEY = "v0id.run";
