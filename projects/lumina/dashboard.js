@@ -162,7 +162,7 @@ function renderHabits() {
       <div class="empty-state bg-surface-container-low rounded-lg py-14">
         <span class="material-symbols-outlined">add_task</span>
         <p class="font-bold mt-3 text-on-surface">No habits yet</p>
-        <p class="text-sm mt-1">Head to <a href="settings/index.html" class="text-primary underline font-semibold">Settings</a> to create your first ritual</p>
+        <p class="text-sm mt-1">Head to <a href="./settings/" class="text-primary underline font-semibold">Settings</a> to create your first ritual</p>
       </div>`;
     return;
   }
@@ -170,11 +170,16 @@ function renderHabits() {
   container.innerHTML = habits
     .map((habit) => {
       const done = !!checkins[habit.id];
-      const current = Store.getHabitProgressForDate(habit.id, new Date().toISOString());
+      const current = Store.getHabitProgressForDate(
+        habit.id,
+        new Date().toISOString(),
+      );
       const pct =
         habit.target > 0
           ? Math.min(100, Math.round((current / habit.target) * 100))
-          : done ? 100 : 0;
+          : done
+            ? 100
+            : 0;
       const colors = getColorClass(habit.color);
       const unitLbl = getUnitLabel(habit.unit);
 
@@ -231,10 +236,16 @@ window.toggleHabit = function (habitId) {
       Store.updateCheckinStatusForDate(habit.id, today);
       done = true;
     } else {
-      const logs = Store.getLogs().filter(l => !(l.habitId === habit.id && l.date.split("T")[0] === targetDateStr));
+      const logs = Store.getLogs().filter(
+        (l) =>
+          !(l.habitId === habit.id && l.date.split("T")[0] === targetDateStr),
+      );
       Store.set(Store.KEYS.LOGS, logs);
       Store.updateCheckinStatusForDate(habit.id, today);
-      ActivityLog.push("session_deleted", `Reset today's progress for "${habit.name}" \u2014 all today's logs cleared`);
+      ActivityLog.push(
+        "session_deleted",
+        `Reset today's progress for "${habit.name}" \u2014 all today's logs cleared`,
+      );
       done = false;
     }
   } else {
@@ -288,30 +299,35 @@ function initJournal() {
     showToast("Journal entry saved ✨");
   });
 
-  document.getElementById("view-all-journal-btn")?.addEventListener("click", () => {
-    const modal = document.getElementById("journal-modal");
-    if (!modal) return;
-    modal.classList.remove("hidden");
-    
-    if (!modal.dataset.initialized) {
-      document.getElementById("close-journal-modal")?.addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
-      window.addEventListener("click", (e) => {
-        if (e.target === modal) modal.classList.add("hidden");
-      });
-      modal.dataset.initialized = "true";
-    }
+  document
+    .getElementById("view-all-journal-btn")
+    ?.addEventListener("click", () => {
+      const modal = document.getElementById("journal-modal");
+      if (!modal) return;
+      modal.classList.remove("hidden");
 
-    const feed = document.getElementById("journal-modal-feed");
-    const entries = Store.getJournalEntries();
-    if (!entries.length) {
-      feed.innerHTML = "<p class='text-on-surface-variant text-sm'>No journal entries yet.</p>";
-      return;
-    }
-    feed.innerHTML = entries
-      .map(
-        (entry) => `
+      if (!modal.dataset.initialized) {
+        document
+          .getElementById("close-journal-modal")
+          ?.addEventListener("click", () => {
+            modal.classList.add("hidden");
+          });
+        window.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.add("hidden");
+        });
+        modal.dataset.initialized = "true";
+      }
+
+      const feed = document.getElementById("journal-modal-feed");
+      const entries = Store.getJournalEntries();
+      if (!entries.length) {
+        feed.innerHTML =
+          "<p class='text-on-surface-variant text-sm'>No journal entries yet.</p>";
+        return;
+      }
+      feed.innerHTML = entries
+        .map(
+          (entry) => `
       <div class="p-4 md:p-5 hover:bg-surface-container-high/30 rounded-[16px] transition-colors group relative">
         <div class="flex justify-between items-start mb-3">
           <div class="flex items-center gap-2">
@@ -325,9 +341,11 @@ function initJournal() {
         <p class="text-sm md:text-base text-on-surface leading-relaxed ml-[2.1rem]">"${entry.text}"</p>
         ${entry.mood ? `<div class="ml-[2.1rem] mt-3"><span class="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] uppercase font-bold tracking-wider border border-primary/20 shadow-sm">${entry.mood}</span></div>` : ""}
       </div>`,
-      )
-      .join('<div class="h-px w-full bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent my-1"></div>');
-  });
+        )
+        .join(
+          '<div class="h-px w-full bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent my-1"></div>',
+        );
+    });
 }
 
 function renderJournalFeed() {
