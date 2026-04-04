@@ -1,0 +1,606 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lumina Habit | Settings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../images/icon.png" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#00dcff",
+              "on-primary-container": "#005b2c",
+              "surface-container-high": "#1e201f",
+              "on-tertiary-fixed": "#00333d",
+              "secondary-fixed-dim": "#63ecaf",
+              "surface-variant": "#242625",
+              outline: "#747674",
+              "surface-tint": "#a4ffb9",
+              "on-primary-fixed-variant": "#006632",
+              primary: "#a4ffb9",
+              "on-error": "#490006",
+              "on-surface-variant": "#aaaba9",
+              "on-error-container": "#ffa8a3",
+              "secondary-container": "#006c48",
+              "on-secondary-fixed-variant": "#006946",
+              background: "#0d0f0e",
+              "on-tertiary-container": "#004956",
+              "inverse-surface": "#f9f9f7",
+              "surface-container-highest": "#242625",
+              "outline-variant": "#474847",
+              "secondary-dim": "#63ecaf",
+              "on-primary": "#006531",
+              "surface-container-low": "#121413",
+              "surface-container-lowest": "#000000",
+              "inverse-on-surface": "#545554",
+              "on-tertiary": "#005361",
+              "inverse-primary": "#006e37",
+              surface: "#0d0f0e",
+              "on-surface": "#f7f6f4",
+              "on-tertiary-fixed-variant": "#005361",
+              "error-container": "#9f0519",
+              "surface-dim": "#0d0f0e",
+              "primary-dim": "#00ed7d",
+              "surface-container": "#181a19",
+              error: "#ff716c",
+              "on-secondary-fixed": "#004930",
+              "primary-fixed-dim": "#00ed7d",
+              "on-background": "#f7f6f4",
+              "on-secondary-container": "#e1ffeb",
+              "tertiary-container": "#00dcff",
+              "primary-fixed": "#00fd86",
+              "error-dim": "#d7383b",
+              "surface-bright": "#2a2d2b",
+              "primary-container": "#00fd86",
+              "on-secondary": "#005e3e",
+              "secondary-fixed": "#73fbbc",
+              "tertiary-dim": "#00cded",
+              "tertiary-fixed-dim": "#00cded",
+              secondary: "#73fbbc",
+              "on-primary-fixed": "#004620",
+              tertiary: "#7de6ff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Plus Jakarta Sans"],
+              label: ["Plus Jakarta Sans"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="bg-background text-on-background min-h-screen">
+    <nav
+      class="fixed top-0 w-full z-50 bg-[#0d0f0e]/70 glass-nav shadow-[0_0_40px_rgba(0,255,135,0.05)]"
+    >
+      <div class="flex justify-between items-center px-6 md:px-8 py-4">
+        <div
+          class="text-2xl font-bold tracking-tighter text-[#00FF87] font-headline"
+        >
+          Lumina Habit
+        </div>
+        <div class="desktop-nav hidden md:flex items-center gap-8">
+          <a
+            data-nav-link
+            href="../"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors"
+            >Dashboard</a
+          >
+          <a
+            data-nav-link
+            href="../habit/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors"
+            >Habits</a
+          >
+          <a
+            data-nav-link
+            href="../stats/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors"
+            >Stats</a
+          >
+          <a
+            data-nav-link
+            href="../settings/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors"
+            >Settings</a
+          >
+        </div>
+        <div class="flex items-center gap-3">
+          <a
+            href="../habit/"
+            class="hidden md:block px-5 py-2 rounded-full signature-gradient text-on-primary font-bold hover:scale-95 transition-all duration-200 text-sm"
+            >Quick Check-in</a
+          >
+          <button
+            id="profile-avatar-btn"
+            class="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/20 bg-surface-container-high flex items-center justify-center hover:border-primary/40 transition-colors cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-primary"
+              style="font-size: 20px"
+              >person</span
+            >
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <nav
+      id="mobile-bottom-nav"
+      class="md:hidden fixed bottom-0 left-0 w-full bg-[#0d0f0e]/95 glass-nav border-t border-white/5 z-50"
+    ></nav>
+
+    <main class="pt-20 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
+      <header class="mb-8 fade-in-up">
+        <h1
+          class="text-3xl md:text-5xl font-extrabold tracking-tight mb-1 text-on-surface"
+        >
+          Sanctuary Settings
+        </h1>
+        <p class="text-on-surface-variant text-sm">
+          Refine your rhythms and personal growth space.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        <aside class="lg:col-span-4 space-y-5 fade-in-up fade-in-up-delay-1">
+          <div
+            class="bg-surface-container-low rounded-xl p-6 text-center relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"
+            ></div>
+            <div class="relative z-10">
+              <div
+                class="w-20 h-20 mx-auto mb-4 rounded-full bg-surface-container-high border-2 border-primary/30 flex items-center justify-center"
+              >
+                <span
+                  class="material-symbols-outlined text-primary"
+                  style="font-size: 36px"
+                  >person</span
+                >
+              </div>
+              <h2
+                class="text-xl font-bold text-on-surface mb-0.5"
+                id="profile-name"
+              >
+                —
+              </h2>
+              <p
+                class="text-xs text-primary font-medium mb-3"
+                id="profile-since"
+              >
+                Not set up yet
+              </p>
+              <div class="flex justify-center gap-2 flex-wrap">
+                <span
+                  class="px-2 py-1 bg-surface-container-highest rounded-full text-xs font-label text-on-surface-variant"
+                  id="profile-streak"
+                  >0 Day Streak</span
+                >
+                <span
+                  class="px-2 py-1 bg-surface-container-highest rounded-full text-xs font-label text-on-surface-variant"
+                  id="profile-tier"
+                  >Luminary</span
+                >
+              </div>
+              <button
+                id="edit-profile-btn"
+                class="mt-4 w-full py-2.5 rounded-full border border-primary/30 text-primary text-sm font-bold hover:bg-primary/10 transition-colors"
+              >
+                Edit Profile
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-surface-container-low rounded-xl p-8 space-y-1">
+            <button data-panel="habits" class="settings-nav-btn active">
+              <span class="material-symbols-outlined">checklist</span>
+              <span class="font-medium text-sm">Habits</span>
+            </button>
+            <button
+              data-panel="account"
+              class="settings-nav-btn text-on-surface-variant"
+            >
+              <span class="material-symbols-outlined">person</span>
+              <span class="font-medium text-sm">Account</span>
+            </button>
+            <button
+              data-panel="privacy"
+              class="settings-nav-btn text-on-surface-variant"
+            >
+              <span class="material-symbols-outlined">security</span>
+              <span class="font-medium text-sm">Privacy &amp; Data</span>
+            </button>
+            <hr class="border-outline-variant/10 my-2 mx-1" />
+            <button
+              id="clear-all-data-btn"
+              class="w-full flex items-center gap-[12px] px-[14px] py-[10px] rounded-[0.875rem] text-left transition-all border-none bg-transparent cursor-pointer font-body text-error/80 hover:bg-error/10 hover:text-error"
+            >
+              <span class="material-symbols-outlined text-[24px]"
+                >delete_forever</span
+              >
+              <span class="font-medium text-sm">Clear all data</span>
+            </button>
+          </div>
+        </aside>
+
+        <section class="lg:col-span-8 space-y-6 fade-in-up fade-in-up-delay-2">
+          <div id="panel-habits" class="panel-content space-y-6">
+            <div
+              class="bg-surface-container-low rounded-xl p-6 md:p-8 border border-outline-variant/10"
+            >
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold text-on-surface">
+                  Cultivate New Habit
+                </h3>
+                <span class="material-symbols-outlined text-primary"
+                  >colors</span
+                >
+              </div>
+
+              <div class="space-y-5">
+                <div>
+                  <label
+                    class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+                    >Habit Name</label
+                  >
+                  <input
+                    id="habit-name"
+                    class="w-full bg-surface-container-high border-none rounded-[16px] p-4 focus:ring-2 focus:ring-primary/40 text-on-surface placeholder:text-on-surface-variant/30"
+                    placeholder="e.g., Morning Meditation, No Smoking…"
+                    type="text"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+                    >Frequency</label
+                  >
+                  <select
+                    id="habit-frequency"
+                    class="w-full bg-surface-container-high border-none rounded-[16px] p-4 focus:ring-2 focus:ring-primary/40 text-on-surface"
+                  >
+                    <option value="daily">Daily</option>
+                    <option value="weekdays">Weekdays only</option>
+                    <option value="weekends">Weekends only</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+                    >Target Goal</label
+                  >
+                  <div class="unit-select-wrapper">
+                    <input
+                      id="habit-target"
+                      placeholder="e.g. 30"
+                      type="number"
+                      min="1"
+                    />
+                    <div class="unit-divider"></div>
+                    <select id="habit-unit"></select>
+                  </div>
+                  <p class="text-xs text-on-surface-variant/60 mt-2 ml-1">
+                    💡 For avoidance habits (quitting smoking, alcohol etc.)
+                    choose the
+                    <strong class="text-on-surface-variant"
+                      >🚫 Avoidance</strong
+                    >
+                    units above.
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3"
+                    >Icon</label
+                  >
+                  <div id="icon-picker" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3"
+                    >Accent Color</label
+                  >
+                  <div
+                    id="color-picker"
+                    class="flex flex-wrap gap-3 items-center"
+                  ></div>
+                </div>
+
+                <div class="flex justify-end pt-1">
+                  <button
+                    id="add-habit-btn"
+                    class="signature-gradient px-7 py-3.5 rounded-full text-on-primary font-bold shadow-[0_0_20px_rgba(0,255,135,0.2)] hover:scale-105 transition-all text-sm"
+                  >
+                    Initialize Habit
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between px-1">
+                <h3 class="text-base font-bold text-on-surface">
+                  Active Rhythms
+                </h3>
+              </div>
+              <div id="habits-manage-list" class="space-y-3"></div>
+            </div>
+          </div>
+
+          <div id="panel-account" class="panel-content hidden space-y-5">
+            <div
+              class="bg-surface-container-low rounded-xl p-6 md:p-8 border border-outline-variant/10 space-y-5"
+            >
+              <h3 class="text-lg font-bold">Account Settings</h3>
+              <div>
+                <label
+                  class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+                  >Display Name</label
+                >
+                <input
+                  id="account-name"
+                  class="w-full bg-surface-container-high border-none rounded-[16px] p-4 focus:ring-2 focus:ring-primary/40 text-on-surface placeholder:text-on-surface-variant/30"
+                  placeholder="Your name"
+                  type="text"
+                />
+              </div>
+              <div class="flex justify-end">
+                <button
+                  id="save-account-btn"
+                  class="signature-gradient px-7 py-3 rounded-full text-on-primary font-bold hover:scale-105 transition-all text-sm"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="panel-privacy" class="panel-content hidden space-y-5">
+            <div
+              class="bg-surface-container-low rounded-xl p-6 md:p-8 border border-outline-variant/10 space-y-4"
+            >
+              <h3 class="text-lg font-bold flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary"
+                  >database</span
+                >
+                Data Management
+              </h3>
+              <p class="text-sm text-on-surface-variant">
+                Export your data as a backup, or import a previous backup to
+                restore everything.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <button
+                  id="export-btn"
+                  class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 hover:border-primary/30 transition-all text-left group"
+                >
+                  <div
+                    class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors"
+                  >
+                    <span
+                      class="material-symbols-outlined text-primary text-2xl"
+                      >download</span
+                    >
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm">Export Data</div>
+                    <div class="text-xs text-on-surface-variant mt-0.5">
+                      Download all your data as JSON
+                    </div>
+                  </div>
+                </button>
+
+                <label
+                  for="import-file-input"
+                  class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 hover:border-tertiary/30 transition-all text-left group cursor-pointer"
+                >
+                  <div
+                    class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center shrink-0 group-hover:bg-tertiary/20 transition-colors"
+                  >
+                    <span
+                      class="material-symbols-outlined text-tertiary text-2xl"
+                      >upload</span
+                    >
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm">Import Data</div>
+                    <div class="text-xs text-on-surface-variant mt-0.5">
+                      Restore from a JSON backup file
+                    </div>
+                  </div>
+                </label>
+                <input
+                  id="import-file-input"
+                  type="file"
+                  accept=".json"
+                  class="hidden"
+                />
+              </div>
+            </div>
+
+            <div
+              class="bg-surface-container-low rounded-xl p-6 md:p-8 border border-outline-variant/10 space-y-4"
+            >
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                  <span class="material-symbols-outlined text-tertiary"
+                    >timeline</span
+                  >
+                  Activity Log
+                </h3>
+                <button
+                  id="clear-log-btn"
+                  class="text-xs text-error hover:underline font-semibold"
+                >
+                  Clear Log
+                </button>
+              </div>
+              <p class="text-xs text-on-surface-variant">
+                Every action you take in Lumina is recorded here.
+              </p>
+              <div
+                id="activity-log-container"
+                class="activity-timeline max-h-[480px] overflow-y-auto space-y-0 pr-1"
+              ></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer
+      class="myFooter w-full py-8 px-6 bg-[#0d0f0e] border-t border-emerald-500/5"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto"
+      >
+        <div class="text-base font-bold text-[#00FF87]">Lumina Habit</div>
+        <div class="text-xs text-emerald-500/40">
+          © 2026 Lumina Habit. Your Living Sanctuary.
+        </div>
+        <div class="flex gap-6">
+          <a
+            class="text-emerald-500/40 font-bold hover:text-[#00FF87] transition-colors text-m"
+            href="https://shyamkanth.github.io/"
+            >Connect Developer</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div
+      id="edit-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden"
+    >
+      <div
+        style="
+          background: #1e201f;
+          border-radius: 1.5rem;
+          padding: 2rem;
+          width: 100%;
+          max-width: 26rem;
+          margin: 0 1rem;
+          border: 1px solid rgba(71, 72, 71, 0.3);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        "
+        class="space-y-4"
+      >
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold">Edit Habit</h3>
+          <button
+            id="close-modal-btn"
+            class="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer"
+          >
+            close
+          </button>
+        </div>
+        <input
+          id="edit-name"
+          class="w-full bg-surface-container-highest border-none rounded-[16px] p-4 focus:ring-2 focus:ring-primary/40 text-on-surface text-sm"
+          placeholder="Habit name"
+          type="text"
+        />
+        <div>
+          <label
+            class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+            >Target Amount</label
+          >
+          <div class="unit-select-wrapper">
+            <input
+              id="edit-target"
+              placeholder="Target"
+              type="number"
+              min="1"
+            />
+            <div class="unit-divider"></div>
+            <select id="edit-unit"></select>
+          </div>
+        </div>
+        <input type="hidden" id="edit-habit-id" />
+        <button
+          id="save-edit-btn"
+          class="w-full signature-gradient py-3.5 rounded-[16px] text-on-primary font-bold hover:scale-[0.98] transition-transform text-sm"
+        >
+          Save Changes
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="profile-modal"
+      class="fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 hidden"
+      style="backdrop-filter: blur(6px)"
+    >
+      <div class="profile-modal-card">
+        <div class="flex items-center justify-between mb-6">
+          <h3
+            class="text-xl font-bold text-on-surface"
+            id="profile-modal-title"
+          >
+            Edit Profile
+          </h3>
+          <button
+            id="close-profile-modal"
+            class="material-symbols-outlined text-on-surface-variant hover:text-on-surface cursor-pointer"
+          >
+            close
+          </button>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label
+              class="block text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-2"
+              >Your Name</label
+            >
+            <input
+              id="profile-name-input"
+              class="w-full bg-surface-container-highest border-none rounded-[16px] p-4 text-on-surface placeholder:text-on-surface-variant/40 focus:ring-2 focus:ring-primary/40 text-sm"
+              placeholder="e.g., Julian"
+              type="text"
+            />
+          </div>
+          <button
+            id="save-profile-btn"
+            class="w-full signature-gradient py-4 rounded-[16px] text-on-primary font-extrabold hover:scale-[0.98] transition-transform"
+          >
+            Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../script.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

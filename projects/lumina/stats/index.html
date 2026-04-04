@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lumina Habit | Analytics</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../images/icon.png" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#00dcff",
+              "on-primary-container": "#005b2c",
+              "surface-container-high": "#1e201f",
+              "on-tertiary-fixed": "#00333d",
+              "secondary-fixed-dim": "#63ecaf",
+              "surface-variant": "#242625",
+              outline: "#747674",
+              "surface-tint": "#a4ffb9",
+              "on-primary-fixed-variant": "#006632",
+              primary: "#a4ffb9",
+              "on-error": "#490006",
+              "on-surface-variant": "#aaaba9",
+              "on-error-container": "#ffa8a3",
+              "secondary-container": "#006c48",
+              "on-secondary-fixed-variant": "#006946",
+              background: "#0d0f0e",
+              "on-tertiary-container": "#004956",
+              "inverse-surface": "#f9f9f7",
+              "surface-container-highest": "#242625",
+              "outline-variant": "#474847",
+              "secondary-dim": "#63ecaf",
+              "on-primary": "#006531",
+              "surface-container-low": "#121413",
+              "surface-container-lowest": "#000000",
+              "inverse-on-surface": "#545554",
+              "on-tertiary": "#005361",
+              "inverse-primary": "#006e37",
+              surface: "#0d0f0e",
+              "on-surface": "#f7f6f4",
+              "on-tertiary-fixed-variant": "#005361",
+              "error-container": "#9f0519",
+              "surface-dim": "#0d0f0e",
+              "primary-dim": "#00ed7d",
+              "surface-container": "#181a19",
+              error: "#ff716c",
+              "on-secondary-fixed": "#004930",
+              "primary-fixed-dim": "#00ed7d",
+              "on-background": "#f7f6f4",
+              "on-secondary-container": "#e1ffeb",
+              "tertiary-container": "#00dcff",
+              "primary-fixed": "#00fd86",
+              "error-dim": "#d7383b",
+              "surface-bright": "#2a2d2b",
+              "primary-container": "#00fd86",
+              "on-secondary": "#005e3e",
+              "secondary-fixed": "#73fbbc",
+              "tertiary-dim": "#00cded",
+              "tertiary-fixed-dim": "#00cded",
+              secondary: "#73fbbc",
+              "on-primary-fixed": "#004620",
+              tertiary: "#7de6ff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Plus Jakarta Sans"],
+              label: ["Plus Jakarta Sans"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body
+    class="bg-background text-on-surface selection:bg-primary selection:text-on-primary"
+  >
+    <nav
+      class="fixed top-0 w-full z-50 bg-[#0d0f0e]/70 glass-nav shadow-[0_0_40px_rgba(0,255,135,0.05)]"
+    >
+      <div class="flex justify-between items-center px-6 md:px-8 py-4">
+        <div
+          class="text-2xl font-bold tracking-tighter text-[#00FF87] font-headline"
+        >
+          Lumina Habit
+        </div>
+        <div class="desktop-nav hidden md:flex items-center gap-8">
+          <a
+            data-nav-link
+            href="../"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Dashboard</a
+          >
+          <a
+            data-nav-link
+            href="../habit/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Habits</a
+          >
+          <a
+            data-nav-link
+            href="../stats/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Stats</a
+          >
+          <a
+            data-nav-link
+            href="../settings/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Settings</a
+          >
+        </div>
+        <div class="flex items-center gap-3">
+          <a
+            href="../habit/"
+            class="hidden md:block signature-gradient text-on-primary px-5 py-2 rounded-full font-bold text-sm hover:scale-95 duration-200 transition-all"
+            >Quick Check-in</a
+          >
+          <a
+            href="../settings/"
+            class="w-9 h-9 rounded-full border border-outline-variant/20 bg-surface-container-high flex items-center justify-center hover:border-primary/40 transition-colors"
+          >
+            <span
+              class="material-symbols-outlined text-primary"
+              style="font-size: 20px"
+              >person</span
+            >
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <nav
+      id="mobile-bottom-nav"
+      class="md:hidden fixed bottom-0 left-0 w-full bg-[#0d0f0e]/95 glass-nav border-t border-white/5 z-50"
+    ></nav>
+
+    <main class="pt-24 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
+      <header class="mb-10 fade-in-up">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-4"
+        >
+          <div>
+            <h1
+              class="text-4xl md:text-6xl font-extrabold tracking-tight mb-2 text-on-surface"
+            >
+              Your Growth
+            </h1>
+            <p class="text-on-surface-variant text-base max-w-md">
+              Every small step is a light in the dark.
+            </p>
+          </div>
+          <div
+            class="flex items-center gap-3 bg-surface-container-low p-4 rounded-lg ambient-glow"
+          >
+            <div class="text-right">
+              <p
+                class="text-xs font-label uppercase tracking-widest text-on-surface-variant"
+              >
+                Current Streak
+              </p>
+              <p
+                class="text-3xl font-bold text-primary tracking-tighter"
+                id="streak-display"
+              >
+                0 Days
+              </p>
+            </div>
+            <div
+              class="w-11 h-11 flex items-center justify-center rounded-full bg-primary/10"
+            >
+              <span
+                class="material-symbols-outlined text-primary text-3xl"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >workspace_premium</span
+              >
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+        <div
+          class="md:col-span-8 bg-surface-container-low rounded-lg p-6 md:p-8 ambient-glow overflow-hidden relative group fade-in-up fade-in-up-delay-1"
+        >
+          <div class="flex justify-between items-start mb-8 md:mb-12">
+            <div>
+              <h2 class="text-xl font-bold text-on-surface">
+                Weekly Consistency
+              </h2>
+              <p class="text-on-surface-variant text-sm" id="weekly-summary">
+                Loading…
+              </p>
+            </div>
+          </div>
+          <div
+            id="bar-chart"
+            class="h-48 md:h-64 flex items-end justify-between gap-2 md:gap-3 px-1"
+          ></div>
+        </div>
+
+        <div class="md:col-span-4 flex flex-col gap-5">
+          <div
+            class="bg-surface-container-high p-5 rounded-lg border border-outline-variant/10 fade-in-up fade-in-up-delay-1"
+          >
+            <h3 class="text-base font-bold mb-5 flex items-center gap-2">
+              <span
+                class="material-symbols-outlined text-primary text-xl"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >bolt</span
+              >
+              Best Streaks
+            </h3>
+            <div id="streak-list" class="space-y-3"></div>
+          </div>
+          <div
+            class="flex-grow signature-gradient p-5 rounded-lg relative overflow-hidden group fade-in-up fade-in-up-delay-2"
+          >
+            <div class="relative z-10">
+              <h3
+                class="text-on-primary text-base font-bold leading-tight mb-2"
+                id="motivational-text"
+              >
+                Start your journey!
+              </h3>
+              <p class="text-on-primary/80 text-xs mb-4">
+                Keep that inner glow alive. Your discipline is your sanctuary.
+              </p>
+            </div>
+            <span
+              class="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl text-on-primary/10 transition-transform group-hover:scale-110"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >lightbulb</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="md:col-span-5 bg-surface-container-low rounded-lg p-5 md:p-8 ambient-glow fade-in-up fade-in-up-delay-2"
+        >
+          <h3 class="text-base font-bold mb-5">
+            Activity Rhythm
+            <span class="text-xs text-on-surface-variant font-normal"
+              >(last 28 days)</span
+            >
+          </h3>
+          <div id="mini-heatmap" class="grid grid-cols-7 gap-1.5"></div>
+          <div
+            class="mt-3 flex justify-between items-center text-[10px] text-on-surface-variant font-label uppercase tracking-widest"
+          >
+            <span>Less</span>
+            <div class="flex gap-1">
+              <div
+                class="w-2 h-2 bg-surface-container-highest rounded-full"
+              ></div>
+              <div class="w-2 h-2 bg-primary/30 rounded-full"></div>
+              <div class="w-2 h-2 bg-primary/60 rounded-full"></div>
+              <div class="w-2 h-2 bg-primary rounded-full"></div>
+            </div>
+            <span>More</span>
+          </div>
+        </div>
+
+        <div
+          class="md:col-span-7 bg-surface-container-low rounded-lg p-5 md:p-8 ambient-glow flex flex-col sm:flex-row gap-6 items-center fade-in-up fade-in-up-delay-3"
+        >
+          <div class="w-28 h-28 flex-shrink-0 relative">
+            <svg
+              class="w-full h-full transform -rotate-90"
+              viewBox="0 0 128 128"
+            >
+              <circle
+                class="text-surface-container-highest"
+                cx="64"
+                cy="64"
+                fill="transparent"
+                r="56"
+                stroke="currentColor"
+                stroke-width="12"
+              />
+              <circle
+                id="insight-ring"
+                cx="64"
+                cy="64"
+                fill="transparent"
+                r="56"
+                stroke="url(#ringGrad)"
+                stroke-dasharray="351.8"
+                stroke-dashoffset="351.8"
+                stroke-linecap="round"
+                stroke-width="12"
+                style="
+                  transition: stroke-dashoffset 1.2s
+                    cubic-bezier(0.34, 1.56, 0.64, 1);
+                "
+              />
+              <defs>
+                <linearGradient id="ringGrad" x1="0" x2="1" y1="0" y2="1">
+                  <stop stop-color="#a4ffb9" />
+                  <stop offset="1" stop-color="#00fd86" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="text-xl font-bold text-on-surface" id="insight-pct"
+                >—</span
+              >
+            </div>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold mb-2">Morning Momentum</h3>
+            <p
+              class="text-on-surface-variant leading-relaxed text-sm mb-4"
+              id="insight-text"
+            >
+              Log some sessions to discover your peak performance window.
+            </p>
+            <div class="flex gap-3">
+              <div
+                class="px-3 py-1.5 bg-surface-container-high rounded-full flex items-center gap-2"
+              >
+                <span class="material-symbols-outlined text-primary text-sm"
+                  >schedule</span
+                >
+                <span class="text-xs font-bold" id="peak-time"
+                  >Log sessions to unlock</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer
+      class="myFooter w-full py-8 px-6 bg-[#0d0f0e] border-t border-emerald-500/5"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto"
+      >
+        <div class="text-base font-bold text-[#00FF87]">Lumina Habit</div>
+        <div class="text-xs text-emerald-500/40">
+          © 2026 Lumina Habit. Your Living Sanctuary.
+        </div>
+        <div class="flex gap-6">
+          <a
+            class="text-emerald-500/40 font-bold hover:text-[#00FF87] transition-colors text-m"
+            href="https://shyamkanth.github.io/"
+            >Connect Developer</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div id="toast-container"></div>
+    <script src="../script.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

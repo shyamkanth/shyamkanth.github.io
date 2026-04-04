@@ -1,0 +1,498 @@
+<!doctype html>
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lumina Habit | Habit Logging</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../images/icon.png" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-fixed": "#00dcff",
+              "on-primary-container": "#005b2c",
+              "surface-container-high": "#1e201f",
+              "on-tertiary-fixed": "#00333d",
+              "secondary-fixed-dim": "#63ecaf",
+              "surface-variant": "#242625",
+              outline: "#747674",
+              "surface-tint": "#a4ffb9",
+              "on-primary-fixed-variant": "#006632",
+              primary: "#a4ffb9",
+              "on-error": "#490006",
+              "on-surface-variant": "#aaaba9",
+              "on-error-container": "#ffa8a3",
+              "secondary-container": "#006c48",
+              "on-secondary-fixed-variant": "#006946",
+              background: "#0d0f0e",
+              "on-tertiary-container": "#004956",
+              "inverse-surface": "#f9f9f7",
+              "surface-container-highest": "#242625",
+              "outline-variant": "#474847",
+              "secondary-dim": "#63ecaf",
+              "on-primary": "#006531",
+              "surface-container-low": "#121413",
+              "surface-container-lowest": "#000000",
+              "inverse-on-surface": "#545554",
+              "on-tertiary": "#005361",
+              "inverse-primary": "#006e37",
+              surface: "#0d0f0e",
+              "on-surface": "#f7f6f4",
+              "on-tertiary-fixed-variant": "#005361",
+              "error-container": "#9f0519",
+              "surface-dim": "#0d0f0e",
+              "primary-dim": "#00ed7d",
+              "surface-container": "#181a19",
+              error: "#ff716c",
+              "on-secondary-fixed": "#004930",
+              "primary-fixed-dim": "#00ed7d",
+              "on-background": "#f7f6f4",
+              "on-secondary-container": "#e1ffeb",
+              "tertiary-container": "#00dcff",
+              "primary-fixed": "#00fd86",
+              "error-dim": "#d7383b",
+              "surface-bright": "#2a2d2b",
+              "primary-container": "#00fd86",
+              "on-secondary": "#005e3e",
+              "secondary-fixed": "#73fbbc",
+              "tertiary-dim": "#00cded",
+              "tertiary-fixed-dim": "#00cded",
+              secondary: "#73fbbc",
+              "on-primary-fixed": "#004620",
+              tertiary: "#7de6ff",
+            },
+            borderRadius: {
+              DEFAULT: "1rem",
+              lg: "2rem",
+              xl: "3rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Plus Jakarta Sans"],
+              body: ["Plus Jakarta Sans"],
+              label: ["Plus Jakarta Sans"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="bg-background text-on-background min-h-screen">
+    <nav
+      class="fixed top-0 w-full z-50 bg-[#0d0f0e]/70 glass-nav shadow-[0_0_40px_rgba(0,255,135,0.05)]"
+    >
+      <div class="flex justify-between items-center px-6 md:px-8 py-4">
+        <div
+          class="text-2xl font-bold tracking-tighter text-[#00FF87] font-headline"
+        >
+          Lumina Habit
+        </div>
+        <div class="desktop-nav hidden md:flex items-center gap-8">
+          <a
+            data-nav-link
+            href="../"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Dashboard</a
+          >
+          <a
+            data-nav-link
+            href="../habit/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Habits</a
+          >
+          <a
+            data-nav-link
+            href="../stats/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Stats</a
+          >
+          <a
+            data-nav-link
+            href="../settings/"
+            class="text-emerald-500/50 hover:text-emerald-400 transition-colors font-medium"
+            >Settings</a
+          >
+        </div>
+        <div class="flex items-center gap-3">
+          <button
+            class="hidden md:block signature-gradient text-on-primary px-5 py-2 rounded-full font-bold text-sm hover:scale-95 duration-200"
+          >
+            Quick Check-in
+          </button>
+          <a
+            href="../settings/"
+            class="w-9 h-9 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/20 flex items-center justify-center hover:border-primary/40 transition-colors"
+          >
+            <span
+              class="material-symbols-outlined text-primary"
+              style="font-size: 20px"
+              >person</span
+            >
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <nav
+      id="mobile-bottom-nav"
+      class="md:hidden fixed bottom-0 left-0 w-full bg-[#0d0f0e]/95 glass-nav border-t border-white/5 z-50"
+    ></nav>
+
+    <main class="pt-24 pb-20 px-4 md:px-6 max-w-6xl mx-auto">
+      <header
+        class="mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 fade-in-up"
+      >
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 text-primary mb-1">
+            <span class="material-symbols-outlined text-lg" id="focus-icon"
+              >mindfulness</span
+            >
+            <span
+              class="text-xs font-semibold tracking-widest uppercase opacity-70"
+              >Current Focus</span
+            >
+          </div>
+          <h1
+            class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface"
+            id="focus-habit-name"
+          >
+            Select a Habit
+          </h1>
+          <p
+            class="text-on-surface-variant text-sm md:text-base"
+            id="focus-habit-desc"
+          >
+            Choose a habit below to log your session.
+          </p>
+        </div>
+        <div class="flex flex-col items-start md:items-end gap-1">
+          <div
+            class="text-xs font-label text-on-surface-variant uppercase tracking-widest"
+          >
+            Overall Today
+          </div>
+          <div class="flex items-center gap-3">
+            <div
+              class="text-3xl font-bold text-primary tracking-tighter"
+              id="global-pct"
+            >
+              0%
+            </div>
+            <div
+              class="w-28 h-2.5 bg-surface-container-highest rounded-full overflow-hidden"
+            >
+              <div
+                id="global-progress-bar"
+                class="h-full signature-gradient rounded-full"
+                style="
+                  width: 0%;
+                  box-shadow: 0 0 8px #00ff87;
+                  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        <section class="lg:col-span-7 space-y-6">
+          <div
+            class="bg-surface-container-low rounded-lg p-5 fade-in-up fade-in-up-delay-1"
+          >
+            <label
+              class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-3"
+              >Select Habit</label
+            >
+            <select
+              id="habit-select"
+              class="w-full bg-surface-container-high border-none rounded-[16px] p-4 focus:ring-2 focus:ring-primary/40 text-on-surface"
+            >
+              <option value="">— Choose a habit to log —</option>
+            </select>
+          </div>
+
+          <div
+            class="bg-surface-container-low rounded-lg p-6 md:p-8 ambient-glow fade-in-up fade-in-up-delay-1"
+          >
+            <h2 class="text-xl font-bold mb-6 flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary"
+                >edit_note</span
+              >
+              Log Session
+            </h2>
+
+            <div class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label
+                    class="text-xs font-bold text-on-surface-variant uppercase tracking-widest"
+                    >Session Date</label
+                  >
+                  <div
+                    class="bg-surface-container-high p-4 rounded-[16px] flex items-center gap-3 border border-outline-variant/10 focus-within:border-primary/40 transition-all"
+                  >
+                    <span
+                      class="material-symbols-outlined text-on-surface-variant text-xl"
+                      >calendar_today</span
+                    >
+                    <input
+                      id="log-date"
+                      class="bg-transparent border-none focus:ring-0 text-on-surface w-full text-sm py-0"
+                      type="date"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label
+                    class="text-xs font-bold text-on-surface-variant uppercase tracking-widest"
+                    >Amount</label
+                  >
+                  <div class="unit-select-wrapper">
+                    <input
+                      id="log-duration"
+                      placeholder="e.g. 20"
+                      type="number"
+                      min="1"
+                    />
+                    <div class="unit-divider"></div>
+                    <select id="log-unit"></select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  class="text-xs font-bold text-on-surface-variant uppercase tracking-widest"
+                  >Session Quality</label
+                >
+                <div class="flex flex-wrap gap-2" id="intensity-chips">
+                  <button
+                    type="button"
+                    data-intensity="Low"
+                    class="intensity-chip px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-sm font-medium"
+                  >
+                    😔 Low
+                  </button>
+                  <button
+                    type="button"
+                    data-intensity="Optimal"
+                    class="intensity-chip px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-sm font-medium"
+                  >
+                    👍 Optimal
+                  </button>
+                  <button
+                    type="button"
+                    data-intensity="Deep Flow"
+                    class="intensity-chip px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-sm font-medium"
+                  >
+                    🔥 Deep Flow
+                  </button>
+                  <button
+                    type="button"
+                    data-intensity="Transcendent"
+                    class="intensity-chip px-4 py-2 rounded-full bg-surface-container-highest border border-outline-variant/20 text-sm font-medium"
+                  >
+                    ⚡ Peak
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  class="text-xs font-bold text-on-surface-variant uppercase tracking-widest"
+                  >Reflections (optional)</label
+                >
+                <textarea
+                  id="log-notes"
+                  class="w-full bg-surface-container-high p-4 rounded-[16px] border border-outline-variant/10 focus:border-primary/40 focus:ring-0 text-on-surface placeholder:text-on-surface-variant/40 resize-none text-sm"
+                  rows="3"
+                  placeholder="How did it feel?"
+                ></textarea>
+              </div>
+
+              <button
+                id="log-submit-btn"
+                class="w-full signature-gradient text-on-primary py-4 rounded-[16px] font-extrabold text-base flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >bolt</span
+                >
+                Log Session
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-3 fade-in-up fade-in-up-delay-2">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-base font-bold text-on-surface-variant">
+                Session History
+              </h3>
+              <button
+                id="view-all-history-btn"
+                class="text-primary text-sm font-bold flex items-center gap-1 hover:opacity-80"
+              >
+                <span class="material-symbols-outlined text-sm">history</span>
+                View All
+              </button>
+            </div>
+            <div id="session-history" class="space-y-3"></div>
+          </div>
+        </section>
+
+        <aside class="lg:col-span-5 space-y-6">
+          <div
+            class="relative overflow-hidden bg-surface-container-highest rounded-lg p-6 md:p-8 ambient-glow fade-in-up fade-in-up-delay-1"
+          >
+            <div class="text-center">
+              <div
+                class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 border-2 border-primary text-primary mb-4 streak-badge"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >auto_awesome</span
+                >
+              </div>
+              <h3
+                class="text-2xl font-extrabold tracking-tighter mb-1"
+                id="streak-title"
+              >
+                0-Day Streak
+              </h3>
+              <p class="text-on-surface-variant text-sm mb-5">
+                Every session counts. Keep the flame alive.
+              </p>
+              <div class="grid grid-cols-2 gap-3">
+                <div
+                  class="bg-surface-container-low p-3 rounded-[16px] border border-primary/10"
+                >
+                  <div
+                    class="text-primary text-xl font-black"
+                    id="total-sessions"
+                  >
+                    0
+                  </div>
+                  <div
+                    class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold"
+                  >
+                    Sessions
+                  </div>
+                </div>
+                <div
+                  class="bg-surface-container-low p-3 rounded-[16px] border border-primary/10"
+                >
+                  <div class="text-primary text-xl font-black" id="zen-level">
+                    Rank I
+                  </div>
+                  <div
+                    class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold"
+                  >
+                    Zen Level
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-surface-container-low rounded-lg p-6 fade-in-up fade-in-up-delay-2"
+          >
+            <h3
+              class="text-base font-bold mb-4 flex items-center justify-between"
+            >
+              <span>Achievements</span>
+            </h3>
+            <div id="milestone-grid" class="grid grid-cols-3 gap-2"></div>
+          </div>
+
+          <div
+            class="bg-surface-container-low p-5 rounded-lg tip-card flex gap-3 fade-in-up fade-in-up-delay-3"
+          >
+            <span
+              class="material-symbols-outlined text-tertiary shrink-0 text-xl"
+              >lightbulb</span
+            >
+            <div>
+              <div class="font-bold text-sm mb-1">Zen Tip</div>
+              <p
+                id="daily-tip"
+                class="text-xs text-on-surface-variant leading-relaxed"
+              ></p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer
+      class="myFooter w-full py-8 px-6 bg-[#0d0f0e] border-t border-emerald-500/5"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto"
+      >
+        <div class="text-base font-bold text-[#00FF87]">Lumina Habit</div>
+        <div class="text-xs text-emerald-500/40">
+          © 2026 Lumina Habit. Your Living Sanctuary.
+        </div>
+        <div class="flex gap-6">
+          <a
+            class="text-emerald-500/40 font-bold hover:text-[#00FF87] transition-colors text-m"
+            href="https://shyamkanth.github.io/"
+            >Connect Developer</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div id="history-modal" class="hidden">
+      <div
+        class="bg-surface-container-high rounded-[2rem] p-6 md:p-8 w-[90%] md:w-[70%] max-w-4xl border border-outline-variant/20 shadow-[0_30px_80px_rgba(0,0,0,0.8)] fade-in-up relative overflow-hidden"
+      >
+        <div
+          class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"
+        ></div>
+
+        <div
+          class="flex items-center justify-between mb-6 pb-5 border-b border-outline-variant/20 relative z-10"
+        >
+          <h3
+            class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary"
+          >
+            Session Logs
+          </h3>
+          <button
+            id="close-history-modal"
+            class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant hover:text-primary hover:bg-primary/20 transition-all cursor-pointer shadow-sm"
+          >
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+        <div
+          id="history-modal-feed"
+          class="space-y-2 overflow-y-auto max-h-[65vh] pr-3 relative z-10"
+        ></div>
+      </div>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="../script.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

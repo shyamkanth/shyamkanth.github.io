@@ -1,0 +1,76 @@
+.settings-nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 0.875rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #aaaba9;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.settings-nav-btn:hover {
+  background: #242625;
+  color: #f7f6f4;
+}
+.settings-nav-btn.active {
+  background: rgba(164, 255, 185, 0.1);
+  color: #a4ffb9 !important;
+}
+
+.habit-manage-card {
+  transition: background-color 0.2s ease;
+}
+.habit-manage-card:hover {
+  background-color: #242625;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+.shake {
+  animation: shake 0.3s ease;
+}
+
+.icon-option {
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.icon-option:hover {
+  background: rgba(164, 255, 185, 0.12);
+  color: #a4ffb9;
+  border-color: rgba(164, 255, 185, 0.25);
+}
+.icon-option.selected {
+  background: rgba(164, 255, 185, 0.15);
+  color: #a4ffb9;
+  outline: 2px solid rgba(164, 255, 185, 0.4);
+}
+
+.color-swatch {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  border: 2px solid transparent;
+}
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+.color-swatch.selected {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+  transform: scale(1.1);
+}

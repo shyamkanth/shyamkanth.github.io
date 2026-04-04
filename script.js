@@ -101,6 +101,16 @@ const industrialProjects = [
 
 const personalProjects = [
   {
+    name: "Lumina Habit - Habit Tracker",
+    role: "Web Developer",
+    duration: "2 Days",
+    tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
+    description:
+      "Lumina is a fully offline, browser-based habit tracking application built with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no accounts, no cloud. Open the file in a browser and you're up and running.",
+    link: "/projects/lumina/",
+    image: "/images/lumina.png",
+  },
+  {
     name: "PasswordVault - Password Manager",
     role: "Android Developer",
     duration: "2 months",
