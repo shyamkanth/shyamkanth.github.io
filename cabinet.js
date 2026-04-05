@@ -1,4 +1,3 @@
-// cabinet.js — command palette
 (function () {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
@@ -10,12 +9,12 @@
   document.addEventListener("contextmenu", (event) => {
     event.preventDefault();
   });
-  // ── HELPERS ────────────────────────────────────────────────────────────────
+
   function _go(p) {
     window.location.href = p;
   }
 
-  // ── STYLES ─────────────────────────────────────────────────────────────────
+
   function _injectStyles() {
     if (document.getElementById("_cp_st")) return;
     const s = document.createElement("style");
@@ -149,7 +148,6 @@
     document.head.appendChild(s);
   }
 
-  // ── STATE ──────────────────────────────────────────────────────────────────
   let _isOpen = false;
   let _ai = 0;
   let _fl = [];
@@ -174,10 +172,10 @@
       const ql = q.toLowerCase().trim();
       const items = ql
         ? GHOST_COMMANDS.filter(
-            (c) =>
-              c.label.toLowerCase().includes(ql) ||
-              c.desc.toLowerCase().includes(ql),
-          )
+          (c) =>
+            c.label.toLowerCase().includes(ql) ||
+            c.desc.toLowerCase().includes(ql),
+        )
         : [...GHOST_COMMANDS];
       return {
         isSecret: true,
@@ -188,10 +186,10 @@
     const ql = raw.toLowerCase().trim();
     const items = ql
       ? PUBLIC_COMMANDS.filter(
-          (c) =>
-            c.label.toLowerCase().includes(ql) ||
-            c.desc.toLowerCase().includes(ql),
-        )
+        (c) =>
+          c.label.toLowerCase().includes(ql) ||
+          c.desc.toLowerCase().includes(ql),
+      )
       : [...PUBLIC_COMMANDS];
     return {
       isSecret: false,
@@ -200,7 +198,6 @@
     };
   }
 
-  // Full rebuild — only called when query changes
   function _render(raw) {
     const rl = document.getElementById("_cp_rl");
     const em = document.getElementById("_cp_em");
@@ -254,9 +251,6 @@
     });
     rl.innerHTML = html;
 
-    // ── KEY FIX ───────────────────────────────────────────────────────────────
-    // mouseenter only updates the active class — does NOT rebuild HTML.
-    // This keeps the DOM stable so clicks always land on a live element.
     rl.querySelectorAll(".cpi").forEach((el) => {
       el.addEventListener("mouseenter", () => {
         _setActive(parseInt(el.dataset.i));
@@ -334,7 +328,19 @@
    * Code obfuscated using : https://codebeautify.org/javascript-obfuscator
    */
 
-  // Just update the active highlight — no DOM rebuild
+  /**
+   * Steps to follow after adding any project : 
+   * Add project and test thoroughly then publish.
+   * Add the project to the PUBLIC_COMMANDS / GHOST_COMMANDS array in cabinet.js file..
+   * Add project info and links in the projects section in script.js file.
+   * (Optional) Create announcement for that if applicable.
+   * (Optional) Create privacy policy for that if applicable.
+   * (Optional) Create blog for that if applicable.
+   * [Mandatory] Create notifications for all (New Project, Announcement, Privacy Policy, Blog, etc.) in notification.js file.
+   * Commit and Push the files.
+   */
+
+
   function _setActive(i) {
     _ai = i;
     document.querySelectorAll("#_cp_rl .cpi").forEach((el) => {
@@ -345,7 +351,7 @@
   function _exec(i) {
     const cmd = _fl[i];
     if (!cmd) return;
-    cmd.action(); // navigate immediately
+    cmd.action();
     _close();
   }
 
@@ -356,7 +362,6 @@
       ?.scrollIntoView({ block: "nearest" });
   }
 
-  // ── OPEN / CLOSE ───────────────────────────────────────────────────────────
   function _show() {
     if (_isOpen) return;
     _isOpen = true;
@@ -432,7 +437,6 @@
     }, 150);
   }
 
-  // ── TRIGGER: Ctrl + / (desktop) ───────────────────────────────────────────
   document.addEventListener("keydown", (e) => {
     const _k = String.fromCharCode(0x10 ^ 0x3f);
     const _isSlash = e.key === _k || e.code === "Slash";
@@ -443,7 +447,6 @@
     if (e.key === "Escape" && _isOpen) _close();
   });
 
-  // ── TRIGGER: 2-finger 2-second long press (mobile) ────────────────────────
   let _pressTimer;
   let _touchStartX, _touchStartY;
   document.addEventListener("touchstart", (e) => {
