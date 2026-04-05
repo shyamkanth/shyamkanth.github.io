@@ -321,6 +321,74 @@
           "text": "Botbook v2 is live within the local ecosystem. Access it via the global command palette (CTRL + /) or navigate to the Projects section of the portfolio. Just like Lumina, it is a single-entry point application—open the index.html and start writing immediately."
         }
       ]
+    },
+    {
+      "id": "lexica-personal-dictionary-a-private-linguistic-vault",
+      "title": "Lexica — A Private Linguistic Vault for Your Personal Vocabulary",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-04-05",
+      "thumbnail": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=400&fit=crop",
+      "type": "RELEASE",
+      "priority": "info",
+      "excerpt": "Lexica is a minimalist, localStorage-powered personal dictionary designed for writers, students, and language lovers to curate their own collection of words, definitions, pronunciations, and contextual examples.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introducing Lexica"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lexica is a fully client-side web application that serves as a private vault for your linguistic discoveries. It combines a clean, academic aesthetic with powerful organizational tools, allowing users to build a custom lexicon without any external dependencies, accounts, or cloud storage. It is designed for those who find beauty in words and want a dedicated space to archive them."
+        },
+        {
+          "type": "heading",
+          "text": "Key Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Create a personal lexicon with word definitions, pronunciations, and example sentences",
+            "Categorize entries by parts of speech (Noun, Verb, Adjective, Adverb) or custom categories",
+            "Dashboard with real-time stats: Total Words, Weekly Growth, and Favorite count",
+            "Automated 'Word of the Day' feature that resurfaces curated artifacts from your library",
+            "Advanced search interface with multi-criteria filtering and sorting",
+            "Star/Favorite system for highlighting your most cherished linguistic findings",
+            "Live Activity Log that records every action, from additions to data exports",
+            "Full data portability with JSON-based import and export capabilities",
+            "Responsive 'App-like' design with mobile bottom-nav and desktop sidebar layouts",
+            "Customizable profile section to track your journey as a Lexicographer"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Tech Stack"
+        },
+        {
+          "type": "paragraph",
+          "text": "Lexica is built using a modern multi-page architecture with Vanilla HTML5, CSS3, and JavaScript. Unlike frameworks that rely on heavy dependencies, Lexica uses a custom-built localStorage API for state persistence and Material Symbols for its minimalist iconography. The styling focuses on a refined dark-themed aesthetic with deep charcoal tones and a focus on typography."
+        },
+        {
+          "type": "quote",
+          "text": "Today's language is tomorrow's literature.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Resurfacing Your Vocabulary"
+        },
+        {
+          "type": "paragraph",
+          "text": "To encourage engagement with your collected vocabulary, Lexica features a 'Word of the Day' system. It randomly selects an entry from your database and presents it in a beautiful curated format, helping you stay connected with words you've archived. The app also includes dedicated fields for pronunciation and etymological notes, making it a comprehensive tool for serious word collectors."
+        },
+        {
+          "type": "heading",
+          "text": "Try It"
+        },
+        {
+          "type": "paragraph",
+          "text": "Open the command palette by pressing CTRL + / or by using the global navigation on the portfolio. Lexica is a zero-setup application — simply navigate to the lexicon and start adding words. All your data is saved instantly to your browser and can be backed up as a JSON file at any time."
+        }
+      ]
     }
   ]
 }

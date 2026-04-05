@@ -298,13 +298,19 @@
       action: () => _go("/blogs/"),
     },
     {
-      label: "Lumina Habit",
+      label: "Lumina - Habit Tracker",
       desc: "Your personal browser based habit tracker",
       icon: "tactic",
       action: () => _go("/projects/lumina/"),
     },
     {
-      label: "BotBook",
+      label: "Lexica - Personal Dictionary",
+      desc: "Your browser based personal dictionary",
+      icon: "tactic",
+      action: () => _go("/projects/lexica/"),
+    },
+    {
+      label: "BotBook - Text Editor",
       desc: "Your browser based notebook for quick access.",
       icon: "tactic",
       action: () => _go("/projects/botbook/"),

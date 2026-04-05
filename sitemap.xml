@@ -50,4 +50,11 @@
     <priority>0.50</priority>
   </url>
 
+      <url>
+    <loc>https://shyamkanth.github.io/projects/lexica/</loc>
+    <lastmod>2026-04-05T20:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
 </urlset>

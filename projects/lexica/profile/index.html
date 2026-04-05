@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Lexica — Profile</title>
+    <link rel="stylesheet" href="../shared.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../../../images/icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo-text">LEXI<span>CA</span></div>
+          <div class="logo-sub">Personal Dictionary</div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="../" class="nav-item">
+            <span class="nav-icon material-symbols-outlined">grid_view</span>
+            Dashboard
+          </a>
+          <a href="../dictionary/" class="nav-item">
+            <span class="nav-icon material-symbols-outlined">menu_book</span>
+            Dictionary
+          </a>
+          <a href="./" class="nav-item active">
+            <span class="nav-icon material-symbols-outlined">person</span>
+            Profile
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <button class="btn-add-word" onclick="openAddModal()">
+            <span class="material-symbols-outlined" style="font-size: 18px"
+              >add</span
+            >
+            Add New Word
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+          <div class="mobile-logo">LEXI<span>CA</span></div>
+          <div class="mobile-header-actions">
+            <button class="icon-btn" onclick="openAddModal()">
+              <span class="material-symbols-outlined">add</span>
+            </button>
+            <button
+              class="icon-btn"
+              id="edit-toggle-btn"
+              onclick="toggleEditMode()"
+            >
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="profile-content">
+          <!-- Profile Hero -->
+          <div class="profile-hero card">
+            <div class="profile-avatar" id="profile-avatar">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <div class="profile-info">
+              <div class="profile-name-row">
+                <div id="profile-display-name" class="profile-name"></div>
+                <span class="profile-badge" id="profile-badge"></span>
+              </div>
+              <div
+                class="profile-title-display"
+                id="profile-title-display"
+              ></div>
+
+              <div
+                class="profile-edit-fields"
+                id="profile-edit-fields"
+                style="display: none"
+              >
+                <input
+                  type="text"
+                  class="form-input"
+                  id="edit-name"
+                  placeholder="Your name…"
+                />
+                <input
+                  type="text"
+                  class="form-input"
+                  id="edit-title"
+                  placeholder="Your title (e.g. Word Collector)…"
+                />
+              </div>
+            </div>
+            <div class="profile-hero-actions" id="profile-hero-actions">
+              <button
+                class="btn-secondary"
+                id="cancel-edit-btn"
+                style="display: none"
+                onclick="cancelEdit()"
+              >
+                Cancel
+              </button>
+              <button
+                class="btn-primary desktop-edit-btn"
+                id="desktop-edit-btn"
+                onclick="toggleEditMode()"
+              >
+                <span class="material-symbols-outlined">edit</span>
+                Edit Profile
+              </button>
+              <button
+                class="btn-primary"
+                id="save-edit-btn"
+                style="display: none"
+                onclick="saveProfile_()"
+              >
+                <span class="material-symbols-outlined">check</span>
+                Save Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="profile-stats">
+            <div class="stat-card">
+              <div class="stat-label">Words Logged</div>
+              <div class="stat-value"><span id="p-total">0</span></div>
+              <div class="stat-sub">total entries</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">This Week</div>
+              <div class="stat-value"><span id="p-week">0</span></div>
+              <div class="stat-sub">words added</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Favorites</div>
+              <div class="stat-value"><span id="p-favs">0</span></div>
+              <div class="stat-sub">starred</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Categories</div>
+              <div class="stat-value"><span id="p-cats">0</span></div>
+              <div class="stat-sub">in use</div>
+            </div>
+          </div>
+
+          <!-- Middle Row -->
+          <div class="profile-middle">
+            <!-- Data Management -->
+            <div class="card data-card">
+              <div class="section-label" style="margin-bottom: 16px">
+                Data Management
+              </div>
+              <div class="data-card-inner">
+                <div class="data-info">
+                  <h3 class="data-title">Sync Lexicon</h3>
+                  <p class="data-desc">
+                    Backup your curated word collections and personal
+                    etymologies as portable JSON files.
+                  </p>
+                </div>
+                <div class="data-actions">
+                  <button class="data-action-btn" onclick="handleImport()">
+                    <div class="data-action-icon">
+                      <span class="material-symbols-outlined">upload_file</span>
+                    </div>
+                    <div class="data-action-text">
+                      <div class="data-action-title">Import JSON</div>
+                      <div class="data-action-sub">
+                        Overwrite or merge library
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined"
+                      style="color: var(--text-muted); font-size: 18px"
+                      >chevron_right</span
+                    >
+                  </button>
+                  <button class="data-action-btn" onclick="handleExport()">
+                    <div class="data-action-icon">
+                      <span class="material-symbols-outlined">download</span>
+                    </div>
+                    <div class="data-action-text">
+                      <div class="data-action-title">Export JSON</div>
+                      <div class="data-action-sub">
+                        Universal data portability
+                      </div>
+                    </div>
+                    <span
+                      class="material-symbols-outlined"
+                      style="color: var(--text-muted); font-size: 18px"
+                      >chevron_right</span
+                    >
+                  </button>
+                </div>
+                <div class="data-last-export" id="data-last-export">
+                  Last Export: <span style="color: var(--accent)">Never</span>
+                </div>
+              </div>
+              <input
+                type="file"
+                id="import-input"
+                accept=".json"
+                style="display: none"
+                onchange="handleImportFile(event)"
+              />
+
+              <!-- Clear Data Section -->
+              <div class="clear-data-section">
+                <div
+                  class="section-label"
+                  style="margin-bottom: 12px; color: #f87171"
+                >
+                  Danger Zone
+                </div>
+                <button class="btn-clear-all" onclick="openClearDataModal()">
+                  <span class="material-symbols-outlined">delete_forever</span>
+                  Clear All Data
+                </button>
+                <p class="clear-data-warning">
+                  This will permanently delete all words, logs, and settings.
+                  This action cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="card activity-card">
+              <div class="activity-log-header">
+                <div class="section-label">Activity Log</div>
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <div class="live-indicator">
+                    <div class="live-dot-green"></div>
+                    <span>Live Updates</span>
+                  </div>
+                  <button
+                    class="btn-ghost"
+                    onclick="clearLogs()"
+                    style="font-size: 11px"
+                  >
+                    Clear History
+                  </button>
+                </div>
+              </div>
+              <div id="activity-log-list"></div>
+              <div
+                id="activity-log-more"
+                style="display: none; margin-top: 8px"
+              >
+                <button
+                  class="btn-ghost"
+                  style="width: 100%; justify-content: center"
+                  onclick="loadMoreLogs()"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    style="font-size: 16px"
+                    >expand_more</span
+                  >
+                  View full history
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Bottom Nav -->
+      <nav class="bottom-nav">
+        <div class="bottom-nav-inner">
+          <a href="../" class="bottom-nav-btn">
+            <span class="material-symbols-outlined">grid_view</span>
+            Home
+          </a>
+          <a href="../dictionary/" class="bottom-nav-btn">
+            <span class="material-symbols-outlined">menu_book</span>
+            Dictionary
+          </a>
+          <a href="./" class="bottom-nav-btn active">
+            <span class="material-symbols-outlined">person</span>
+            Profile
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Add Word Modal -->
+    <div
+      class="modal-backdrop"
+      id="add-modal"
+      onclick="handleAddBackdrop(event)"
+    >
+      <div class="modal">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+          <div class="modal-title" id="add-modal-title">Add New Word</div>
+          <button class="modal-close" onclick="closeAddModal()">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="edit-id" />
+          <div class="form-group">
+            <div class="form-label">Word or Phrase</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-word"
+              placeholder="Enter word…"
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Pronunciation</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-pronunciation"
+              placeholder="e.g., /ˈwɜːd/"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Definition</div>
+            <textarea
+              class="form-textarea"
+              id="m-def"
+              placeholder="Define its essence…"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Example Sentence</div>
+            <textarea
+              class="form-textarea"
+              id="m-ex"
+              placeholder="Used in context…"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Tags (comma separated)</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-tags"
+              placeholder="e.g. time, nature, poetry"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Category</div>
+            <select class="styled-select" id="m-cat">
+              <option value="noun">Noun</option>
+              <option value="verb">Verb</option>
+              <option value="adjective">Adjective</option>
+              <option value="adverb">Adverb</option>
+              <option value="custom">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="btn-secondary"
+            style="flex: 1"
+            onclick="closeAddModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn-primary"
+            style="flex: 2"
+            onclick="handleSaveWord()"
+          >
+            <span class="material-symbols-outlined">save</span>
+            <span id="save-btn-label">Add Word</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clear All Data Modal -->
+    <div
+      class="modal-backdrop"
+      id="clear-data-modal"
+      onclick="handleClearDataBackdrop(event)"
+    >
+      <div class="modal modal-clear-data">
+        <div class="clear-modal-header">
+          <span class="material-symbols-outlined clear-modal-warning-icon"
+            >warning</span
+          >
+          <div class="clear-modal-title">Clear All Data?</div>
+          <p class="clear-modal-subtitle">This action cannot be undone</p>
+        </div>
+        <div class="clear-modal-content">
+          <p class="clear-modal-description">This will permanently delete:</p>
+          <ul class="clear-modal-list">
+            <li>
+              <span class="material-symbols-outlined">menu_book</span> All words
+              and definitions
+            </li>
+            <li>
+              <span class="material-symbols-outlined">history</span> Complete
+              activity history
+            </li>
+            <li>
+              <span class="material-symbols-outlined">tune</span> All custom
+              settings
+            </li>
+          </ul>
+          <p class="clear-modal-preservation">
+            Your profile information will be preserved.
+          </p>
+        </div>
+        <div class="modal-footer modal-footer-clear">
+          <button
+            class="btn-secondary"
+            style="flex: 1"
+            onclick="closeClearDataModal()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn-danger"
+            style="flex: 1"
+            onclick="confirmClearAllData()"
+          >
+            <span class="material-symbols-outlined">delete_forever</span>
+            Clear All Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast-profile"></div>
+
+    <script src="../shared.js"></script>
+    <script src="script.js"></script>
+    <script src="../../../cabinet.min.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Lexica - Dashboard</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="../../images/icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo-text">LEXI<span>CA</span></div>
+          <div class="logo-sub">Personal Dictionary</div>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="./" class="nav-item active">
+            <span class="nav-icon material-symbols-outlined">grid_view</span>
+            Dashboard
+          </a>
+          <a href="./dictionary/" class="nav-item">
+            <span class="nav-icon material-symbols-outlined">menu_book</span>
+            Dictionary
+          </a>
+          <a href="./profile/" class="nav-item">
+            <span class="nav-icon material-symbols-outlined">person</span>
+            Profile
+          </a>
+        </nav>
+        <div class="sidebar-bottom">
+          <button class="btn-add-word" onclick="openModal()">
+            <span class="material-symbols-outlined" style="font-size: 18px"
+              >add</span
+            >
+            Add New Word
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main class="main">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+          <div class="mobile-logo">LEXI<span>CA</span></div>
+          <div class="mobile-header-actions">
+            <button class="icon-btn" onclick="openModal()">
+              <span class="material-symbols-outlined">add</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="dashboard-content">
+          <!-- Page Header -->
+          <div class="page-header">
+            <div class="page-header-left">
+              <h1 class="page-title">Your <em>Lexicon</em> Dashboard</h1>
+              <p class="page-subtitle">
+                Curating the linguistic artifacts of your journey. Today's
+                language is tomorrow's literature.
+              </p>
+            </div>
+            <div class="page-header-search desktop-only">
+              <div
+                class="search-bar"
+                onclick="window.location = './dictionary/'"
+              >
+                <span class="material-symbols-outlined">search</span>
+                <input
+                  type="text"
+                  placeholder="Explore your dictionary..."
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <span class="material-symbols-outlined">menu_book</span>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Total Words</div>
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-sub">in your lexicon</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <span class="material-symbols-outlined">calendar_today</span>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Added This Week</div>
+                <div class="stat-value">
+                  <span id="stat-week">0</span>
+                  <span class="stat-growth" id="stat-growth"></span>
+                </div>
+                <div class="stat-sub" id="stat-week-sub">Start today!</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon">
+                <span class="material-symbols-outlined">star</span>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Favorites</div>
+                <div class="stat-value" id="stat-favs">0</div>
+                <div class="stat-sub">starred words</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Section -->
+          <div class="middle-section">
+            <!-- Add Word Card -->
+            <div class="card add-word-card">
+              <div class="add-word-card-header">
+                <div class="add-word-icon">
+                  <span class="material-symbols-outlined">edit_note</span>
+                </div>
+                <h2 class="add-word-title">What's on your mind today?</h2>
+              </div>
+
+              <form onsubmit="handleQuickAdd(event)">
+                <div class="form-row">
+                  <div class="form-group">
+                    <div class="form-label">New Word or Phrase</div>
+                    <input
+                      type="text"
+                      class="form-input"
+                      id="q-word"
+                      placeholder="Enter the artifact..."
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label">Definition / Note</div>
+                  <textarea
+                    class="form-textarea"
+                    id="q-def"
+                    placeholder="Define its essence..."
+                    rows="3"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label">Contextual Example</div>
+                  <textarea
+                    class="form-textarea"
+                    id="q-ex"
+                    placeholder="Capture its use in the wild..."
+                    rows="2"
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-label">Category</div>
+                  <div class="category-chips" id="category-chips">
+                    <button type="button" class="chip active" data-cat="noun">
+                      Noun
+                    </button>
+                    <button type="button" class="chip" data-cat="verb">
+                      Verb
+                    </button>
+                    <button type="button" class="chip" data-cat="adjective">
+                      Adjective
+                    </button>
+                    <button type="button" class="chip" data-cat="adverb">
+                      Adverb
+                    </button>
+                    <button type="button" class="chip" data-cat="custom">
+                      Custom
+                    </button>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn-primary save-btn">
+                  <span class="material-symbols-outlined">save</span>
+                  Save Artifact
+                </button>
+              </form>
+            </div>
+
+            <!-- Activity Panel -->
+            <div class="card activity-panel">
+              <div class="activity-panel-header">
+                <div class="section-label">Recent Activity</div>
+                <a href="./profile/" class="link-text">View All</a>
+              </div>
+              <div id="activity-list"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Bottom Nav -->
+      <nav class="bottom-nav">
+        <div class="bottom-nav-inner">
+          <a href="./" class="bottom-nav-btn active">
+            <span class="material-symbols-outlined">grid_view</span>
+            Home
+          </a>
+          <a href="./dictionary/" class="bottom-nav-btn">
+            <span class="material-symbols-outlined">menu_book</span>
+            Dictionary
+          </a>
+          <a href="./profile/" class="bottom-nav-btn">
+            <span class="material-symbols-outlined">person</span>
+            Profile
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Add Word Modal -->
+    <div
+      class="modal-backdrop"
+      id="modal-backdrop"
+      onclick="handleBackdropClick(event)"
+    >
+      <div class="modal">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+          <div class="modal-title">Add New Word</div>
+          <button class="modal-close" onclick="closeModal()">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="form-label">Word or Phrase</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-word"
+              placeholder="Enter word..."
+              autocomplete="off"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Pronunciation</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-pronunciation"
+              placeholder="e.g., /ˈwɜːd/"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Definition</div>
+            <textarea
+              class="form-textarea"
+              id="m-def"
+              placeholder="Define its essence..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Example Sentence</div>
+            <textarea
+              class="form-textarea"
+              id="m-ex"
+              placeholder="Used in context..."
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Tags (comma separated)</div>
+            <input
+              type="text"
+              class="form-input"
+              id="m-tags"
+              placeholder="e.g. time, nature, poetry"
+            />
+          </div>
+          <div class="form-group">
+            <div class="form-label">Category</div>
+            <select class="styled-select" id="m-cat">
+              <option value="noun">Noun</option>
+              <option value="verb">Verb</option>
+              <option value="adjective">Adjective</option>
+              <option value="adverb">Adverb</option>
+              <option value="custom">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" style="flex: 1" onclick="closeModal()">
+            Cancel
+          </button>
+          <button
+            class="btn-primary"
+            style="flex: 2"
+            onclick="handleModalAdd()"
+          >
+            <span class="material-symbols-outlined">save</span>
+            Add Word
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="shared.js"></script>
+    <script src="script.js"></script>
+    <script src="../../cabinet.min.js" defer></script>
+  </body>
+</html>

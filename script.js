@@ -154,22 +154,35 @@ const personalProjects = [
   {
     name: "Lumina Habit - Habit Tracker",
     role: "Web Developer",
-    duration: "2 Days",
+    duration: "20 Days",
     tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
     description:
       "Lumina is a fully offline, browser-based habit tracking application built with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no accounts, no cloud. Open the file in a browser and you're up and running.",
     link: "/projects/lumina/",
-    image: "/images/lumina.png",
+    image:
+      "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=400&fit=crop",
+  },
+  {
+    name: "Lexica - Personal Dictionary",
+    role: "Web Developer",
+    duration: "15 Days",
+    tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
+    description:
+      "Lexica is a minimalist, localStorage-powered personal dictionary built with pure Vanilla JavaScript. Designed for writers, students, and language lovers, it serves as a private archive for curating a collection of words, definitions, pronunciations, and contextual examples—no backend required.",
+    link: "/projects/lexica/",
+    image:
+      "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=400&fit=crop",
   },
   {
     name: "BotBook : Browser Note Companion",
     role: "Front End Developer",
-    duration: "2 Days",
+    duration: "10 Days",
     tags: ["HTML", "CSS", "JAVASCRIPT"],
     description:
       "A sleek, browser-based notebook built with HTML, CSS, and JavaScript that lets you create, edit, and manage notes effortlessly. Your notes are stored locally in your browser using `localStorage`, ensuring privacy and persistence across sessions.",
     link: "/projects/botbook/",
-    image: "/images/botbook.png",
+    image:
+      "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&h=400&fit=crop",
   },
   {
     name: "PayDay - EMI Reminder App",
