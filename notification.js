@@ -1,94 +1,106 @@
 (function () {
   const notifications = [
     {
-      id: 'lexica_launch',
-      category: 'New Project',
-      heading: 'Lexica : Your personal dictionary [Released]',
-      description: 'Explore words like never before with our new dictionary app.',
-      date_added: '04/05/2026', // Format: MM/DD/YYYY
-      navigateTo: '/projects/lexica/',
+      id: "lexica_launch",
+      category: "New Project",
+      heading: "Lexica: Linguistic Vault [Deployment Complete]",
+      description:
+        "Experience a specialized approach to vocabulary management and personal language indexing.",
+      date_added: "04/05/2026",
+      navigateTo: "/projects/lexica/",
     },
     {
-      id: 'announcement_lexica',
-      category: 'Announcement Added',
-      heading: 'Lexica : Announcement',
-      description: 'Explore words like never before with our new dictionary app.',
-      date_added: '04/05/2026',
-      navigateTo: '/announcements/announcement.html?id=lexica-personal-dictionary-a-private-linguistic-vault',
+      id: "announcement_lexica",
+      category: "Announcement Added",
+      heading: "Lexica: Strategic Architecture Overview",
+      description:
+        "An in-depth look into the design philosophy behind our personal dictionary ecosystem.",
+      date_added: "04/05/2026",
+      navigateTo:
+        "/announcements/announcement.html?id=lexica-personal-dictionary-a-private-linguistic-vault",
     },
     {
-      id: 'lumina_launch',
-      category: 'New Project',
-      heading: 'Lumina : Habit tracker [Released]',
-      description: 'Major update with new progress tracking features and dark mode refinements.',
-      date_added: '04/04/2026',
-      navigateTo: '/projects/lumina/',
+      id: "lumina_launch",
+      category: "New Project",
+      heading: "Lumina: Behavioral Framework [Production Ready]",
+      description:
+        "Optimized habit tracking utility featuring advanced analytical visualization and UI refinements.",
+      date_added: "04/04/2026",
+      navigateTo: "/projects/lumina/",
     },
     {
-      id: 'announcement_lumina',
-      category: 'Announcement Added',
-      heading: 'Lumina : Announcement',
-      description: 'Read about our new habit tracker website.',
-      date_added: '04/04/2026',
-      navigateTo: '/announcements/announcement.html?id=lumina-habit-a-beautiful-static-habit-tracker-built-with-van',
+      id: "announcement_lumina",
+      category: "Announcement Added",
+      heading: "Lumina: Development Lifecycle Insights",
+      description:
+        "Technical breakdown of the Lumina Habit static architecture and UX paradigms.",
+      date_added: "04/04/2026",
+      navigateTo:
+        "/announcements/announcement.html?id=lumina-habit-a-beautiful-static-habit-tracker-built-with-van",
     },
     {
-      id: 'botbook_update',
-      category: 'Project Update',
-      heading: 'BotBook - Version 2.0 [Live Now]',
-      description: 'Major update with new ui and features.',
-      date_added: '04/04/2026',
-      navigateTo: '/projects/botbook/',
+      id: "botbook_update",
+      category: "Project Update",
+      heading: "BotBook v2.0: Core Infrastructure Upgrade",
+      description:
+        "Implementation of a redesigned interface and enhanced feature-set for improved performance.",
+      date_added: "04/04/2026",
+      navigateTo: "/projects/botbook/",
     },
     {
-      id: 'announcement_botbook',
-      category: 'Announcement Added',
-      heading: 'BotBook V2.0: Announcement',
-      description: 'Checkout our revamped BotBook website with cool and modern UI and extra features.',
-      date_added: '04/04/2026',
-      navigateTo: '/announcements/announcement.html?id=botbook-v2-minimalist-notes-architecture',
+      id: "announcement_botbook",
+      category: "Announcement Added",
+      heading: "BotBook: Modernization Strategy",
+      description:
+        "Evaluating the transition to minimalist note-taking architecture and modernized UI components.",
+      date_added: "04/04/2026",
+      navigateTo:
+        "/announcements/announcement.html?id=botbook-v2-minimalist-notes-architecture",
     },
     {
-      id: 'privacy_policy_password_vault',
-      category: 'Privacy Policy Update',
-      heading: 'Password Vault Privacy Policy : Updated',
-      description: 'Kindly go through the updated privacy policy for the password vault application.',
-      date_added: '03/26/2026',
-      navigateTo: '/privacy-policy/policy.html?id=password-vault',
+      id: "privacy_policy_password_vault",
+      category: "Privacy Policy Update",
+      heading: "Password Vault: Compliance & Security Update",
+      description:
+        "Critical revisions have been applied to the security protocols and privacy standards.",
+      date_added: "03/26/2026",
+      navigateTo: "/privacy-policy/policy.html?id=password-vault",
     },
     {
-      id: 'privacy_policy_japnaam',
-      category: 'Privacy Policy Update',
-      heading: 'Japnaam Privacy Policy : Updated',
-      description: 'Kindly go through the updated privacy policy for the japnaam application.',
-      date_added: '03/24/2026',
-      navigateTo: '/privacy-policy/policy.html?id=japnaam',
+      id: "privacy_policy_japnaam",
+      category: "Privacy Policy Update",
+      heading: "Japnaam: Data Governance Revision",
+      description:
+        "Updated privacy guidelines regarding user data handling and security integrity.",
+      date_added: "03/24/2026",
+      navigateTo: "/privacy-policy/policy.html?id=japnaam",
     },
     {
-      id: 'welcome_announcement',
-      category: 'Announcement Added',
-      heading: 'Portfolio Redesign Live!',
-      description: 'Welcome to the new and improved portfolio experience.',
-      date_added: '03/22/2026',
-      navigateTo: '/',
-    }
+      id: "welcome_announcement",
+      category: "Announcement Added",
+      heading: "Portfolio Ecosystem: v2.0 Redesign Live",
+      description:
+        "Transitioning to a high-fidelity interface optimized for technical performance and global reach.",
+      date_added: "03/22/2026",
+      navigateTo: "/",
+    },
   ];
 
   const categoryIcons = {
-    'New Project': 'rocket_launch',
-    'Project Update': 'update',
-    'Announcement Added': 'campaign',
-    'Announcement Update': 'edit_notifications',
-    'Blog Added': 'article',
-    'Blog Update': 'history_edu',
-    'Privacy Policy Added': 'policy',
-    'Privacy Policy Update': 'gavel',
-    'New App Launch': 'install_mobile',
+    "New Project": "rocket_launch",
+    "Project Update": "update",
+    "Announcement Added": "campaign",
+    "Announcement Update": "edit_notifications",
+    "Blog Added": "article",
+    "Blog Update": "history_edu",
+    "Privacy Policy Added": "policy",
+    "Privacy Policy Update": "gavel",
+    "New App Launch": "install_mobile",
   };
 
   const getReadNotifications = () => {
     try {
-      return JSON.parse(localStorage.getItem('read_notifications') || '[]');
+      return JSON.parse(localStorage.getItem("read_notifications") || "[]");
     } catch (e) {
       return [];
     }
@@ -98,7 +110,7 @@
     const read = getReadNotifications();
     if (!read.includes(id)) {
       read.push(id);
-      localStorage.setItem('read_notifications', JSON.stringify(read));
+      localStorage.setItem("read_notifications", JSON.stringify(read));
     }
   };
 
@@ -113,12 +125,12 @@
     const diffMonth = Math.floor(diffDay / 30);
     const diffYear = Math.floor(diffDay / 365);
 
-    if (diffYear > 0) return `${diffYear} year${diffYear > 1 ? 's' : ''} ago`;
-    if (diffMonth > 0) return `${diffMonth} mon${diffMonth > 1 ? 's' : ''} ago`;
-    if (diffDay > 0) return `${diffDay} day${diffDay > 1 ? 's' : ''} ago`;
-    if (diffHour > 0) return `${diffHour} hr${diffHour > 1 ? 's' : ''} ago`;
-    if (diffMin > 0) return `${diffMin} min${diffMin > 1 ? 's' : ''} ago`;
-    return 'just now';
+    if (diffYear > 0) return `${diffYear} year${diffYear > 1 ? "s" : ""} ago`;
+    if (diffMonth > 0) return `${diffMonth} mon${diffMonth > 1 ? "s" : ""} ago`;
+    if (diffDay > 0) return `${diffDay} day${diffDay > 1 ? "s" : ""} ago`;
+    if (diffHour > 0) return `${diffHour} hr${diffHour > 1 ? "s" : ""} ago`;
+    if (diffMin > 0) return `${diffMin} min${diffMin > 1 ? "s" : ""} ago`;
+    return "just now";
   };
 
   const isWithinOneMonth = (dateStr) => {
@@ -131,7 +143,9 @@
 
   const getUnreadCount = () => {
     const read = getReadNotifications();
-    return notifications.filter(n => !read.includes(n.id) && isWithinOneMonth(n.date_added)).length;
+    return notifications.filter(
+      (n) => !read.includes(n.id) && isWithinOneMonth(n.date_added),
+    ).length;
   };
 
   const injectStyles = () => {
@@ -475,46 +489,47 @@
       }
     `;
 
-    const styleEl = document.createElement('style');
+    const styleEl = document.createElement("style");
     styleEl.textContent = styles;
     document.head.appendChild(styleEl);
   };
 
   const renderNotifications = () => {
-    const listBody = document.querySelector('#notification-panel .panel-body');
-    const unreadToggle = document.querySelector('#unread-toggle');
+    const listBody = document.querySelector("#notification-panel .panel-body");
+    const unreadToggle = document.querySelector("#unread-toggle");
     if (!listBody) return;
 
     const read = getReadNotifications();
     const showUnreadOnly = unreadToggle ? unreadToggle.checked : false;
 
-    let filtered = notifications
-      .sort((a, b) => new Date(b.date_added) - new Date(a.date_added));
+    let filtered = notifications.sort(
+      (a, b) => new Date(b.date_added) - new Date(a.date_added),
+    );
 
     if (showUnreadOnly) {
-      filtered = filtered.filter(n => !read.includes(n.id));
+      filtered = filtered.filter((n) => !read.includes(n.id));
     }
 
     if (filtered.length === 0) {
       listBody.innerHTML = `
         <div class="empty-unread-state">
           <span class="material-symbols-outlined empty-unread-icon">
-            ${showUnreadOnly ? 'notifications_paused' : 'notifications'}
+            ${showUnreadOnly ? "notifications_paused" : "notifications"}
           </span>
           <p class="empty-unread-text">
-            ${showUnreadOnly ? 'No unread notifications present' : 'No notifications yet'}
+            ${showUnreadOnly ? "No unread notifications present" : "No notifications yet"}
           </p>
         </div>
       `;
     } else {
       listBody.innerHTML = filtered
-        .map(n => {
+        .map((n) => {
           const isRead = read.includes(n.id);
-          const icon = categoryIcons[n.category] || 'notifications';
+          const icon = categoryIcons[n.category] || "notifications";
           const relativeTime = calculateRelativeTime(n.date_added);
 
           return `
-            <div class="notification-item ${isRead ? '' : 'unread'}" data-id="${n.id}" data-url="${n.navigateTo}">
+            <div class="notification-item ${isRead ? "" : "unread"}" data-id="${n.id}" data-url="${n.navigateTo}">
               <div class="item-icon-container">
                 <span class="material-symbols-outlined">${icon}</span>
               </div>
@@ -529,28 +544,29 @@
               </div>
             </div>
           `;
-        }).join('');
+        })
+        .join("");
     }
 
     // Update count
     const count = getUnreadCount();
-    const badge = document.getElementById('notification-badge');
-    const fab = document.getElementById('notification-fab');
+    const badge = document.getElementById("notification-badge");
+    const fab = document.getElementById("notification-fab");
 
     if (count > 0) {
       badge.textContent = count;
-      badge.style.display = 'flex';
-      fab.classList.add('pulse-animation');
+      badge.style.display = "flex";
+      fab.classList.add("pulse-animation");
     } else {
-      badge.style.display = 'none';
-      fab.classList.remove('pulse-animation');
+      badge.style.display = "none";
+      fab.classList.remove("pulse-animation");
     }
 
     // Attach listeners
-    document.querySelectorAll('.notification-item').forEach(item => {
+    document.querySelectorAll(".notification-item").forEach((item) => {
       item.onclick = function () {
-        const id = this.getAttribute('data-id');
-        const url = this.getAttribute('data-url');
+        const id = this.getAttribute("data-id");
+        const url = this.getAttribute("data-url");
         markAsRead(id);
         window.location.href = url;
       };
@@ -558,8 +574,8 @@
   };
 
   const createDOM = () => {
-    const container = document.createElement('div');
-    container.id = 'notification-container';
+    const container = document.createElement("div");
+    container.id = "notification-container";
 
     container.innerHTML = `
       <div id="notification-fab">
@@ -588,20 +604,20 @@
 
     document.body.appendChild(container);
 
-    const fab = container.querySelector('#notification-fab');
-    const panel = container.querySelector('#notification-panel');
-    const closeBtn = container.querySelector('#notification-close');
-    const unreadToggle = container.querySelector('#unread-toggle');
+    const fab = container.querySelector("#notification-fab");
+    const panel = container.querySelector("#notification-panel");
+    const closeBtn = container.querySelector("#notification-close");
+    const unreadToggle = container.querySelector("#unread-toggle");
 
     const togglePanel = (show) => {
       if (show) {
         if (unreadToggle) unreadToggle.checked = false; // Reset toggle when opening
-        container.classList.add('panel-active');
-        panel.classList.add('active');
+        container.classList.add("panel-active");
+        panel.classList.add("active");
         renderNotifications(); // Refresh list to respect reset toggle
       } else {
-        container.classList.remove('panel-active');
-        panel.classList.remove('active');
+        container.classList.remove("panel-active");
+        panel.classList.remove("active");
       }
     };
 
@@ -619,7 +635,7 @@
       unreadToggle.onchange = () => renderNotifications();
     }
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       if (!container.contains(e.target)) {
         togglePanel(false);
       }
@@ -628,8 +644,8 @@
     renderNotifications();
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
       injectStyles();
       createDOM();
     });
