@@ -1,133 +1,201 @@
 <!doctype html>
 <html class="dark" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="title" content="Announcements & Updates — Shyam Sunder Kanth" />
+    <meta
+      name="description"
+      content="Official updates, app releases, and technical news from the development journey of Shyam Sunder Kanth. Insights into Android and Angular projects are shared here."
+    />
+    <meta
+      name="keywords"
+      content="Shyam Sunder Kanth Blog, Android App Updates, Kotlin News, Angular Projects, Software Development Announcements, Payday App Update"
+    />
+    <meta name="author" content="Shyam Sunder Kanth" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://shyamkanth.github.io/announcements/" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Announcements - Shyam Sunder Kanth</title>
-  <link rel="stylesheet" href="announcement-style.css" />
-  <link rel="icon" href="/images/icon.png" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap"
-    rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    rel="stylesheet" />
-</head>
+    <meta property="og:type" content="blog" />
+    <meta
+      property="og:url"
+      content="https://shyamkanth.github.io/announcements/"
+    />
+    <meta
+      property="og:title"
+      content="Announcements & Updates — Shyam Sunder Kanth"
+    />
+    <meta
+      property="og:description"
+      content="The latest project updates and development news are published here. Stay informed about new releases in the Android and Angular ecosystem."
+    />
+    <meta
+      property="og:image"
+      content="https://shyamkanth.github.io/images/og-card.png"
+    />
+    <meta property="og:site_name" content="Shyam Sunder Kanth Portfolio" />
 
-<body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <a class="nav-brand" href="/">
-        <div class="brand-icon">
-          <span class="material-symbols-outlined">terminal</span>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://shyamkanth.github.io/announcements/"
+    />
+    <meta
+      name="twitter:title"
+      content="Announcements & Updates — Shyam Sunder Kanth"
+    />
+    <meta
+      name="twitter:description"
+      content="Recent updates and technical announcements are shared. Track the progress of active Android and Angular projects."
+    />
+    <meta
+      name="twitter:image"
+      content="https://shyamkanth.github.io/images/og-card.png"
+    />
+
+    <meta name="theme-color" content="#0D1117" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcements - Shyam Sunder Kanth</title>
+    <link rel="stylesheet" href="announcement-style.css" />
+    <link rel="icon" href="/images/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a class="nav-brand" href="/">
+          <div class="brand-icon">
+            <span class="material-symbols-outlined">terminal</span>
+          </div>
+          <span class="brand-name">SHYAM SUNDER KANTH</span>
+        </a>
+        <a href="/" class="nav-back">
+          <span class="material-symbols-outlined">arrow_back</span>
+          Back to Portfolio
+        </a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="blog-hero">
+        <div class="container">
+          <div class="blog-hero-content">
+            <h1 class="blog-hero-title">
+              Announcements & <span class="highlight">Updates</span>
+            </h1>
+            <p class="blog-hero-subtitle">
+              App releases, project updates, and news from my development
+              journey
+            </p>
+          </div>
         </div>
-        <span class="brand-name">SHYAM SUNDER KANTH</span>
-      </a>
-      <a href="/" class="nav-back">
-        <span class="material-symbols-outlined">arrow_back</span>
-        Back to Portfolio
-      </a>
-    </div>
-  </nav>
+      </section>
 
-  <main>
-    <section class="blog-hero">
+      <section class="blog-search-section">
+        <div class="container-narrow">
+          <div class="search-wrapper">
+            <div class="search-icon-wrapper">
+              <span class="material-symbols-outlined search-icon">search</span>
+            </div>
+            <input
+              type="text"
+              id="searchInput"
+              class="search-input"
+              placeholder="Search announcements..."
+              autocomplete="off"
+            />
+            <button id="clearSearch" class="clear-btn" style="display: none">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="blog-content">
+        <div class="container">
+          <div class="sort-section">
+            <div class="sort-label">
+              <span class="material-symbols-outlined sort-icon">sort</span>
+              Sort By
+            </div>
+            <div class="sort-buttons-group">
+              <button class="sort-btn active" data-sort="newest">
+                <span class="material-symbols-outlined">arrow_downward</span>
+                Newest
+              </button>
+              <button class="sort-btn" data-sort="oldest">
+                <span class="material-symbols-outlined">arrow_upward</span>
+                Oldest
+              </button>
+            </div>
+          </div>
+
+          <div class="tags-filter-wrapper">
+            <div class="tags-filter-container">
+              <button class="tag-filter-btn active" data-tag="all">
+                <span class="tag-filter-dot"></span>
+                All
+              </button>
+              <div id="tagsContainer" class="tags-list"></div>
+            </div>
+            <button class="tag-scroll-btn" id="tagScrollBtn">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+
+          <div id="announcementsGrid" class="blogs-grid"></div>
+
+          <div id="noResults" class="no-results" style="display: none">
+            <span class="material-symbols-outlined no-results-icon"
+              >campaign</span
+            >
+            <h3>No announcements found</h3>
+            <p>Try adjusting your search or filters</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
       <div class="container">
-        <div class="blog-hero-content">
-          <h1 class="blog-hero-title">
-            Announcements & <span class="highlight">Updates</span>
-          </h1>
-          <p class="blog-hero-subtitle">
-            App releases, project updates, and news from my development
-            journey
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="blog-search-section">
-      <div class="container-narrow">
-        <div class="search-wrapper">
-          <div class="search-icon-wrapper">
-            <span class="material-symbols-outlined search-icon">search</span>
+        <div class="footer-content">
+          <div class="footer-brand">
+            <div class="brand-icon-small"></div>
+            <span class="footer-brand-text">SHYAM.DEV © 2025</span>
           </div>
-          <input type="text" id="searchInput" class="search-input" placeholder="Search announcements..."
-            autocomplete="off" />
-          <button id="clearSearch" class="clear-btn" style="display: none">
-            <span class="material-symbols-outlined">close</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section class="blog-content">
-      <div class="container">
-        <div class="sort-section">
-          <div class="sort-label">
-            <span class="material-symbols-outlined sort-icon">sort</span>
-            Sort By
-          </div>
-          <div class="sort-buttons-group">
-            <button class="sort-btn active" data-sort="newest">
-              <span class="material-symbols-outlined">arrow_downward</span>
-              Newest
-            </button>
-            <button class="sort-btn" data-sort="oldest">
-              <span class="material-symbols-outlined">arrow_upward</span>
-              Oldest
-            </button>
+          <div class="footer-links">
+            <a href="/" class="footer-link">Portfolio</a>
+            <a
+              href="https://github.com/shyamkanth"
+              target="_blank"
+              class="footer-link"
+              >GitHub</a
+            >
+            <a
+              href="https://www.linkedin.com/in/shyam-sunder-kanth/"
+              target="_blank"
+              class="footer-link"
+              >LinkedIn</a
+            >
           </div>
         </div>
-
-        <div class="tags-filter-wrapper">
-          <div class="tags-filter-container">
-            <button class="tag-filter-btn active" data-tag="all">
-              <span class="tag-filter-dot"></span>
-              All
-            </button>
-            <div id="tagsContainer" class="tags-list"></div>
-          </div>
-          <button class="tag-scroll-btn" id="tagScrollBtn">
-            <span class="material-symbols-outlined">chevron_right</span>
-          </button>
-        </div>
-
-        <div id="announcementsGrid" class="blogs-grid"></div>
-
-        <div id="noResults" class="no-results" style="display: none">
-          <span class="material-symbols-outlined no-results-icon">campaign</span>
-          <h3>No announcements found</h3>
-          <p>Try adjusting your search or filters</p>
-        </div>
       </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <div class="brand-icon-small"></div>
-          <span class="footer-brand-text">SHYAM.DEV © 2025</span>
-        </div>
-        <div class="footer-links">
-          <a href="/" class="footer-link">Portfolio</a>
-          <a href="https://github.com/shyamkanth" target="_blank" class="footer-link">GitHub</a>
-          <a href="https://www.linkedin.com/in/shyam-sunder-kanth/" target="_blank" class="footer-link">LinkedIn</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      initializeAnnouncementSystem();
-    });
-  </script>
-  <script src="announcement-system.js"></script>
-  <script src="../notification.js"></script>
-  <script src="../cabinet.min.js"></script>
-</body>
-
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeAnnouncementSystem();
+      });
+    </script>
+    <script src="announcement-system.js"></script>
+    <script src="../notification.js"></script>
+    <script src="../cabinet.min.js"></script>
+  </body>
 </html>
