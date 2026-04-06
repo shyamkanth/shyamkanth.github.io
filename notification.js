@@ -237,6 +237,29 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
         transform-origin: bottom right;
+        z-index: 10;
+      }
+
+      #notification-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 5;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      }
+
+      #notification-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
       }
 
       #notification-panel.active {
@@ -476,16 +499,35 @@
         font-weight: 500;
       }
 
+      @media (max-width: 768px) {
+        #notification-panel {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          right: auto;
+          bottom: auto;
+          transform: translate(-50%, -45%) scale(0.95);
+          width: calc(100vw - 40px);
+          max-width: 450px;
+          max-height: 70vh;
+          transform-origin: center;
+        }
+
+        #notification-panel.active {
+          transform: translate(-50%, -50%) scale(1);
+          background: rgba(17, 19, 18, 0.98); /* More solid background for mobile */
+          backdrop-filter: none; /* Remove double blur */
+        }
+
+        .close-panel-btn {
+          display: flex; /* Keep it visible on tablets/mobiles if centered */
+        }
+      }
+
       @media (max-width: 480px) {
         #notification-panel {
-          width: calc(100vw - 60px);
-          max-height: 50vh;
-          bottom: 80px;
-          right: 0;
+          width: calc(100vw - 30px);
         }
-          .close-panel-btn{
-          display: none;
-          }
       }
     `;
 
@@ -578,6 +620,7 @@
     container.id = "notification-container";
 
     container.innerHTML = `
+      <div id="notification-overlay"></div>
       <div id="notification-fab">
         <span class="material-symbols-outlined">notifications</span>
         <div id="notification-badge" style="display:none">0</div>
@@ -604,21 +647,32 @@
 
     document.body.appendChild(container);
 
+    const overlay = container.querySelector("#notification-overlay");
     const fab = container.querySelector("#notification-fab");
     const panel = container.querySelector("#notification-panel");
     const closeBtn = container.querySelector("#notification-close");
     const unreadToggle = container.querySelector("#unread-toggle");
 
     const togglePanel = (show) => {
+      // Check if we should show overlay (only for mobile/tablet)
+      const isMobile = window.innerWidth <= 768;
+
       if (show) {
         if (unreadToggle) unreadToggle.checked = false; // Reset toggle when opening
         container.classList.add("panel-active");
         panel.classList.add("active");
+        if (isMobile) overlay.classList.add("active");
         renderNotifications(); // Refresh list to respect reset toggle
       } else {
         container.classList.remove("panel-active");
         panel.classList.remove("active");
+        overlay.classList.remove("active");
       }
+    };
+
+    overlay.onclick = (e) => {
+      e.stopPropagation();
+      togglePanel(false);
     };
 
     fab.onclick = (e) => {
