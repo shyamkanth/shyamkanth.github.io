@@ -2,22 +2,46 @@
 class KineticTerminal {
   constructor() {
     this.currentProject = null;
-    this.currentView = "board";
+    this.currentView = null; // null to allow applySettings to set default
     this.currentTaskId = null;
     this.issuesViewType = "table";
-    this.filters = { status: "all", priority: "all" };
+    this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
     this.breadcrumbStack = [];
-    this.currentSort = "id-asc";
     this.init();
   }
 
   init() {
+
+    console.log("app.js init");
+
     this.cacheDOM();
     this.bindEvents();
     this.loadState();
+
+    // Standardize view preference before applying
+    const settings = storage.getSettings();
+
+    console.log("settings", settings);
+
+    const rawView = settings.viewMode || "board";
+    const initialView = rawView === "kanban" ? "board" : rawView;
+    this.currentView = initialView;
+
     this.applySettings(true);
-    this.render();
-    this.transformSelects();
+
+    // Sort preference from storage
+    this.sortPreference = settings.sortPreference || "updated-desc";
+
+    // Initial Badge Refresh
+    if (this.currentProject) {
+      this.updateSidebarBadges();
+    }
+
+    // INITIAL RENDER - Move to next tick so window.app is set
+    setTimeout(() => {
+      this.render();
+      this.transformSelects();
+    }, 0);
   }
 
   cacheDOM() {
@@ -39,15 +63,17 @@ class KineticTerminal {
     // Sidebar
     this.sidebarProjectName = document.getElementById("sidebarProjectName");
     this.sidebarProjectKey = document.getElementById("sidebarProjectKey");
-    this.issuesCount = document.getElementById("issuesCount");
+    this.issuesBadge = document.getElementById("issuesBadge");
+    this.boardBadge = document.getElementById("boardBadge");
+    this.backlogBadge = document.getElementById("backlogBadge");
+    this.projectList = document.getElementById("projectList");
   }
-
   bindEvents() {
     // Navigation
     document.querySelectorAll(".sidebar-link, .nav-link").forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
-        const view = e.currentTarget.dataset.view;
+        const view = e.currentTarget.getAttribute("data-view");
         if (view) {
           this.switchView(view);
         }
@@ -55,17 +81,13 @@ class KineticTerminal {
     });
 
     // Project switching
-    document
-      .getElementById("switchProjectBtn")
-      ?.addEventListener("click", () => {
-        this.openProjectsModal();
-      });
+    document.getElementById("switchProjectBtn")?.addEventListener("click", () => {
+      this.openProjectsModal();
+    });
 
-    document
-      .getElementById("switchProjectFooterBtn")
-      ?.addEventListener("click", () => {
-        this.openProjectsModal();
-      });
+    document.getElementById("switchProjectFooterBtn")?.addEventListener("click", () => {
+      this.openProjectsModal();
+    });
 
     // Settings
     document.getElementById("settingsBtn")?.addEventListener("click", () => {
@@ -73,16 +95,12 @@ class KineticTerminal {
     });
 
     // Create project
-    document
-      .getElementById("createNewProjectBtn")
-      ?.addEventListener("click", () => {
-        this.openProjectForm();
-      });
+    document.getElementById("createNewProjectBtn")?.addEventListener("click", () => {
+      this.openProjectForm();
+    });
 
     // Form submissions
-    this.projectForm?.addEventListener("submit", (e) =>
-      this.handleProjectSubmit(e),
-    );
+    this.projectForm?.addEventListener("submit", (e) => this.handleProjectSubmit(e));
     this.taskForm?.addEventListener("submit", (e) => this.handleTaskSubmit(e));
     this.personForm?.addEventListener("submit", (e) => this.handlePersonSubmit(e));
 
@@ -116,117 +134,165 @@ class KineticTerminal {
 
     // Keyboard shortcuts
     window.addEventListener("keydown", (e) => {
-      // Escape to close modals
       if (e.key === "Escape") {
         this.closeAllModals();
       }
 
-      // Check if typing in input/textarea
       const isTyping = ["INPUT", "TEXTAREA"].includes(document.activeElement.tagName);
 
-      // Ctrl/Cmd + K for search
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         e.stopPropagation();
         document.getElementById("globalSearch")?.focus();
       }
 
-      // Alt + N for New Issue (More reliable than Ctrl+N)
       if (e.altKey && e.key.toLowerCase() === "n") {
         e.preventDefault();
         e.stopPropagation();
         this.openTaskForm();
       }
 
-      // 'C' for New Issue
-      // if (!isTyping && e.key.toLowerCase() === "c") {
-      //   e.preventDefault();
-      //   e.stopPropagation();
-      //   this.openTaskForm();
-      // }
-
-      // Ctrl/Cmd + P for New Project
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
         e.preventDefault();
         e.stopPropagation();
         this.openProjectForm();
       }
 
-      // Ctrl/Cmd + B for Switch Project
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
         e.preventDefault();
         e.stopPropagation();
         this.openProjectsModal();
       }
 
-      // Number keys for View Switching (1-5)
-      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
-        const views = {
-          "1": "board",
-          "2": "backlog",
-          "3": "timeline",
-          "4": "issues",
-          "5": "reports"
-        };
-        if (views[e.key] && !isTyping) {
-          this.switchView(views[e.key]);
+      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && !isTyping) {
+        const views = { "1": "board", "2": "backlog", "3": "timeline", "4": "issues", "5": "reports" };
+        if (views[e.key]) this.switchView(views[e.key]);
+      }
+    }, true);
+
+    // Global click listener for delegation and UI management
+    document.addEventListener("click", (e) => {
+      const dropToggle = e.target.closest(".dropdown-toggle");
+      const dropMenu = e.target.closest(".dropdown-menu");
+
+      // 1. Dropdown Toggles
+      if (dropToggle) {
+        e.preventDefault();
+        const menu = dropToggle.nextElementSibling;
+        if (menu && menu.classList.contains("dropdown-menu")) {
+          const wasOpen = menu.classList.contains("show");
+          this.closeAllMenus();
+          if (!wasOpen) menu.classList.add("show");
+        }
+        return;
+      }
+
+      // 2. Handle Closing Menus Next
+      if (!dropMenu) {
+        this.closeAllMenus();
+      }
+
+      // 3. Status change via delegation
+      const statusLink = e.target.closest("[data-status-value]");
+      if (statusLink) {
+        e.preventDefault();
+        const taskId = statusLink.dataset.taskId;
+        const newStatus = statusLink.dataset.statusValue;
+        this.closeAllMenus();
+        this.handleStatusChange(taskId, newStatus);
+        return;
+      }
+
+      // 4. Sort option selection
+      const sortLink = e.target.closest("[data-sort-value]");
+      if (sortLink) {
+        e.preventDefault();
+        const value = sortLink.dataset.sortValue;
+        this.closeAllMenus();
+        this.handleSortChange(value);
+        return;
+      }
+
+      // 5. Blocker link navigation
+      const blockerLink = e.target.closest(".blocker-item.clickable");
+      if (blockerLink) {
+        e.preventDefault();
+        const blockerId = blockerLink.dataset.blockerId;
+        if (blockerId) {
+          this.openTaskDetails(blockerId);
+        }
+        return;
+      }
+
+      // 6. Action buttons (Edit from Details, etc)
+      const actionBtn = e.target.closest("[data-action]");
+      if (actionBtn) {
+        const action = actionBtn.dataset.action;
+        const taskId = actionBtn.dataset.taskId;
+        if (action === "edit-task") {
+          e.preventDefault();
+          this.openTaskForm(taskId || this.currentTaskId);
+          return;
+        }
+        if (action === "delete-task") {
+          e.preventDefault();
+          this.deleteCurrentTask();
+          return;
         }
       }
-    }, true); // Use capture to better override browser defaults
 
-    // Dynamic event delegation
-    document.addEventListener("click", (e) => {
-      // Project selection
+      // 7. Project selection
       const projectTarget = e.target.closest(".project-card") || e.target.closest(".project-item");
       if (projectTarget) {
         const projectId = projectTarget.dataset.projectId;
         this.selectProject(projectId);
+        return;
       }
 
-      // Task card click
-      const cardTarget = e.target.closest(".kanban-card, .issue-card");
-      if (cardTarget) {
-        const taskId = cardTarget.dataset.taskId;
+      // 8. Task click (Board or Issues)
+      const taskTarget = e.target.closest(".kanban-card, .issue-card, .issue-table tbody tr[data-task-id]");
+      if (taskTarget && !e.target.closest("button") && !e.target.closest("a") && !e.target.closest(".dropdown")) {
+        const taskId = taskTarget.dataset.taskId;
         this.openTaskDetails(taskId);
+        return;
       }
 
-      // Table row click
-      const rowTarget = e.target.closest(".issue-table tbody tr[data-task-id]");
-      if (rowTarget) {
-        const taskId = rowTarget.dataset.taskId;
-        this.openTaskDetails(taskId);
-      }
-
-      // Add task button
+      // 9. Generic Create Task buttons
       if (e.target.closest(".kanban-add-btn") || e.target.id === "createTaskBtn" || e.target.closest("#createTaskBtn")) {
         this.openTaskForm();
+        return;
       }
 
-      // Edit task button
+      // 10. Specific Edit/Delete in Modals (if they don't use data-action)
       if (e.target.id === "editTaskBtn" || e.target.closest("#editTaskBtn")) {
         this.editCurrentTask();
+        return;
       }
-
-      // Global click listener for dropdowns
-      document.addEventListener("click", (e) => {
-        if (!e.target.closest(".dropdown")) {
-          document.querySelectorAll(".dropdown-menu.show").forEach(menu => {
-            menu.classList.remove("show");
-          });
-        }
-      });
-
-      // Delete task button
-      if (
-        e.target.id === "deleteTaskBtn" ||
-        e.target.closest("#deleteTaskBtn")
-      ) {
+      if (e.target.id === "deleteTaskBtn" || e.target.closest("#deleteTaskBtn")) {
         this.deleteCurrentTask();
+        return;
       }
 
-      // Close search results when clicking outside
+      // 11. Breadcrumb clicks
+      const breadcrumbItem = e.target.closest("[data-breadcrumb-view]");
+      if (breadcrumbItem) {
+        const view = breadcrumbItem.dataset.breadcrumbView;
+        const id = breadcrumbItem.dataset.breadcrumbId;
+        this.switchView(view, id);
+        return;
+      }
+
+      // 12. Search management
       if (!e.target.closest(".search-box")) {
         document.getElementById("searchResults")?.classList.remove("active");
+      }
+    });
+
+    // Horizontal scroll for project switcher
+    this.projectList?.addEventListener("wheel", (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        this.projectList.scrollLeft += e.deltaY;
       }
     });
   }
@@ -246,13 +312,28 @@ class KineticTerminal {
       }
     }
   }
-
   render() {
-    if (!this.currentProject && storage.getProjects().length > 0) {
-      this.currentProject = storage.getProjects()[0];
+    const projects = storage.getProjects();
+
+    // 1. Project Selection Safeguard
+    if (!this.currentProject && projects.length > 0) {
+      this.currentProject = projects[0];
       this.updateSidebarProject();
     }
 
+    // 2. Default View Safeguard
+    if (!this.currentView || this.currentView === "kanban") {
+      const settings = storage.getSettings();
+      const rawView = settings.viewMode || "board";
+      this.currentView = rawView === "kanban" ? "board" : rawView;
+    }
+
+    // 3. Ensure content is visible
+    if (this.contentArea) {
+      this.contentArea.style.opacity = "1";
+    }
+
+    this.updateSidebarBadges();
     this.updateActiveLinks();
     this.renderCurrentView();
   }
@@ -287,8 +368,9 @@ class KineticTerminal {
       }
       this.currentTaskId = taskId;
     } else if (view !== "issueDetail") {
-      // Direct view switch without task, reset stack
+      // Direct view switch without task, reset stack and current task
       this.breadcrumbStack = [];
+      this.currentTaskId = null;
     }
 
     this.render();
@@ -297,8 +379,9 @@ class KineticTerminal {
   updateActiveLinks() {
     const view = this.currentView;
     document.querySelectorAll(".sidebar-link, .nav-link").forEach((link) => {
+      const linkView = link.getAttribute("data-view");
       link.classList.remove("active");
-      if (link.dataset.view === view) {
+      if (linkView === view) {
         link.classList.add("active");
       }
     });
@@ -333,7 +416,32 @@ class KineticTerminal {
     document.querySelectorAll(".custom-select, .filter-select").forEach((select) => {
       // Don't transform if already transformed
       if (select.nextElementSibling && select.nextElementSibling.classList.contains("custom-dropdown-wrapper")) {
-        // Just refresh if it's a searchable select
+        const wrapper = select.nextElementSibling;
+        const buttonText = wrapper.querySelector("button span");
+
+        // Helper to get display text
+        const getDisplayText = () => {
+          if (select.multiple) {
+            const selected = Array.from(select.selectedOptions);
+            if (selected.length === 0) return select.dataset.placeholder || "Select...";
+            if (selected.length === 1) return selected[0].text;
+            return `${selected.length} selected`;
+          }
+          return select.options[select.selectedIndex]?.text || select.dataset.placeholder || "Select...";
+        };
+
+        if (buttonText) buttonText.textContent = getDisplayText();
+
+        // Update active class in menu
+        const menu = wrapper.querySelector(".dropdown-menu");
+        if (menu) {
+          const selectedValues = select.multiple ? Array.from(select.selectedOptions).map(o => o.value) : [select.value];
+          menu.querySelectorAll("a").forEach(a => {
+            const val = a.dataset.value;
+            a.classList.toggle("active", selectedValues.includes(val));
+          });
+        }
+
         if (select.classList.contains("searchable-select")) {
           this.refreshSearchableSelect(select);
         }
@@ -519,11 +627,12 @@ class KineticTerminal {
             ${columnTasks.map((task) => this.renderKanbanCard(task)).join("")}
           </div>
           <div class="drop-overlay" data-target-status="${status.key}">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="8 17 12 21 16 17"/>
-              <line x1="12" y1="21" x2="12" y2="3"/>
-            </svg>
-            <span class="drop-label">Move to ${status.label}</span>
+             <div class="drop-hint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span>Drop Here</span>
+             </div>
           </div>
         </div>
       `;
@@ -557,19 +666,21 @@ class KineticTerminal {
     let draggedTaskId = null;
     let sourceStatus = null;
 
+    // Make cards draggable
     board.querySelectorAll(".kanban-card").forEach((card) => {
       card.addEventListener("dragstart", (e) => {
         draggedTaskId = card.dataset.taskId;
         const sourceColumn = card.closest(".kanban-column");
-        sourceStatus = sourceColumn.dataset.status;
-
-        // Mark source column + board
-        sourceColumn.classList.add("drag-source");
-        board.classList.add("is-dragging");
-        card.classList.add("is-dragging");
+        sourceStatus = sourceColumn ? sourceColumn.dataset.status : null;
 
         e.dataTransfer.effectAllowed = "move";
         e.dataTransfer.setData("text/plain", draggedTaskId);
+
+        // Slight delay so Chrome renders the drag image before we add the class
+        setTimeout(() => {
+          card.classList.add("is-dragging");
+          board.classList.add("is-dragging");
+        }, 0);
       });
 
       card.addEventListener("dragend", () => {
@@ -577,7 +688,7 @@ class KineticTerminal {
         sourceStatus = null;
         board.classList.remove("is-dragging");
         board.querySelectorAll(".kanban-column").forEach((col) => {
-          col.classList.remove("drag-source", "drag-over");
+          col.classList.remove("drag-over");
         });
         board.querySelectorAll(".kanban-card").forEach((c) => {
           c.classList.remove("is-dragging");
@@ -585,32 +696,37 @@ class KineticTerminal {
       });
     });
 
-    board.querySelectorAll(".drop-overlay").forEach((overlay) => {
-      const targetStatus = overlay.dataset.targetStatus;
-      const column = overlay.closest(".kanban-column");
+    // Listen on each column directly (not the overlay)
+    board.querySelectorAll(".kanban-column").forEach((column) => {
+      const targetStatus = column.dataset.status;
 
-      overlay.addEventListener("dragenter", (e) => {
+      column.addEventListener("dragenter", (e) => {
         e.preventDefault();
-        column.classList.add("drag-over");
+        if (targetStatus !== sourceStatus) {
+          column.classList.add("drag-over");
+        }
       });
 
-      overlay.addEventListener("dragleave", () => {
-        column.classList.remove("drag-over");
+      column.addEventListener("dragleave", (e) => {
+        // Only remove class if we're leaving the column itself, not a child
+        if (!column.contains(e.relatedTarget)) {
+          column.classList.remove("drag-over");
+        }
       });
 
-      overlay.addEventListener("dragover", (e) => {
+      column.addEventListener("dragover", (e) => {
         e.preventDefault();
         e.dataTransfer.dropEffect = "move";
       });
 
-      overlay.addEventListener("drop", (e) => {
+      column.addEventListener("drop", (e) => {
         e.preventDefault();
-        const taskId = e.dataTransfer.getData("text/plain");
-        if (taskId && targetStatus !== sourceStatus) {
+        const taskId = e.dataTransfer.getData("text/plain") || draggedTaskId;
+        if (taskId && targetStatus && targetStatus !== sourceStatus) {
           storage.updateTask(taskId, { status: targetStatus });
           this.updateSidebarProject();
           this.renderCurrentView();
-          this.showNotification(`Moved to ${targetStatus.replace("-", " ")}`, "success");
+          this.showNotification(`Moved to ${targetStatus.replace(/-/g, " ")}`, "success");
         }
         column.classList.remove("drag-over");
       });
@@ -693,7 +809,7 @@ class KineticTerminal {
           Create Issue
         </button>`
     )}
-      <div class="content-wrapper">
+      <div class="table-view full-width">
         ${this.renderTaskTable(tasks)}
       </div>
     `;
@@ -704,12 +820,12 @@ class KineticTerminal {
       return this.renderNoProject();
     }
 
-    let tasks = this.sortTasks(this.getFilteredTasks());
-    this.issuesCount.textContent = storage.getTasks(this.currentProject.id).length;
-
+    const allTasks = storage.getTasks(this.currentProject.id);
+    const tasks = this.getFilteredTasks();
     const isTable = this.issuesViewType === "table";
 
-    if (tasks.length === 0) {
+    // If project is completely empty (no tasks at all)
+    if (allTasks.length === 0) {
       return `
         ${this.renderPageHeader(this.currentProject.name, [this.currentProject.name, "Issues"], `
           ${this.renderSortDropdown()}
@@ -727,15 +843,12 @@ class KineticTerminal {
       `;
     }
 
+    // Normal view with filters (even if filtered result is empty)
     return `
       ${this.renderPageHeader(
       "All Issues",
       [this.currentProject.name, "Issues"],
       `
-        <div class="view-toggle">
-          <button class="view-toggle-btn ${!isTable ? "active" : ""}" onclick="app.setIssuesView('grid')">Grid</button>
-          <button class="view-toggle-btn ${isTable ? "active" : ""}" onclick="app.setIssuesView('table')">Table</button>
-        </div>
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -767,13 +880,36 @@ class KineticTerminal {
             <option value="low" ${this.filters.priority === "low" ? "selected" : ""}>Low</option>
           </select>
         </div>
+        <div class="filter-group">
+          <span class="filter-label">Assignee:</span>
+          <select class="filter-select" id="assigneeFilter" onchange="app.applyFilters()">
+            <option value="all" ${this.filters.assignee === "all" ? "selected" : ""}>All Assignees</option>
+            ${storage.getPeople().map(p => `
+              <option value="${p.name}" ${this.filters.assignee === p.name ? "selected" : ""}>${p.name}</option>
+            `).join("")}
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Reporter:</span>
+          <select class="filter-select" id="reporterFilter" onchange="app.applyFilters()">
+            <option value="all" ${this.filters.reporter === "all" ? "selected" : ""}>All Reporters</option>
+            ${storage.getPeople().map(p => `
+              <option value="${p.name}" ${this.filters.reporter === p.name ? "selected" : ""}>${p.name}</option>
+            `).join("")}
+          </select>
+        </div>
         <div class="view-toggle">
           <button class="view-toggle-btn ${isTable ? "active" : ""}" data-issues-view="table">Table</button>
           <button class="view-toggle-btn ${!isTable ? "active" : ""}" data-issues-view="cards">Cards</button>
         </div>
       </div>
       <div class="issues-view-container">
-        ${isTable ? this.renderTaskTable(tasks) : this.renderTaskCards(tasks)}
+        ${tasks.length === 0
+        ? `<div class="text-center" style="padding: 4rem;">
+               <h3 style="color: var(--text-secondary);">No issues found matching filters</h3>
+               <button class="btn btn-secondary mt-lg" onclick="window.app.clearFilters()">Clear Filters</button>
+             </div>`
+        : (isTable ? this.renderTaskTable(tasks) : this.renderTaskCards(tasks))}
       </div>
     `;
   }
@@ -787,19 +923,16 @@ class KineticTerminal {
     if (this.filters.priority !== "all") {
       tasks = tasks.filter((t) => t.priority === this.filters.priority);
     }
-    return tasks;
+    if (this.filters.assignee !== "all") {
+      tasks = tasks.filter((t) => t.assignee === this.filters.assignee);
+    }
+    if (this.filters.reporter !== "all") {
+      tasks = tasks.filter((t) => t.reporter === this.filters.reporter);
+    }
+    return this.sortTasks(tasks);
   }
 
   renderTaskCards(tasks) {
-    if (tasks.length === 0) {
-      return `
-        <div class="text-center" style="padding: 4rem;">
-          <h3 style="color: var(--text-secondary);">No issues found matching filters</h3>
-          <button class="btn btn-secondary mt-lg" onclick="app.clearFilters()">Clear Filters</button>
-        </div>
-      `;
-    }
-
     return `
       <div class="issues-grid">
         ${tasks
@@ -842,21 +975,11 @@ class KineticTerminal {
   }
 
   clearFilters() {
-    this.filters = { status: "all", priority: "all" };
+    this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
     this.renderCurrentView();
   }
 
   renderTaskTable(tasks) {
-    if (tasks.length === 0) {
-      return `
-        <div class="text-center" style="padding: 4rem;">
-          <h3 style="color: var(--text-secondary);">No issues found</h3>
-          <p style="color: var(--text-tertiary); margin-bottom: 1.5rem;">Create your first issue to get started</p>
-          <button class="btn btn-primary" id="createTaskBtn">Create Issue</button>
-        </div>
-      `;
-    }
-
     return `
       <div class="table-wrapper">
         <table class="issue-table">
@@ -892,63 +1015,335 @@ class KineticTerminal {
       </div>
     `;
   }
-
   renderTimeline() {
+    if (!this.currentProject) return this.renderNoProject();
+
+    const tasks = storage.getTasks(this.currentProject.id);
+    const tasksWithDueDate = tasks.filter(t => t.dueDate).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+    // Calculate Velocity (tasks created per day for last 7 days)
+    const last7Days = [...Array(7)].map((_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      return d.toISOString().split('T')[0];
+    });
+
+    const velocityCounts = last7Days.map(date => {
+      return tasks.filter(t => t.createdAt.startsWith(date)).length;
+    });
+
+    const maxCount = Math.max(...velocityCounts, 1);
+    const chartWidth = 1000;
+    const chartHeight = 120;
+    const points = velocityCounts.map((count, i) => {
+      const x = (i / (velocityCounts.length - 1)) * chartWidth;
+      const y = chartHeight - (count / maxCount) * chartHeight;
+      return `${x},${y}`;
+    }).join(' ');
+
+    const polylinePoints = points;
+    const areaPoints = `0,${chartHeight} ${points} ${chartWidth},${chartHeight}`;
+
     return `
-      ${this.renderPageHeader("Timeline", [this.currentProject ? this.currentProject.name : "Project", "Timeline"])}
-      <div class="content-centered">
-        ${this.renderEmptyState("Timeline View Coming Soon", "Visualize your project timeline and milestones")}
+      ${this.renderPageHeader("Timeline", [this.currentProject.name, "Timeline"])}
+      <div class="timeline-container">
+        
+        <!-- Project Pulse (Velocity) -->
+        <div class="velocity-chart-wrapper">
+          <div class="timeline-section-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Project Pulse (New Issues / Day)
+          </div>
+          <svg class="velocity-chart" viewBox="0 0 ${chartWidth} ${chartHeight}" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--primary)" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <polyline class="chart-line" points="${polylinePoints}" />
+            <polygon class="chart-area" points="${areaPoints}" />
+            
+            <!-- Tooltip Hover Points -->
+            ${velocityCounts.map((count, i) => {
+      const x = (i / (velocityCounts.length - 1)) * chartWidth;
+      const y = chartHeight - (count / maxCount) * chartHeight;
+      const date = new Date(last7Days[i]).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      return `<circle cx="${x}" cy="${y}" r="7" class="chart-dot">
+                        <title>${count} issue${count !== 1 ? 's' : ''} — ${date}</title>
+                      </circle>`;
+    }).join('')}
+          </svg>
+          <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; color: var(--text-tertiary);">
+            ${last7Days.map(date => `<span>${new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>`).join('')}
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--spacing-2xl);">
+          
+          <!-- Upcoming Milestones -->
+          <div>
+            <div class="timeline-section-title" style="margin-bottom: 1rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+              Key Milestones & Deadlines
+            </div>
+            
+            ${tasksWithDueDate.length > 0 ? `
+              <div class="milestones-grid">
+                ${tasksWithDueDate.slice(0, 6).map(task => {
+      const date = new Date(task.dueDate);
+      const day = date.getDate();
+      const month = date.toLocaleDateString(undefined, { month: 'short' });
+      return `
+                    <div class="milestone-card" onclick="window.app.switchView('issueDetail', '${task.id}')">
+                      <div class="milestone-date-box">
+                        <span class="ms-day">${day}</span>
+                        <span class="ms-month">${month}</span>
+                      </div>
+                      <div class="milestone-info">
+                        <div class="milestone-title">${this.escapeHtml(task.title)}</div>
+                        <div class="milestone-status">${task.status} • ${task.id}</div>
+                      </div>
+                    </div>
+                  `;
+    }).join('')}
+              </div>
+            ` : `
+              <div class="empty-timeline">
+                <p>No issues with deadlines yet.</p>
+                <button class="btn btn-secondary mt-3" style="margin-top: 1rem;" onclick="window.app.openTaskForm()">Schedule a Task</button>
+              </div>
+            `}
+          </div>
+
+          <!-- Project Health & Stability (Middle) -->
+          <div>
+            <div class="timeline-section-title" style="margin-bottom: 1.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              Project Health & Stability
+            </div>
+            
+            <div class="health-card">
+              <div class="health-meta">
+                <div class="health-progress-ring">
+                  ${(() => {
+        const completed = tasks.filter(t => t.status === 'done').length;
+        const total = tasks.length || 1;
+        const percent = Math.round((completed / total) * 100);
+        return `
+                    <svg width="80" height="80" viewBox="0 0 36 36">
+                      <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                      <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="${percent}, 100" />
+                      <text x="18" y="20.35" class="ring-text" fill="white" font-size="8" text-anchor="middle">${percent}%</text>
+                    </svg>
+                    `;
+      })()}
+                </div>
+                <div class="health-stats">
+                  <div class="health-stat-item">
+                    <span class="label">Total Tasks</span>
+                    <span class="value">${tasks.length}</span>
+                  </div>
+                  <div class="health-stat-item">
+                    <span class="label">Completed</span>
+                    <span class="value">${tasks.filter(t => t.status === 'done').length}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="priority-distribution">
+                <div class="dist-title">Priority Spread</div>
+                <div class="dist-bar">
+                  ${(() => {
+        const high = tasks.filter(t => t.priority === 'critical' || t.priority === 'high').length;
+        const med = tasks.filter(t => t.priority === 'medium').length;
+        const low = tasks.filter(t => t.priority === 'low').length;
+        const total = tasks.length || 1;
+        return `
+                      <div class="dist-segment urgent" style="width: ${(high / total) * 100}%" title="High/Critical"></div>
+                      <div class="dist-segment medium" style="width: ${(med / total) * 100}%" title="Medium"></div>
+                      <div class="dist-segment low" style="width: ${(low / total) * 100}%" title="Low"></div>
+                    `;
+      })()}
+                </div>
+                <div class="dist-legend">
+                  <span>Critical: ${tasks.filter(t => t.priority === 'critical').length}</span>
+                  <span>Active: ${tasks.filter(t => t.status === 'in-progress').length}</span>
+                </div>
+              </div>
+
+              <div class="health-breakdown">
+                <div class="breakdown-item">
+                  <div class="item-header">
+                    <span class="dot story"></span>
+                    <span class="label">User Stories</span>
+                    <span class="val">${tasks.filter(t => t.type === 'story').length}</span>
+                  </div>
+                  <div class="mini-bar-bg"><div class="mini-bar story" style="width: ${(tasks.filter(t => t.type === 'story').length / tasks.length) * 100}%"></div></div>
+                </div>
+                <div class="breakdown-item">
+                  <div class="item-header">
+                    <span class="dot bug"></span>
+                    <span class="label">Bugs & Fixes</span>
+                    <span class="val">${tasks.filter(t => t.type === 'bug').length}</span>
+                  </div>
+                  <div class="mini-bar-bg"><div class="mini-bar bug" style="width: ${(tasks.filter(t => t.type === 'bug').length / tasks.length) * 100}%"></div></div>
+                </div>
+                <div class="breakdown-item">
+                  <div class="item-header">
+                    <span class="dot task"></span>
+                    <span class="label">General Tasks</span>
+                    <span class="val">${tasks.filter(t => t.type === 'task').length}</span>
+                  </div>
+                  <div class="mini-bar-bg"><div class="mini-bar task" style="width: ${(tasks.filter(t => t.type === 'task').length / tasks.length) * 100}%"></div></div>
+                </div>
+              </div>
+
+              <div class="project-pace-widget">
+                 <div class="pace-label">Project Pace</div>
+                 <div class="pace-value">${tasks.length > 5 ? 'Stable' : 'Building'}</div>
+                 <div class="pace-sub">Based on last 7 days activity</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Roadmap -->
+          <div>
+            <div class="timeline-section-title" style="margin-bottom: 1rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Project Roadmap
+            </div>
+            <div class="roadmap-visual">
+              ${tasks.slice(0, 5).map(task => `
+                <div class="roadmap-item">
+                  <div class="roadmap-content" onclick="window.app.switchView('issueDetail', '${task.id}')">
+                    <div style="flex: 1;">
+                        <div class="roadmap-date">${new Date(task.updatedAt).toLocaleDateString()}</div>
+                        <div class="roadmap-task">${this.escapeHtml(task.title)}</div>
+                        <div class="roadmap-meta">
+                            <span>${task.id}</span>
+                        </div>
+                    </div>
+                    <div class="roadmap-status-container" style="flex-shrink:0">
+                        <span class="status-badge ${task.status}">${task.status}</span>
+                    </div>
+                  </div>
+                </div>
+              `).slice(0, 5).join('')}
+              ${tasks.length === 0 ? '<div style="color: var(--text-tertiary);">No activity yet.</div>' : ''}
+            </div>
+          </div>
+
+        </div>
       </div>
     `;
   }
 
   renderReports() {
-    const stats = storage.getStatistics(this.currentProject ? this.currentProject.id : null);
+    if (!this.currentProject) return this.renderNoProject();
+
+    const stats = storage.getStatistics(this.currentProject.id);
+    const p = this.currentProject;
 
     return `
-      ${this.renderPageHeader("Reports & Analytics", [this.currentProject ? this.currentProject.name : "Project", "Reports"])}
-      <div class="content-wrapper">
-        <div class="projects-grid">
-          <div class="project-card">
-            <div class="project-card-title">Tasks by Status</div>
-            <div class="project-card-stats">
-              <div class="stat-item">
-                <div class="stat-number">${stats.tasksByStatus.backlog}</div>
-                <div class="stat-label">Backlog</div>
+      ${this.renderPageHeader(
+      "Reports & Analytics",
+      [this.currentProject.name, "Reports"],
+      `
+        <button class="btn btn-secondary" onclick="window.app.openProjectForm('${p.id}')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Edit Project
+        </button>
+      `
+    )}
+      <div class="reports-container">
+        <!-- Project Context Section -->
+        <div class="project-brand-section">
+          <h1 class="project-brand-title">${this.escapeHtml(p.name)}</h1>
+          <p class="project-brand-desc">${this.escapeHtml(p.description || "No description provided for this project.")}</p>
+        </div>
+
+        <div class="analytics-dashboard">
+          <!-- Overall Health -->
+          <div class="analytics-widget">
+            <div class="widget-header">
+              <span class="widget-title">Project Health</span>
+              <span class="badge ${stats.completionRate > 80 ? "success" : stats.completionRate > 40 ? "warning" : "danger"}">${stats.completionRate}% Done</span>
+            </div>
+            <div class="stat-showcase">
+              <span class="stat-value-large">${stats.completionRate}%</span>
+              <span class="stat-label-large">Completion Rate</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width: ${stats.completionRate}%"></div>
+            </div>
+            <div class="data-grid">
+              <div class="data-item">
+                <span class="data-val">${stats.totalTasks}</span>
+                <span class="data-lab">Total Issues</span>
               </div>
-              <div class="stat-item">
-                <div class="stat-number">${stats.tasksByStatus.todo}</div>
-                <div class="stat-label">To Do</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number">${stats.tasksByStatus.inProgress}</div>
-                <div class="stat-label">In Progress</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number">${stats.tasksByStatus.done}</div>
-                <div class="stat-label">Done</div>
+              <div class="data-item">
+                <span class="data-val">${stats.doneTasks}</span>
+                <span class="data-lab">Completed</span>
               </div>
             </div>
           </div>
-          <div class="project-card">
-            <div class="project-card-title">Tasks by Priority</div>
-            <div class="project-card-stats">
-              <div class="stat-item">
-                <div class="stat-number" style="color: var(--priority-critical)">${stats.tasksByPriority.critical}</div>
-                <div class="stat-label">Critical</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number" style="color: var(--priority-high)">${stats.tasksByPriority.high}</div>
-                <div class="stat-label">High</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number" style="color: var(--priority-medium)">${stats.tasksByPriority.medium}</div>
-                <div class="stat-label">Medium</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-number" style="color: var(--priority-low)">${stats.tasksByPriority.low}</div>
-                <div class="stat-label">Low</div>
-              </div>
+
+          <!-- Status Distribution -->
+          <div class="analytics-widget">
+            <div class="widget-header">
+                <span class="widget-title">Status Breakdown</span>
+            </div>
+            <div class="data-grid">
+                <div class="data-item">
+                    <span class="data-val">${stats.tasksByStatus.todo}</span>
+                    <span class="data-lab">To Do</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-val">${stats.tasksByStatus.inProgress}</span>
+                    <span class="data-lab">In Progress</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-val">${stats.tasksByStatus.inReview}</span>
+                    <span class="data-lab">In Review</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-val">${stats.tasksByStatus.backlog}</span>
+                    <span class="data-lab">Backlog</span>
+                </div>
+            </div>
+          </div>
+
+          <!-- Priority & Velocity -->
+          <div class="analytics-widget">
+            <div class="widget-header">
+                <span class="widget-title">Priority & Velocity</span>
+            </div>
+            <div class="data-grid">
+                <div class="data-item" style="border-left: 4px solid var(--danger);">
+                    <span class="data-val">${stats.tasksByPriority.critical}</span>
+                    <span class="data-lab">Critical Issues</span>
+                </div>
+                <div class="data-item">
+                    <span class="data-val">${stats.recentActivityCount}</span>
+                    <span class="data-lab">Updated (5d)</span>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <div class="widget-title" style="font-size: 0.8rem; margin-bottom: 8px;">Task Type Mix</div>
+                <div class="progress-track" style="height: 12px; display: flex; background: #eee;">
+                    <div style="width: ${(stats.tasksByType.task / stats.totalTasks) * 100 || 0}%; background: var(--primary); height: 100%;" title="Tasks"></div>
+                    <div style="width: ${(stats.tasksByType.bug / stats.totalTasks) * 100 || 0}%; background: var(--danger); height: 100%;" title="Bugs"></div>
+                    <div style="width: ${(stats.tasksByType.story / stats.totalTasks) * 100 || 0}%; background: var(--success); height: 100%;" title="Stories"></div>
+                </div>
+                <div style="display: flex; gap: 10px; font-size: 0.7rem; margin-top: 8px; color: var(--text-tertiary);">
+                    <span>● Task</span>
+                    <span>● Bug</span>
+                    <span>● Story</span>
+                </div>
             </div>
           </div>
         </div>
@@ -1021,11 +1416,10 @@ class KineticTerminal {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Export All Data
             </button>
-            ${hasProject ? `
             <button class="btn btn-secondary" id="exportProjectBtn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
               Export Current Project
-            </button>` : ""}
+            </button>
           </div>
         </div>
 
@@ -1053,9 +1447,6 @@ class KineticTerminal {
             <input type="file" id="importProjectFile" accept=".json" style="display:none">
           </div>
         </div>
-
-        </div>
-
       </div>
     `;
   }
@@ -1129,11 +1520,10 @@ class KineticTerminal {
             </div>
           </div>
           <div class="settings-card-actions">
-            ${this.currentProject ? `
             <button class="btn btn-danger btn-outline" id="deleteCurrentProjectBtn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
               Delete Current Project
-            </button>` : ""}
+            </button>
             <button class="btn btn-danger" id="clearAllDataBtn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
               Clear All Data
@@ -1160,7 +1550,7 @@ class KineticTerminal {
           <p style="color: var(--text-tertiary); font-size: 1.1rem; max-width: 500px; text-align: center; margin-bottom: 2.5rem;">
             Select a project from the sidebar or create a new one to start managing your tasks efficiently.
           </p>
-          <button class="btn btn-primary" onclick="app.openProjectsModal()">
+          <button class="btn btn-primary" onclick="window.app.openProjectsModal()">
             Select a Project
           </button>
         </div>
@@ -1246,45 +1636,49 @@ class KineticTerminal {
   sortTasks(tasks) {
     if (!tasks || tasks.length === 0) return [];
 
+    // Create a copy to avoid mutation issues if needed
     const sorted = [...tasks];
-    switch (this.currentSort) {
-      case 'date-added':
-        return sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-      case 'date-updated':
-        return sorted.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-      case 'id-asc':
-        return sorted.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
-      case 'id-desc':
-        return sorted.sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }));
-      default:
-        return sorted;
-    }
+    const pref = this.sortPreference || "updated-desc";
+
+    return sorted.sort((a, b) => {
+      switch (pref) {
+        case "updated-desc":
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        case "updated-asc":
+          return new Date(a.updatedAt) - new Date(b.updatedAt);
+        case "priority-desc":
+          const pMap = { critical: 4, high: 3, medium: 2, low: 1 };
+          return pMap[b.priority] - pMap[a.priority];
+        case "title-asc":
+          return a.title.localeCompare(b.title);
+        default:
+          return 0;
+      }
+    });
   }
 
   renderSortDropdown() {
     const options = [
-      { key: 'date-added', label: 'Date Added (Asc)' },
-      { key: 'date-updated', label: 'Recently Updated' },
-      { key: 'id-asc', label: 'ID Ascending' },
-      { key: 'id-desc', label: 'ID Descending' }
+      { value: "updated-desc", label: "Recently Updated" },
+      { value: "updated-asc", label: "Oldest First" },
+      { value: "priority-desc", label: "Priority (High to Low)" },
+      { value: "title-asc", label: "Title (A-Z)" },
     ];
 
-    const currentLabel = options.find(o => o.key === this.currentSort)?.label || "Sort";
+    const current = this.sortPreference || "updated-desc";
+    const currentLabel = options.find((o) => o.value === current)?.label || "Recently Updated";
 
     return `
       <div class="dropdown sort-dropdown">
-        <button class="btn btn-secondary dropdown-toggle" onclick="this.nextElementSibling.classList.toggle('show')">
+        <button class="btn btn-secondary dropdown-toggle">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-            <polyline points="16 7 22 7 22 13"/>
+            <line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/>
           </svg>
-          <span class="btn-text-hidden-mobile">${currentLabel}</span>
+          Sort: ${currentLabel}
         </button>
         <div class="dropdown-menu">
-          ${options.map(opt => `
-            <a href="#" onclick="app.applySort('${opt.key}'); return false;" class="${this.currentSort === opt.key ? 'active' : ''}">
-              ${opt.label}
-            </a>
+          ${options.map((opt) => `
+            <a href="#" class="${opt.value === current ? "active" : ""}" data-sort-value="${opt.value}">${opt.label}</a>
           `).join("")}
         </div>
       </div>
@@ -1379,11 +1773,12 @@ class KineticTerminal {
       this.applySettings();
     });
 
-    document
-      .getElementById("viewModeSelect")
+    document.getElementById("viewModeSelect")
       ?.addEventListener("change", (e) => {
         storage.setSetting("viewMode", e.target.value);
       });
+
+
 
     // Filters
     document.getElementById("statusFilter")?.addEventListener("change", () => {
@@ -1411,65 +1806,137 @@ class KineticTerminal {
   // Continue in next part...
   selectProject(projectId) {
     const project = storage.getProject(projectId);
-    if (project) {
-      this.currentProject = project;
-      localStorage.setItem("lastProjectId", projectId);
-      this.updateSidebarProject();
-      this.closeAllModals();
-      this.switchView("board");
-    }
+    if (!project) return;
+
+    this.currentProject = project;
+    localStorage.setItem("lastProjectId", projectId);
+    this.breadcrumbStack = [];
+
+    // Add transition effect to content area
+    this.contentArea.style.opacity = "0";
+    this.contentArea.style.transform = "scale(0.98)";
+
+    setTimeout(() => {
+      this.render();
+      this.contentArea.style.transition = "all 0.4s cubic-bezier(0.2, 0, 0, 1)";
+      this.contentArea.style.opacity = "1";
+      this.contentArea.style.transform = "scale(1)";
+    }, 150);
+
+    this.showNotification(`Switched to ${project.name}`, "success");
+    this.updateSidebarProject();
+    this.closeAllModals();
+    this.switchView("board");
   }
 
   updateSidebarProject() {
     if (this.currentProject) {
-      this.sidebarProjectName.textContent = this.currentProject.name;
-      this.sidebarProjectName.setAttribute("data-tooltip", this.currentProject.name);
-      this.sidebarProjectKey.textContent = this.currentProject.key;
+      if (this.sidebarProjectName) this.sidebarProjectName.textContent = this.currentProject.name;
+      if (this.sidebarProjectName) this.sidebarProjectName.setAttribute("data-tooltip", this.currentProject.name);
+      if (this.sidebarProjectKey) this.sidebarProjectKey.textContent = this.currentProject.key;
       const tasks = storage.getTasks(this.currentProject.id);
-      this.issuesCount.textContent = tasks.length;
+      if (this.issuesBadge) this.issuesBadge.textContent = tasks.length;
     } else {
-      this.sidebarProjectName.textContent = "Select Project";
-      this.sidebarProjectKey.textContent = "---";
-      this.issuesCount.textContent = "0";
+      if (this.sidebarProjectName) this.sidebarProjectName.textContent = "Select Project";
+      if (this.sidebarProjectKey) this.sidebarProjectKey.textContent = "---";
+      if (this.issuesBadge) this.issuesBadge.textContent = "0";
     }
   }
 
   openProjectsModal() {
     const projects = storage.getProjects();
     const projectList = document.getElementById("projectList");
+    const modal = document.getElementById("projectsModal");
 
     if (projects.length === 0) {
       projectList.innerHTML = `
-        <div class="text-center" style="padding: 3rem;">
+        <div class="text-center" style="padding: 3rem; width: 100%;">
           <h3 style="color: var(--text-secondary);">No Projects Yet</h3>
           <p style="color: var(--text-tertiary); margin-bottom: 1.5rem;">Create your first project to get started</p>
+          <button class="btn btn-primary" onclick="window.app.openProjectForm(); window.app.closeModal('projectsModal');">Create Project</button>
         </div>
       `;
     } else {
+      modal.classList.add("switcher-mode");
+      projectList.className = "switcher-list";
       projectList.innerHTML = projects
         .map(
-          (project) => `
-        <div class="project-item ${this.currentProject?.id === project.id ? "active" : ""}" data-project-id="${project.id}">
-          <div class="project-item-icon">${project.name.charAt(0).toUpperCase()}</div>
-          <div class="project-item-info">
-            <span class="project-item-name">${this.escapeHtml(project.name)}</span>
-            <div class="project-item-meta">
-              <span class="project-item-key">${this.escapeHtml(project.key)}</span>
-              <span class="dot">•</span>
-              <span>${project.taskCount || 0} tasks</span>
-              <span class="dot">•</span>
-              <span>Created ${new Date(project.createdAt).toLocaleDateString()}</span>
-            </div>
+          (project, index) => `
+        <div class="switcher-item" data-project-id="${project.id}" data-index="${index}">
+          <div class="switcher-preview">
+            <div class="switcher-icon">${project.key.toUpperCase()}</div>
           </div>
-          <div class="project-item-actions">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
+          <div class="switcher-label">
+            <span class="switcher-badge">${project.key.charAt(0).toUpperCase()}</span>
+            <span>${this.escapeHtml(project.name)}</span>
           </div>
         </div>
       `,
         )
         .join("");
+
+      let currentIndex = projects.findIndex(p => p.id === this.currentProject?.id);
+      if (currentIndex === -1) currentIndex = 0;
+
+      const updateFocus = (index) => {
+        const items = projectList.querySelectorAll(".switcher-item");
+        items.forEach((item, i) => {
+          item.classList.toggle("active", i === index);
+        });
+
+        // Center the active item
+        const activeItem = items[index];
+        if (activeItem) {
+          const scrollLeft = activeItem.offsetLeft - (projectList.offsetWidth / 2) + (activeItem.offsetWidth / 2);
+          projectList.scrollTo({
+            left: scrollLeft,
+            behavior: "smooth"
+          });
+        }
+      };
+
+      // Initial focus
+      setTimeout(() => updateFocus(currentIndex), 100);
+
+      // Keyboard navigation
+      const navHandler = (e) => {
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          currentIndex = (currentIndex + 1) % projects.length;
+          updateFocus(currentIndex);
+        } else if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          currentIndex = (currentIndex - 1 + projects.length) % projects.length;
+          updateFocus(currentIndex);
+        } else if (e.key === "Enter") {
+          e.preventDefault();
+          const selectedProject = projects[currentIndex];
+          this.selectProject(selectedProject.id);
+          closeEverything();
+        } else if (e.key === "Escape") {
+          closeEverything();
+        }
+      };
+
+      const closeEverything = () => {
+        this.closeModal("projectsModal");
+        modal.classList.remove("switcher-mode");
+        document.removeEventListener("keydown", navHandler);
+      };
+
+      document.addEventListener("keydown", navHandler);
+
+      // Add project click listeners for switcher
+      projectList.querySelectorAll(".switcher-item").forEach((item, index) => {
+        item.addEventListener("click", () => {
+          currentIndex = index;
+          updateFocus(currentIndex);
+          setTimeout(() => {
+            this.selectProject(item.dataset.projectId);
+            closeEverything();
+          }, 200);
+        });
+      });
     }
 
     this.openModal("projectsModal");
@@ -1664,8 +2131,61 @@ class KineticTerminal {
     }
 
     this.closeModal("taskModal");
+    this.updateSidebarBadges();
     this.renderCurrentView();
   }
+
+  handleSortChange(value) {
+    this.sortPreference = value;
+    storage.setSetting("sortPreference", value);
+    this.render();
+  }
+
+  sortTasks(tasks) {
+    const pref = this.sortPreference;
+    return tasks.sort((a, b) => {
+      if (pref === "updated-desc") return new Date(b.updatedAt) - new Date(a.updatedAt);
+      if (pref === "updated-asc") return new Date(a.updatedAt) - new Date(b.updatedAt);
+      if (pref === "priority-desc") {
+        const pMap = { critical: 4, high: 3, medium: 2, low: 1 };
+        return pMap[b.priority] - pMap[a.priority];
+      }
+      if (pref === "title-asc") return a.title.localeCompare(b.title);
+      return 0;
+    });
+  }
+
+  formatRelativeTime(timestamp) {
+    const now = new Date();
+    const then = new Date(timestamp);
+    const diff = now - then;
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return then.toLocaleDateString();
+  }
+
+  updateSidebarBadges() {
+    const issuesBadge = document.getElementById("issuesBadge");
+    const backlogBadge = document.getElementById("backlogBadge");
+    const boardBadge = document.getElementById("boardBadge");
+
+    if (!this.currentProject) {
+      if (issuesBadge) issuesBadge.textContent = "0";
+      if (backlogBadge) backlogBadge.textContent = "0";
+      if (boardBadge) boardBadge.textContent = "0";
+      return;
+    }
+
+    const tasks = storage.getTasks(this.currentProject.id);
+    if (issuesBadge) issuesBadge.textContent = tasks.length;
+    if (backlogBadge) backlogBadge.textContent = tasks.filter(t => t.status === 'backlog').length;
+    if (boardBadge) boardBadge.textContent = tasks.filter(t => t.status !== 'backlog' && t.status !== 'done').length;
+  }
+
+
 
   openTaskDetails(taskId) {
     this.switchView("issueDetail", taskId);
@@ -1691,7 +2211,7 @@ class KineticTerminal {
     const blockersHTML = blockers.length > 0
       ? blockers.map(bid => {
         const btask = storage.getTask(bid);
-        return `<div class="blocker-item clickable" onclick="app.openTaskDetails('${bid}')">
+        return `<div class="blocker-item clickable" data-blocker-id="${bid}">
             <span class="blocker-id">${bid}</span>
             <span class="blocker-title">${btask ? this.escapeHtml(btask.title) : "Unknown Task"}</span>
           </div>`;
@@ -1701,27 +2221,34 @@ class KineticTerminal {
     return `
       <div class="issue-view">
         ${this.renderPageHeader(task.id, breadcrumbData, `
-          <button class="btn btn-secondary" onclick="app.openTaskForm('${task.id}')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            Edit
-          </button>
           <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" onclick="this.nextElementSibling.classList.toggle('show')">
+            <button class="btn btn-secondary dropdown-toggle">
               ${this.formatStatus(task.status)}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
             </button>
             <div class="dropdown-menu">
-              <a href="#" onclick="app.handleStatusChange('${task.id}', 'todo'); return false;">To Do</a>
-              <a href="#" onclick="app.handleStatusChange('${task.id}', 'in-progress'); return false;">In Progress</a>
-              <a href="#" onclick="app.handleStatusChange('${task.id}', 'in-review'); return false;">In Review</a>
-              <a href="#" onclick="app.handleStatusChange('${task.id}', 'done'); return false;">Done</a>
+              <a href="#" data-task-id="${task.id}" data-status-value="todo">To Do</a>
+              <a href="#" data-task-id="${task.id}" data-status-value="in-progress">In Progress</a>
+              <a href="#" data-task-id="${task.id}" data-status-value="in-review">In Review</a>
+              <a href="#" data-task-id="${task.id}" data-status-value="done">Done</a>
             </div>
           </div>
+          <button class="btn btn-secondary" data-action="edit-task" data-task-id="${task.id}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            Edit
+          </button>
+          <button class="btn btn-danger" data-action="delete-task" data-task-id="${task.id}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Delete
+          </button>
         `)}
 
         <div class="issue-content">
@@ -1756,7 +2283,7 @@ class KineticTerminal {
                 <div class="comment-input-wrapper">
                   <textarea class="comment-textarea" id="commentInput" placeholder="Add a comment..."></textarea>
                   <div class="comment-actions">
-                    <button class="btn btn-primary" onclick="app.handleAddComment('${task.id}')">Post Comment</button>
+                    <button class="btn btn-primary" onclick="window.app.handleAddComment('${task.id}')">Post Comment</button>
                   </div>
                 </div>
               </div>
@@ -1790,6 +2317,18 @@ class KineticTerminal {
                 <span class="sidebar-label">Status</span>
                 <span class="sidebar-value"><span class="status-badge ${task.status}">${this.formatStatus(task.status)}</span></span>
               </div>
+              <div class="sidebar-item">
+                <span class="sidebar-label">Story Points</span>
+                <span class="sidebar-value">${task.estimate || "0"}</span>
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-label">Labels</span>
+                <span class="sidebar-value">
+                  ${task.tags && task.tags.length > 0
+        ? task.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join("")
+        : '<span style="color: var(--text-tertiary)">None</span>'}
+                </span>
+              </div>
             </div>
 
             <div class="sidebar-group">
@@ -1806,6 +2345,10 @@ class KineticTerminal {
               <div class="sidebar-item">
                 <span class="sidebar-label">Updated</span>
                 <span class="sidebar-value">${new Date(task.updatedAt).toLocaleDateString()}</span>
+              </div>
+              <div class="sidebar-item">
+                <span class="sidebar-label">Due Date</span>
+                <span class="sidebar-value">${task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '<span style="color: var(--text-tertiary)">None</span>'}</span>
               </div>
             </div>
           </div>
@@ -1878,7 +2421,10 @@ class KineticTerminal {
   }
 
   exportProject() {
-    if (!this.currentProject) return;
+    if (!this.currentProject) {
+      this.showNotification("Please select a project to export", "warning");
+      return;
+    }
 
     const result = storage.exportProject(this.currentProject.id);
     if (result) {
@@ -1944,7 +2490,10 @@ class KineticTerminal {
     reader.readAsText(file);
   }
   deleteCurrentProject() {
-    if (!this.currentProject) return;
+    if (!this.currentProject) {
+      this.showNotification("Please select a project first", "warning");
+      return;
+    }
     const projectName = this.currentProject.name;
     const projectId = this.currentProject.id;
 
@@ -1965,11 +2514,11 @@ class KineticTerminal {
           this.switchView("board");
           this.showNotification(`"${projectName}" deleted. Switched to "${remaining[0].name}".`, "success");
         } else {
-          // No projects left — show welcome screen
+          // No projects left — show welcome screen on the board tab
           this.currentProject = null;
           localStorage.removeItem("lastProjectId");
           this.updateSidebarProject();
-          this.switchView("noProject");
+          this.switchView("board");
           this.showNotification(`"${projectName}" deleted.`, "success");
         }
       }
@@ -1991,6 +2540,8 @@ class KineticTerminal {
   applyFilters() {
     this.filters.status = document.getElementById("statusFilter")?.value || "all";
     this.filters.priority = document.getElementById("priorityFilter")?.value || "all";
+    this.filters.assignee = document.getElementById("assigneeFilter")?.value || "all";
+    this.filters.reporter = document.getElementById("reporterFilter")?.value || "all";
     this.renderCurrentView();
   }
 
@@ -2057,6 +2608,18 @@ class KineticTerminal {
     });
   }
 
+  closeAllMenus() {
+    document.querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show").forEach((menu) => {
+      menu.classList.remove("show");
+    });
+  }
+
+  closeAllMenus() {
+    document.querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show").forEach((menu) => {
+      menu.classList.remove("show");
+    });
+  }
+
   applySettings(isInitialLoad = false) {
     const settings = storage.getSettings();
 
@@ -2067,9 +2630,10 @@ class KineticTerminal {
       document.documentElement.classList.remove("light-theme");
     }
 
-    // Apply Default View (only on initial load)
-    if (isInitialLoad) {
-      this.currentView = settings.viewMode || "board";
+    // Apply Default View (only on initial load if not already set)
+    if (isInitialLoad && !this.currentView) {
+      const rawView = settings.viewMode || "board";
+      this.currentView = rawView === "kanban" ? "board" : rawView;
     }
   }
 
@@ -2104,7 +2668,7 @@ class KineticTerminal {
     notification.className = `notification notification-${type}`;
     notification.style.cssText = `
       position: fixed;
-      top: 80px;
+      bottom: 80px;
       right: 24px;
       background: ${type === "success" ? "var(--success)" : "var(--danger)"};
       color: var(--bg-main);
@@ -2179,8 +2743,8 @@ class KineticTerminal {
               }
 
               return `
-                  <span class="breadcrumb-item ${isClickable ? "clickable" : ""}" 
-                        ${isClickable ? `onclick="app.switchView('${targetView}', ${targetId ? `'${targetId}'` : 'null'})"` : ""}>
+                  <span class="breadcrumb-item ${isClickable ? "clickable" : ""}"
+                        ${isClickable ? `data-breadcrumb-view="${targetView}" ${targetId ? `data-breadcrumb-id="${targetId}"` : ""}` : ""}>
                     ${this.escapeHtml(item)}
                   </span>
                   ${index < breadcrumbData.length - 1 ? '<span class="breadcrumb-separator">/</span>' : ""}
@@ -2211,14 +2775,14 @@ class KineticTerminal {
     const people = storage.getPeople();
     return `
       ${this.renderPageHeader("People", [this.currentProject ? this.currentProject.name : "Project", "People"], `
-        <button class="btn btn-primary" onclick="app.openPersonForm()">
+        <button class="btn btn-primary" onclick="window.app.openPersonForm()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Add Person
         </button>
       `)}
-      <div class="content-wrapper">
+      <div class="content-wrapper" style="padding:0">
         <div class="table-wrapper">
           <table class="issue-table">
             <thead>
@@ -2242,12 +2806,12 @@ class KineticTerminal {
                   <td>${person.createdAt ? new Date(person.createdAt).toLocaleDateString() : "N/A"}</td>
                   <td>
                     <div class="table-actions">
-                      <button class="btn-icon-sm" onclick="event.stopPropagation(); app.openPersonForm('${person.id}')" title="Edit person">
+                      <button class="btn-icon-sm" onclick="event.stopPropagation(); window.app.openPersonForm('${person.id}')" title="Edit person">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                         </svg>
                       </button>
-                      <button class="btn-icon-sm btn-danger-soft" onclick="event.stopPropagation(); app.deletePerson('${person.id}')" title="Remove person">
+                      <button class="btn-icon-sm btn-danger-soft" onclick="event.stopPropagation(); window.app.deletePerson('${person.id}')" title="Remove person">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                         </svg>

@@ -27,8 +27,9 @@ class Storage {
       settings: {
         theme: "dark",
         autoSaveInterval: 30,
-        viewMode: "kanban",
+        viewMode: "board",
         notifications: true,
+        sortPreference: "updated-desc",
       },
       activityLog: [],
       people: [
@@ -53,8 +54,9 @@ class Storage {
       settings: {
         theme: oldData.settings?.theme || "dark",
         autoSaveInterval: oldData.settings?.autoSaveInterval || 30,
-        viewMode: oldData.settings?.viewMode || "kanban",
+        viewMode: oldData.settings?.viewMode === "kanban" ? "board" : (oldData.settings?.viewMode || "board"),
         notifications: true,
+        sortPreference: oldData.settings?.sortPreference || "updated-desc",
       },
       activityLog: oldData.activityLog || [],
       people: oldData.people || [
@@ -677,18 +679,24 @@ class Storage {
     let tasks = data.tasks || [];
 
     if (projectId) {
-      tasks = tasks.filter(t => t.projectId === projectId);
+      tasks = tasks.filter((t) => t.projectId === projectId);
     }
+
+    const totalTasks = tasks.length;
+    const doneTasks = tasks.filter((t) => t.status === "done").length;
+    const completionRate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
 
     return {
       totalProjects: data.projects.length,
-      totalTasks: tasks.length,
+      totalTasks: totalTasks,
+      doneTasks: doneTasks,
+      completionRate: completionRate,
       tasksByStatus: {
         backlog: tasks.filter((t) => t.status === "backlog").length,
         todo: tasks.filter((t) => t.status === "todo").length,
         inProgress: tasks.filter((t) => t.status === "in-progress").length,
         inReview: tasks.filter((t) => t.status === "in-review").length,
-        done: tasks.filter((t) => t.status === "done").length,
+        done: doneTasks,
       },
       tasksByPriority: {
         critical: tasks.filter((t) => t.priority === "critical").length,
@@ -696,9 +704,19 @@ class Storage {
         medium: tasks.filter((t) => t.priority === "medium").length,
         low: tasks.filter((t) => t.priority === "low").length,
       },
-      recentActivity: this.getActivityLog(10),
-      lastBackup: data.metadata.lastBackup,
-      databaseSize: new Blob([JSON.stringify(data)]).size,
+      tasksByType: {
+        task: tasks.filter((t) => t.type === "task").length,
+        bug: tasks.filter((t) => t.type === "bug").length,
+        story: tasks.filter((t) => t.type === "story").length,
+        subtask: tasks.filter((t) => t.type === "subtask").length,
+      },
+      recentActivityCount: tasks.filter(t => {
+        const fiveDaysAgo = new Date();
+        fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+        return new Date(t.updatedAt) > fiveDaysAgo;
+      }).length,
+      databaseSize: JSON.stringify(data).length,
+      lastBackup: data.metadata?.lastExport
     };
   }
 }
