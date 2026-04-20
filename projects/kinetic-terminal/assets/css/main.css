@@ -815,21 +815,52 @@ body {
 
 /* Kanban Board */
 .kanban-board {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  /* grid-template-columns is set inline per visible column count */
   gap: var(--spacing-lg);
   padding: var(--spacing-xl) var(--spacing-2xl);
   overflow-x: auto;
   min-height: 600px;
+  align-items: start;
 }
 
 .kanban-column {
-  flex: 0 0 320px;
+  width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   position: relative;
   /* Required for overlay positioning */
+}
+
+/* Manage Views Dropdown Checkbox Items */
+.manage-views-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.manage-views-item:hover {
+  background: var(--bg-hover);
+}
+
+.manage-views-item.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.manage-views-item input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }
 
 /* Drop Overlay - shown on all columns except the source during drag */

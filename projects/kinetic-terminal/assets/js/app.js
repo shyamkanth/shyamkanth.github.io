@@ -2,11 +2,14 @@
 class KineticTerminal {
   constructor() {
     this.currentProject = null;
-    this.currentView = null; // null to allow applySettings to set default
+    this.currentView = null;
     this.currentTaskId = null;
     this.issuesViewType = "table";
     this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
     this.breadcrumbStack = [];
+    const allCols = ["todo", "in-progress", "in-review", "done"];
+    const saved = (() => { try { return JSON.parse(localStorage.getItem("boardVisibleColumns")); } catch { return null; } })();
+    this.boardVisibleColumns = (Array.isArray(saved) && saved.length > 0) ? saved : [...allCols];
     this.init();
   }
 
@@ -407,6 +410,9 @@ class KineticTerminal {
     const renderFn = views[this.currentView];
     if (renderFn) {
       this.contentArea.innerHTML = renderFn();
+      // Scroll the parent scrollable container (not contentArea itself)
+      const scroller = this.contentArea.closest(".main-container") || this.contentArea.parentElement;
+      if (scroller) scroller.scrollTop = 0;
       this.setupDynamicEventListeners();
       this.transformSelects();
     }
@@ -581,16 +587,39 @@ class KineticTerminal {
     }
 
     const tasks = this.sortTasks(storage.getTasks(this.currentProject.id));
-    const statuses = [
+    const allStatuses = [
       { key: "todo", label: "To Do" },
       { key: "in-progress", label: "In Progress" },
       { key: "in-review", label: "In Review" },
       { key: "done", label: "Done" },
     ];
+    const visibleStatuses = allStatuses.filter(s => this.boardVisibleColumns.includes(s.key));
+
+    const manageViewsDropdown = `
+      <div class="dropdown" id="manageViewsDropdown">
+        <button class="btn btn-secondary dropdown-toggle" id="manageViewsBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Manage Views
+        </button>
+        <div class="dropdown-menu manage-views-menu" style="min-width:200px; padding: 0.75rem 0;">
+          ${allStatuses.map(s => {
+      const checked = this.boardVisibleColumns.includes(s.key);
+      const disabled = checked && this.boardVisibleColumns.length === 1;
+      return `<label class="manage-views-item${disabled ? " disabled" : ""}">
+              <input type="checkbox" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}
+                data-col-key="${s.key}" onchange="window.app.toggleBoardColumn('${s.key}', this.checked)">
+              <span>${s.label}</span>
+            </label>`;
+    }).join("")}
+        </div>
+      </div>`;
 
     if (tasks.filter(t => t.status !== 'backlog').length === 0) {
       return `
         ${this.renderPageHeader(this.currentProject.name, [this.currentProject.name, "Board"], `
+           ${manageViewsDropdown}
            ${this.renderSortDropdown()}
            <button class="btn btn-primary" id="createTaskBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -606,7 +635,7 @@ class KineticTerminal {
       `;
     }
 
-    const columnsHTML = statuses
+    const columnsHTML = visibleStatuses
       .map((status) => {
         const columnTasks = tasks.filter((t) => t.status === status.key);
         return `
@@ -644,6 +673,7 @@ class KineticTerminal {
       this.currentProject.name,
       [this.currentProject.name, "Board"],
       `
+        ${manageViewsDropdown}
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -653,10 +683,23 @@ class KineticTerminal {
           Create Issue
         </button>`
     )}
-      <div class="kanban-board" id="kanbanBoard">
+      <div class="kanban-board" id="kanbanBoard" style="grid-template-columns: repeat(${visibleStatuses.length}, 1fr);">
         ${columnsHTML}
       </div>
     `;
+  }
+
+  toggleBoardColumn(key, checked) {
+    if (checked) {
+      if (!this.boardVisibleColumns.includes(key)) {
+        this.boardVisibleColumns.push(key);
+      }
+    } else {
+      if (this.boardVisibleColumns.length <= 1) return; // can't remove last
+      this.boardVisibleColumns = this.boardVisibleColumns.filter(k => k !== key);
+    }
+    localStorage.setItem("boardVisibleColumns", JSON.stringify(this.boardVisibleColumns));
+    this.renderCurrentView();
   }
 
   initKanbanDragDrop() {
@@ -2180,9 +2223,9 @@ class KineticTerminal {
     }
 
     const tasks = storage.getTasks(this.currentProject.id);
-    if (issuesBadge) issuesBadge.textContent = tasks.length;
+    if (issuesBadge) issuesBadge.textContent = tasks.filter(t => t.status !== 'backlog' && t.status !== 'done').length;
     if (backlogBadge) backlogBadge.textContent = tasks.filter(t => t.status === 'backlog').length;
-    if (boardBadge) boardBadge.textContent = tasks.filter(t => t.status !== 'backlog' && t.status !== 'done').length;
+    if (boardBadge) boardBadge.textContent = tasks.length;
   }
 
 
@@ -2229,6 +2272,7 @@ class KineticTerminal {
               </svg>
             </button>
             <div class="dropdown-menu">
+              <a href="#" data-task-id="${task.id}" data-status-value="backlog">Backlog</a>
               <a href="#" data-task-id="${task.id}" data-status-value="todo">To Do</a>
               <a href="#" data-task-id="${task.id}" data-status-value="in-progress">In Progress</a>
               <a href="#" data-task-id="${task.id}" data-status-value="in-review">In Review</a>
@@ -2388,6 +2432,7 @@ class KineticTerminal {
 
   handleStatusChange(taskId, newStatus) {
     storage.updateTask(taskId, { status: newStatus });
+    this.updateSidebarBadges();
     this.renderCurrentView();
     this.showNotification(`Status updated to ${this.formatStatus(newStatus)}`, "success");
   }
