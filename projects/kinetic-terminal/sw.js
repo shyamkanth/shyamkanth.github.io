@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kinetic-terminal-v2';
+const CACHE_NAME = 'kinetic-terminal-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -10,7 +10,9 @@ const ASSETS_TO_CACHE = [
   './assets/js/ui.js',
   './manifest.json',
   './assets/icons/icon.svg',
-  'https://cdn.jsdelivr.net/npm/marked/marked.min.js'
+  'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
+  'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css',
+  'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js'
 ];
 
 self.addEventListener('install', (event) => {

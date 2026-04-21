@@ -4,6 +4,8 @@ class KineticTerminal {
     this.currentProject = null;
     this.currentView = null;
     this.currentTaskId = null;
+    this.taskDescEditor = null;
+    this.commentEditor = null;
     this.issuesViewType = "table";
     this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
     this.breadcrumbStack = [];
@@ -21,6 +23,12 @@ class KineticTerminal {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(err => console.log('Service Worker registration failed:', err));
     }
+
+    // Capture PWA install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      window.deferredPrompt = e;
+    });
 
     this.cacheDOM();
     this.bindEvents();
@@ -410,6 +418,8 @@ class KineticTerminal {
       settings: () => this.renderSettings(),
       people: () => this.renderPeople(),
       shortcuts: () => this.renderKeyboardShortcuts(),
+      install: () => this.renderInstallApp(),
+      about: () => this.renderAboutPage(),
       issueDetail: () => this.renderIssueDetail(this.currentTaskId),
     };
 
@@ -1756,7 +1766,8 @@ class KineticTerminal {
       "Overview": "overview",
       "Reports": "reports",
       "Settings": "settings",
-      "People": "people"
+      "People": "people",
+      "Matrix": "matrix"
     };
     return map[name] || name.toLowerCase();
   }
@@ -1838,9 +1849,42 @@ class KineticTerminal {
     // Initialize Kanban drag & drop if board is visible
     this.initKanbanDragDrop();
 
+    // Initialize Comment EasyMDE if present
+    const commentInput = document.getElementById("commentInput");
+    if (commentInput) {
+      if (this.commentEditor) {
+        this.commentEditor.toTextArea();
+      }
+      if (typeof EasyMDE !== 'undefined') {
+        this.commentEditor = new EasyMDE({
+          element: commentInput,
+          spellChecker: false,
+          status: false,
+          toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "code", "preview"],
+          placeholder: "Add a comment... (Markdown supported)"
+        });
+      }
+    } else {
+      this.commentEditor = null;
+    }
+
     // Create task button
     document.getElementById("createTaskBtn")?.addEventListener("click", () => {
       this.openTaskForm();
+    });
+
+    // Sub-install button
+    document.getElementById("triggerInstallBtn")?.addEventListener("click", () => {
+      this.handleInstallApp();
+    });
+
+    // Sub-install card animation trigger
+    const featureCards = document.querySelectorAll('.feature-card');
+    featureCards.forEach((card, index) => {
+      setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 150 * index);
     });
 
     document
@@ -2114,13 +2158,27 @@ class KineticTerminal {
       return;
     }
 
+    if (typeof EasyMDE !== 'undefined' && !this.taskDescEditor) {
+      this.taskDescEditor = new EasyMDE({
+        element: document.getElementById("taskDesc"),
+        spellChecker: false,
+        status: false,
+        toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "code", "preview", "guide"],
+        placeholder: "Add details, requirements, acceptance criteria... (Markdown supported)"
+      });
+    }
+
     if (taskId) {
       // Edit mode
       const task = storage.getTask(taskId);
       this.currentTaskId = taskId;
       document.getElementById("taskModalTitle").textContent = "Edit Issue";
       document.getElementById("taskTitle").value = task.title;
-      document.getElementById("taskDesc").value = task.description;
+      if (this.taskDescEditor) {
+        this.taskDescEditor.value(task.description);
+      } else {
+        document.getElementById("taskDesc").value = task.description;
+      }
       document.getElementById("taskType").value = task.type;
       document.getElementById("taskStatus").value = task.status;
       document.getElementById("taskPriority").value = task.priority;
@@ -2142,6 +2200,9 @@ class KineticTerminal {
       this.currentTaskId = null;
       document.getElementById("taskModalTitle").textContent = "Create Issue";
       this.taskForm.reset();
+      if (this.taskDescEditor) {
+        this.taskDescEditor.value("");
+      }
       this.populatePeopleSelects();
       this.populateBlockerSelect();
       document.getElementById("taskFormSubmitBtn").textContent = "Create Issue";
@@ -2231,7 +2292,7 @@ class KineticTerminal {
 
     const taskData = {
       title: document.getElementById("taskTitle").value.trim(),
-      description: document.getElementById("taskDesc").value.trim(),
+      description: this.taskDescEditor ? this.taskDescEditor.value().trim() : document.getElementById("taskDesc").value.trim(),
       type: document.getElementById("taskType").value,
       status: document.getElementById("taskStatus").value,
       priority: document.getElementById("taskPriority").value,
@@ -2410,7 +2471,7 @@ class KineticTerminal {
               <div class="comment-input-container">
                 <div class="comment-avatar">M</div>
                 <div class="comment-input-wrapper">
-                  <textarea class="comment-textarea" id="commentInput" placeholder="Add a comment..."></textarea>
+                  <textarea class="comment-textarea" id="commentInput" placeholder="Add a comment... (Markdown supported)"></textarea>
                   <div class="comment-actions">
                     <button class="btn btn-primary" onclick="window.app.handleAddComment('${task.id}')">Post Comment</button>
                   </div>
@@ -2499,19 +2560,26 @@ class KineticTerminal {
             <span class="comment-author">${comment.author}</span>
             <span class="comment-time">${new Date(comment.createdAt).toLocaleString()}</span>
           </div>
-          <div class="comment-text">${this.escapeHtml(comment.content)}</div>
+          <div class="comment-text markdown-body">${(typeof marked !== 'undefined' ? marked.parse(comment.content) : this.escapeHtml(comment.content))}</div>
         </div>
       </div>
     `).join("");
   }
 
   handleAddComment(taskId) {
-    const input = document.getElementById("commentInput");
-    const content = input.value.trim();
+    let content = "";
+    if (this.commentEditor) {
+      content = this.commentEditor.value().trim();
+      this.commentEditor.value("");
+    } else {
+      const input = document.getElementById("commentInput");
+      content = input.value.trim();
+      input.value = "";
+    }
+
     if (!content) return;
 
     storage.addComment(taskId, content);
-    input.value = "";
     this.renderCurrentView();
   }
 
@@ -3019,22 +3087,48 @@ class KineticTerminal {
 
   renderKeyboardShortcuts() {
     const shortcuts = [
-      { key: "Ctrl/Cmd + K", desc: "Focus Global Search" },
-      { key: "Alt + N", desc: "Create New Issue" },
-      { key: "Ctrl/Cmd + P", desc: "Create New Project" },
-      { key: "Ctrl/Cmd + B", desc: "Open Switch Project Modal" },
-      { key: "Numbers 1-5", desc: "Switch between Board, Backlog, Timeline, Issues, Reports" },
-      { key: "Esc", desc: "Close all Modals/Panels" }
+      { key: "Ctrl/Cmd + K", desc: "Focus Global Search", color: "var(--info)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>' },
+      { key: "Alt + N", desc: "Create New Issue", color: "var(--primary)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' },
+      { key: "Ctrl/Cmd + P", desc: "Create New Project", color: "var(--warning)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>' },
+      { key: "Ctrl/Cmd + B", desc: "Open Switch Project Modal", color: "var(--priority-high)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
+      { key: "Numbers 1-5", desc: "Switch Views Dynamically", color: "var(--text-secondary)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>' },
+      { key: "Esc", desc: "Close all Modals/Panels", color: "var(--danger)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' }
     ];
 
     return `
       ${this.renderPageHeader("Keyboard Shortcuts", [this.currentProject ? this.currentProject.name : "Project", "Shortcuts"])}
-      <div class="content-wrapper">
-        <div class="shortcuts-grid">
+      <div class="content-centered install-view-wrapper" style="flex-direction: column; text-align: center; max-width: 900px; margin: 0 auto; padding: var(--spacing-2xl);">
+        
+        <div class="install-hero" style="margin-bottom: 1rem;">
+           <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5">
+             <rect x="2" y="4" width="20" height="16" rx="2" ry="2" fill="rgba(0, 204, 110, 0.1)"/>
+             <line x1="6" y1="8" x2="6" y2="8" stroke-width="2"/>
+             <line x1="10" y1="8" x2="10" y2="8" stroke-width="2"/>
+             <line x1="14" y1="8" x2="14" y2="8" stroke-width="2"/>
+             <line x1="18" y1="8" x2="18" y2="8" stroke-width="2"/>
+             <line x1="6" y1="12" x2="6" y2="12" stroke-width="2"/>
+             <line x1="10" y1="12" x2="10" y2="12" stroke-width="2"/>
+             <line x1="14" y1="12" x2="14" y2="12" stroke-width="2"/>
+             <line x1="18" y1="12" x2="18" y2="12" stroke-width="2"/>
+             <line x1="7" y1="16" x2="17" y2="16"/>
+           </svg>
+        </div>
+        
+        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 700;">Accelerate Your Workflow</h2>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.6;">
+          Master these keyboard shortcuts to navigate Kinetic Terminal at lightning speed.
+        </p>
+
+        <div class="shortcuts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; width: 100%; text-align: left;">
           ${shortcuts.map(s => `
-            <div class="shortcut-card">
-              <div class="shortcut-key">${s.key}</div>
-              <div class="shortcut-desc">${s.desc}</div>
+            <div class="feature-card shortcut-card" style="opacity: 0; transform: translateY(20px); padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default); transition: all 0.3s ease-out; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+              <div style="color: ${s.color}; margin-bottom: 1.25rem;">
+                ${s.icon}
+              </div>
+              <div class="shortcut-key" style="margin-bottom: 0.75rem; color: var(--text-primary); font-family: var(--font-mono); font-size: 1.15rem; font-weight: 600;">
+                <span style="background: var(--bg-main); padding: 0.3rem 0.6rem; border-radius: 4px; border: 1px solid var(--border-strong); box-shadow: 0 4px 0 var(--border-strong); letter-spacing: -0.5px;">${s.key}</span>
+              </div>
+              <div class="shortcut-desc" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-top: 1rem;">${s.desc}</div>
             </div>
           `).join("")}
         </div>
@@ -3070,7 +3164,168 @@ class KineticTerminal {
       dialog.remove();
     });
   }
+  async handleInstallApp() {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      const { outcome } = await window.deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        this.showNotification("Installation started!", "success");
+      }
+      window.deferredPrompt = null;
+    } else {
+      this.showNotification("App is already installed or browser doesn't support PWA installation.", "info");
+    }
+  }
+
+  renderInstallApp() {
+    return `
+      ${this.renderPageHeader("Get Offline App", ["Settings", "Offline App"])}
+      <div class="content-centered install-view-wrapper" style="flex-direction: column; text-align: center; max-width: 800px; margin: 0 auto; padding: var(--spacing-2xl);">
+        
+        <div class="install-hero">
+           <svg class="install-hero-icon" width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="var(--primary)" opacity="0.8"/>
+              <path d="M2 17L12 22L22 17" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+           </svg>
+        </div>
+        
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary); font-weight: 700;">Install Kinetic Terminal</h2>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2.5rem; line-height: 1.6;">
+          Take your project management offline. Install Kinetic Terminal as a standalone desktop application. 
+          It's blazingly fast, runs completely local, and fits perfectly with your workflow.
+        </p>
+
+        <div class="install-features" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 3.5rem; text-align: left;">
+          <div class="feature-card" style="opacity: 0; transform: translateY(20px); transition: all 0.4s ease-out; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="margin-bottom: 1rem;">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+              <line x1="3" y1="9" x2="21" y2="9"/>
+              <line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Native Feel</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Runs in its own window without browser chrome or tabs.</p>
+          </div>
+          <div class="feature-card" style="opacity: 0; transform: translateY(20px); transition: all 0.4s ease-out; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--info)" stroke-width="2" style="margin-bottom: 1rem;">
+               <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+               <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+               <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+               <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+               <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+               <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Fully Offline</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Data is stored locally. No internet connection required.</p>
+          </div>
+          <div class="feature-card" style="opacity: 0; transform: translateY(20px); transition: all 0.4s ease-out; padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2" style="margin-bottom: 1rem;">
+               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+            <h4 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">Lightning Fast</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Instant load times powered by advanced service workers.</p>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.2rem; border-radius: 50px; font-weight: 600; box-shadow: 0 4px 14px rgba(35, 134, 54, 0.4); transition: transform 0.2s, box-shadow 0.2s;" id="triggerInstallBtn" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(35, 134, 54, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 14px rgba(35, 134, 54, 0.4)';">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px; display: inline-block; vertical-align: middle;">
+             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+             <polyline points="7 10 12 15 17 10"/>
+             <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span style="display: inline-block; vertical-align: middle;">Install App Now</span>
+        </button>
+      </div>
+    `;
+  }
+
+  renderAboutPage() {
+    return `
+      ${this.renderPageHeader("About Kinetic Terminal", ["Settings", "About"])}
+      <div class="content-wrapper" style="padding: var(--spacing-xl); max-width: 900px; margin: 0 auto;">
+        
+        <div class="feature-card" style="padding: 2.5rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-default); margin-bottom: 2rem; position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -50px; right: -50px; opacity: 0.03; transform: scale(3);">
+            <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+              <path d="M2 17L12 22L22 17"/>
+              <path d="M2 12L12 17L22 12"/>
+            </svg>
+          </div>
+          
+          <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5" style="margin-right: 1.5rem;">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="rgba(0, 204, 110, 0.1)"/>
+              <path d="M2 17L12 22L22 17" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h2 style="font-size: 2rem; color: var(--text-primary); font-weight: 700; margin-bottom: 0.2rem;">Kinetic Terminal</h2>
+              <p style="color: var(--primary); font-family: var(--font-mono); font-size: 0.9rem;">v1.0.0 — Offline-First Task Management</p>
+            </div>
+          </div>
+          
+          <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
+            Kinetic Terminal was born out of a desire for a distraction-free, lightning-fast project management tool. Modern tools are bloated, slow, and heavily dependent on continuous internet connections. Kinetic Terminal brings back the retro, terminal-style aesthetic, utilizing advanced PWA technology and local storage to give you a Kanban board that operates at the speed of thought.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+             <div>
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid var(--border-default); padding-bottom: 0.5rem;"><span style="color: var(--primary);">#</span> Core Features</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 1rem;">
+                  <li>100% Offline Capable Architecture</li>
+                  <li>Local Storage Persistence</li>
+                  <li>Prioritization Matrix View</li>
+                  <li>Markdown-enabled Rich Editing</li>
+                  <li>Global Search & Keyword Filters</li>
+                  <li>Extensive Keyboard Shortcuts</li>
+                </ul>
+             </div>
+             <div>
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem; border-bottom: 1px solid var(--border-default); padding-bottom: 0.5rem;"><span style="color: var(--info);">#</span> Philosophy</h4>
+                <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: 1rem;">
+                  <li>Zero latency is a feature.</li>
+                  <li>Your data stays on your machine.</li>
+                  <li>Keyboard-first navigation.</li>
+                  <li>Minimalism over feature bloat.</li>
+                </ul>
+             </div>
+          </div>
+        </div>
+
+        <div class="feature-card" style="padding: 2rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-subtle); display: flex; flex-direction: column; align-items: center; text-align: center;">
+           <div style="width: 80px; height: 80px; background: var(--bg-active); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border: 2px solid var(--primary);">
+             <span style="font-size: 2rem; font-weight: bold; color: var(--text-primary);">SK</span>
+           </div>
+           <h3 style="color: var(--text-primary); font-size: 1.5rem; margin-bottom: 0.2rem;">Shyam Sunder Kanth</h3>
+           <p style="color: var(--text-tertiary); margin-bottom: 1.5rem;">Software Developer & Creator</p>
+           
+           <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; max-width: 600px; margin-bottom: 2rem;">
+             I am an Android and full-stack developer deeply passionate about crafting elegant, high-performance software. My goal with Kinetic Terminal was to provide developers a powerful tool that respects their time and workflow.
+           </p>
+
+           <div style="display: flex; gap: 1rem;">
+              <a href="https://github.com/shyamkanth" target="_blank" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                GitHub
+              </a>
+              <a href="https://linkedin.com/in/shyamkanth" target="_blank" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                LinkedIn
+              </a>
+              <a href="https://shyamkanth.github.io" target="_blank" class="btn btn-primary" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                Portfolio
+              </a>
+           </div>
+        </div>
+
+      </div>
+    `;
+  }
 }
+
+
 
 // Add notification animations
 const notifStyle = document.createElement("style");
