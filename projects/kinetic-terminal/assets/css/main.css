@@ -553,7 +553,7 @@ body {
 /* Sidebar Navigation */
 .sidebar-nav {
   flex: 1;
-  padding: var(--spacing-md) 0;
+  padding: 0 0;
   overflow-y: auto;
 }
 
@@ -3459,4 +3459,160 @@ body {
 
 .table-view.full-width .table-wrapper {
   margin: 0 !important;
+}
+
+/* Matrix View */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-xl);
+  height: calc(100vh - 180px);
+  min-height: 500px;
+}
+
+.matrix-quadrant {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.quadrant-header {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 3px solid;
+}
+
+.matrix-quadrant h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+
+.quadrant-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.do-quadrant .quadrant-header {
+  border-bottom-color: var(--status-critical);
+  background: rgba(219, 68, 55, 0.05);
+}
+
+.schedule-quadrant .quadrant-header {
+  border-bottom-color: var(--status-high);
+  background: rgba(244, 180, 0, 0.05);
+}
+
+.delegate-quadrant .quadrant-header {
+  border-bottom-color: var(--status-medium);
+  background: rgba(66, 133, 244, 0.05);
+}
+
+.eliminate-quadrant .quadrant-header {
+  border-bottom-color: var(--status-low);
+  background: rgba(15, 157, 88, 0.05);
+}
+
+.quadrant-tasks {
+  padding: var(--spacing-md);
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.empty-quadrant {
+  text-align: center;
+  color: var(--text-tertiary);
+  margin-top: 2rem;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.matrix-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.matrix-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.matrix-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.matrix-taskId {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.matrix-card-title {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Markdown Body overrides */
+.markdown-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.markdown-body p {
+  margin-bottom: 1em;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-bottom: 1em;
+  padding-left: 20px;
+}
+
+.markdown-body code {
+  background: rgba(136, 136, 136, 0.15);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.markdown-body pre {
+  background: var(--bg-main);
+  padding: 1em;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+.markdown-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid var(--border-default);
+  margin: 0 0 1em 0;
+  padding-left: 1em;
+  color: var(--text-tertiary);
+}
+
+.markdown-body strong {
+  color: var(--text-primary);
 }

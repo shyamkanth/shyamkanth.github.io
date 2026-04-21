@@ -17,6 +17,11 @@ class KineticTerminal {
 
     console.log("app.js init");
 
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('Service Worker registration failed:', err));
+    }
+
     this.cacheDOM();
     this.bindEvents();
     this.loadState();
@@ -394,6 +399,7 @@ class KineticTerminal {
     const views = {
       board: () => this.renderBoard(),
       backlog: () => this.renderBacklog(),
+      matrix: () => this.renderMatrix(),
       timeline: () => this.renderTimeline(),
       issues: () => this.renderIssues(),
       overview: () => this.renderOverview(),
@@ -685,6 +691,84 @@ class KineticTerminal {
     )}
       <div class="kanban-board" id="kanbanBoard" style="grid-template-columns: repeat(${visibleStatuses.length}, 1fr);">
         ${columnsHTML}
+      </div>
+    `;
+  }
+
+  renderMatrix() {
+    if (!this.currentProject) return this.renderNoProject();
+
+    const tasks = storage.getTasks(this.currentProject.id);
+    const getTasksByPriority = (priority) => tasks.filter(t => t.priority === priority && t.status !== 'done');
+
+    const doTasks = getTasksByPriority('critical');
+    const scheduleTasks = getTasksByPriority('high');
+    const delegateTasks = getTasksByPriority('medium');
+    const eliminateTasks = getTasksByPriority('low');
+
+    return `
+      ${this.renderPageHeader(
+      "Prioritization Matrix",
+      [this.currentProject.name, "Matrix"],
+      `<button class="btn btn-primary" id="createTaskBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Create Issue
+        </button>`
+    )}
+      <div style="max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl); width: 100%;">
+        <div class="matrix-grid">
+          <div class="matrix-quadrant do-quadrant">
+             <div class="quadrant-header">
+                <h3>Do First</h3>
+                <span class="quadrant-subtitle">Urgent & Important (Critical Tasks)</span>
+             </div>
+             <div class="quadrant-tasks">
+                ${doTasks.length > 0 ? doTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to do immediately</div>'}
+             </div>
+          </div>
+          <div class="matrix-quadrant schedule-quadrant">
+             <div class="quadrant-header">
+                <h3>Schedule</h3>
+                <span class="quadrant-subtitle">Not Urgent & Important (High Priority)</span>
+             </div>
+             <div class="quadrant-tasks">
+                ${scheduleTasks.length > 0 ? scheduleTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to schedule</div>'}
+             </div>
+          </div>
+          <div class="matrix-quadrant delegate-quadrant">
+             <div class="quadrant-header">
+                <h3>Delegate</h3>
+                <span class="quadrant-subtitle">Urgent & Not Important (Medium Priority)</span>
+             </div>
+             <div class="quadrant-tasks">
+                ${delegateTasks.length > 0 ? delegateTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to delegate</div>'}
+             </div>
+          </div>
+          <div class="matrix-quadrant eliminate-quadrant">
+             <div class="quadrant-header">
+                <h3>Eliminate</h3>
+                <span class="quadrant-subtitle">Not Urgent & Not Important (Low Priority)</span>
+             </div>
+             <div class="quadrant-tasks">
+                ${eliminateTasks.length > 0 ? eliminateTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to eliminate</div>'}
+             </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderMinimalCard(task) {
+    return `
+      <div class="matrix-card" onclick="window.app.openTaskDetails('${task.id}')">
+        <div class="matrix-card-header">
+          <span class="matrix-taskId">${this.escapeHtml(task.id)}</span>
+          <span class="priority-badge ${task.priority}">${task.priority}</span>
+        </div>
+        <div class="matrix-card-title">${this.escapeHtml(task.title)}</div>
       </div>
     `;
   }
@@ -1657,7 +1741,8 @@ class KineticTerminal {
       issues: "Issues",
       overview: "Overview",
       reports: "Reports",
-      settings: "Settings"
+      settings: "Settings",
+      matrix: "Matrix"
     };
     return map[viewId] || viewId;
   }
@@ -2307,7 +2392,7 @@ class KineticTerminal {
                 </svg>
                 Description
               </div>
-              <div class="issue-description">${this.escapeHtml(task.description) || "<em>No description provided.</em>"}</div>
+              <div class="issue-description markdown-body">${task.description ? (typeof marked !== 'undefined' ? marked.parse(task.description) : this.escapeHtml(task.description)) : "<em>No description provided.</em>"}</div>
             </div>
 
             <div class="comments-section">
