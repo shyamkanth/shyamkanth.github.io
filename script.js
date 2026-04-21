@@ -101,6 +101,17 @@ const industrialProjects = [
 
 const personalProjects = [
   {
+    name: "Kinetic Terminal - Project Management",
+    role: "Web Developer",
+    duration: "25 Days",
+    tags: ["HTML", "CSS", "JavaScript", "PWA"],
+    description:
+      "A high-velocity, terminal-inspired project management suite. Features Kanban boards, Eisenhower matrices, and sprint tracking with a local-first architecture. Designed for power users who value speed and data privacy.",
+    link: "/projects/kinetic-terminal/",
+    image:
+      "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&h=400&fit=crop",
+  },
+  {
     name: "PasswordVault - Password Manager",
     role: "Android Developer",
     duration: "2 months",
@@ -108,7 +119,8 @@ const personalProjects = [
     description:
       "Local password manager with MPIN authentication and AES encryption. Features backup/restore using SAF, password strength metrics, and bin management for enhanced privacy.",
     link: "https://play.google.com/store/apps/details?id=io.github.shyamkanth.passwordvault&pcampaignid=web_share",
-    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800",
+    image:
+      "https://images.unsplash.com/photo-1633265486064-086b219458ec?w=800&h=400&fit=crop",
   },
   {
     name: "japnaam",
@@ -116,10 +128,10 @@ const personalProjects = [
     duration: "1 month",
     tags: ["KOTLIN", "ROOM", "MVVM"],
     description:
-      "Japnaam is a simple and powerful app designed to support your spiritual journey.It allows you to track your jaap (chant counts) for different mantras, explore a wide collection of aartis and chalisa's, and stay connected with your daily spiritual practices.",
+      "Japnaam is a simple and powerful app designed to support your spiritual journey. It allows you to track your jaap (chant counts), explore a collection of aartis, and stay connected with daily spiritual practices.",
     link: "https://play.google.com/store/apps/details?id=io.github.shyamkanth.japnaam&pcampaignid=web_share",
     image:
-      "https://play-lh.googleusercontent.com/83MTuaHZ4aTBW7Dm07XlkuYc4P3uZWlbaZ-Y8rBbqtphoiBKxlZsREdGAc9IrObtb_xnhJ5OU27UfRzVPpuQiEY=w240-h480",
+      "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=800&h=400&fit=crop",
   },
   {
     name: "Money Log - Budget Manager",
@@ -129,17 +141,19 @@ const personalProjects = [
     description:
       "Personal expense tracker with transaction logging, category management, and monthly summaries. Built with Room database, DataStore for preferences, and clean MVVM architecture.",
     link: "https://github.com/shyamkanth",
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800",
+    image:
+      "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=800&h=400&fit=crop",
   },
   {
-    name: "Zynance - Expance Tracker",
+    name: "Zynance - Expense Tracker",
     role: "Android Developer",
     duration: "1 month",
     tags: ["KOTLIN", "ROOM", "MVVM", "Coroutines"],
     description:
-      "Zynance is an Android application designed for managing expenses. Users can perform CRUD operations on their expenses and expense categories. Additionally, the app provides various views to track expenses, including bar charts, pie charts, and a tabular view. With support for Room, Coroutines, and the MVVM architecture, this app ensures a clean and efficient approach to managing personal finances.",
+      "Zynance is an Android application for managing expenses with visualization tools like bar and pie charts. Ensures clean state management using Room and Coroutines.",
     link: "https://github.com/shyamkanth/Zynance",
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800",
+    image:
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop",
   },
   {
     name: "ApiHub - API Documentation tool",
@@ -147,9 +161,10 @@ const personalProjects = [
     duration: "1 month",
     tags: ["ANGULAR", "TYPESCRIPT", "BOOTSTRAP"],
     description:
-      "Web-based API documentation tool supporting nested registries and endpoints. Features copy-to-clipboard, dynamic rendering, local storage persistence, and inline editing with reactive forms.",
+      "Web-based API documentation tool supporting nested registries and endpoints. Features copy-to-clipboard, dynamic rendering, and local storage persistence.",
     link: "https://github.com/shyamkanth",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
+    image:
+      "https://images.unsplash.com/photo-1516259762381-22954d7d3ad2?w=800&h=400&fit=crop",
   },
   {
     name: "Lumina Habit - Habit Tracker",
@@ -157,7 +172,7 @@ const personalProjects = [
     duration: "20 Days",
     tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
     description:
-      "Lumina is a fully offline, browser-based habit tracking application built with vanilla HTML, CSS, and JavaScript — no frameworks, no build step, no accounts, no cloud. Open the file in a browser and you're up and running.",
+      "Lumina is a fully offline, browser-based habit tracking application built with vanilla tech to ensure zero dependencies and instant performance.",
     link: "/projects/lumina/",
     image:
       "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=400&fit=crop",
@@ -168,7 +183,7 @@ const personalProjects = [
     duration: "15 Days",
     tags: ["HTML", "CSS", "JavaScript", "Tailwind"],
     description:
-      "Lexica is a minimalist, localStorage-powered personal dictionary built with pure Vanilla JavaScript. Designed for writers, students, and language lovers, it serves as a private archive for curating a collection of words, definitions, pronunciations, and contextual examples—no backend required.",
+      "A minimalist linguistic vault for curating words, definitions, and pronunciations. Features a 'Word of the Day' system and deep-search capabilities.",
     link: "/projects/lexica/",
     image:
       "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=400&fit=crop",
@@ -179,7 +194,7 @@ const personalProjects = [
     duration: "10 Days",
     tags: ["HTML", "CSS", "JAVASCRIPT"],
     description:
-      "A sleek, browser-based notebook built with HTML, CSS, and JavaScript that lets you create, edit, and manage notes effortlessly. Your notes are stored locally in your browser using `localStorage`, ensuring privacy and persistence across sessions.",
+      "A sleek notebook application for the browser. Prioritizes privacy by saving every note to the local session, offering a distraction-free writing experience.",
     link: "/projects/botbook/",
     image:
       "https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&h=400&fit=crop",
@@ -188,11 +203,12 @@ const personalProjects = [
     name: "PayDay - EMI Reminder App",
     role: "Android Developer",
     duration: "In Progress",
-    tags: ["KOTLIN", "ROOM", "MVVM", "DEPENDENCY INJECTION", "HILT"],
+    tags: ["KOTLIN", "ROOM", "MVVM", "HILT"],
     description:
-      "Web-based API documentation tool supporting nested registries and endpoints. Features copy-to-clipboard, dynamic rendering, local storage persistence, and inline editing with reactive forms.",
+      "A dedicated utility for tracking personal loans and EMI schedules. Features notification reminders and repayment analytics to keep your finances on track.",
     link: "",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800",
+    image:
+      "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=400&fit=crop",
   },
 ];
 
@@ -201,25 +217,25 @@ const funProjects = [
     name: "Multifunctional Calculator in C",
     tags: ["C"],
     description:
-      "A multifunctional CLI based C calculator with more than 18 functions including complex matrix operations. ",
+      "A high-performance CLI utility supporting 18+ mathematical operations, featuring complex matrix computations and low-level memory optimization.",
     link: "https://github.com/shyamkanth/Calculator-in-c",
-    emoji: "✏️",
+    emoji: "💻",
   },
   {
     name: "Mac UI Notepad",
     tags: ["HTML", "CSS", "JAVASCRIPT"],
     description:
-      "A cool Notepad built using Bootstrap and JS having Mac Interface. Must check out. ",
+      "A web-based text editor featuring a meticulous macOS-inspired aesthetic, implementing responsive window management and native-like UI interactions.",
     link: "https://shyamkanth.github.io/Mac-UI-Notepad/",
-    emoji: "✏️",
+    emoji: "🖥️",
   },
   {
-    name: "Hey Todo : A todo application",
+    name: "Hey Todo : Task Management",
     tags: ["KOTLIN", "ROOM", "COROUTINES"],
     description:
-      "Hey Todo is an Android application that allows users to manage their tasks in real-time. Users can create, read, update, and delete tasks with ease.",
+      "A robust Android productivity tool leveraging Kotlin Coroutines for asynchronous operations and Room for high-performance local data persistence.",
     link: "https://github.com/shyamkanth/Hey-Todo",
-    emoji: "✏️",
+    emoji: "🎯",
   },
 ];
 

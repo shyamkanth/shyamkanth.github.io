@@ -389,6 +389,74 @@
           "text": "Open the command palette by pressing CTRL + / or by using the global navigation on the portfolio. Lexica is a zero-setup application — simply navigate to the lexicon and start adding words. All your data is saved instantly to your browser and can be backed up as a JSON file at any time."
         }
       ]
+    },
+    {
+      "id": "kinetic-terminal-professional-project-management",
+      "title": "Kinetic Terminal — High-Velocity Project Management & Strategy",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-04-21",
+      "thumbnail": "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?w=800&h=400&fit=crop",
+      "type": "RELEASE",
+      "priority": "high",
+      "excerpt": "Kinetic Terminal is a sophisticated, terminal-inspired project management suite designed for developers and power users. It blends Agile methodologies with strategic frameworks like the Eisenhower Matrix, all within a privacy-first, local-only environment.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "The Kinetic Philosophy"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kinetic Terminal is built on the belief that project management should be as fast and precise as a command-line interface. It moves away from bloated cloud-based subscriptions and instead offers a high-performance, browser-native experience. Designed for deep work, it provides a distraction-free environment to move tasks from ideation to completion with 'kinetic' momentum."
+        },
+        {
+          "type": "heading",
+          "text": "Strategic Management Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Multi-View Architecture: Seamlessly switch between Kanban Board, Backlog, and Timeline views",
+            "Eisenhower Matrix Integration: Visualize task urgency vs. importance for better prioritization",
+            "Issue Lifecycle Management: Detailed tracking for Bugs, Tasks, Features, and Epics",
+            "Advanced Attribute Tracking: Manage Story Points, Sprints, Due Dates, and Assignees",
+            "Dependency Mapping: Track 'Blocks' and 'Blocked By' relationships between issues",
+            "Performance Analytics: Real-time reporting on project health and team activity",
+            "Offline-First Design: Full PWA support allowing for management without an internet connection",
+            "Secure Data Governance: LocalStorage-driven persistence with instant JSON backup/restore",
+            "Universal Search: A global command-palette style search for tasks, people, and views",
+            "Professional Keyboard Shortcuts: Navigate the entire application without touching the mouse"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "The Engineering Behind the Terminal"
+        },
+        {
+          "type": "paragraph",
+          "text": "Leveraging a modern JavaScript core, Kinetic Terminal utilizes an event-driven architecture to keep the UI in sync with localStorage. It features a refined dark-mode aesthetic built with Inter and JetBrains Mono typography, ensuring high legibility for long sessions. The application is modular, using dedicated controllers for activity logging, storage management, and dynamic view rendering."
+        },
+        {
+          "type": "quote",
+          "text": "Efficiency is the result of clear visibility and zero friction.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Project Portability"
+        },
+        {
+          "type": "paragraph",
+          "text": "Kinetic Terminal treats your data as your own. With a single click, you can export your entire project history, tasks, and team logs into a structured JSON format. This makes it easy to migrate between devices or archive completed projects for long-term storage, maintaining the privacy-first standard established in BotBook and Lexica."
+        },
+        {
+          "type": "heading",
+          "text": "Get Started"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ready to accelerate your workflow? Navigate to Kinetic Terminal via the projects menu. Start by creating a new project with a unique key (e.g., 'KT'), add your team members in the People view, and begin populating your backlog. No sign-ups are required—just open and build."
+        }
+      ]
     }
   ]
 }

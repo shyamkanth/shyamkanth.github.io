@@ -1,6 +1,25 @@
 (function () {
   const notifications = [
     {
+      id: "kinetic_terminal_launch",
+      category: "New Project",
+      heading: "Kinetic Terminal: Deployment Successful",
+      description:
+        "The professional project management suite is now live. Experience high-velocity, local-first task tracking.",
+      date_added: "04/21/2026",
+      navigateTo: "/projects/kinetic-terminal/",
+    },
+    {
+      id: "announcement_kinetic_terminal",
+      category: "Announcement Added",
+      heading: "Kinetic Terminal: Productivity Framework",
+      description:
+        "Deep dive into the strategic architecture, from the Eisenhower Matrix to dependency mapping.",
+      date_added: "04/21/2026",
+      navigateTo:
+        "/announcements/announcement.html?id=kinetic-terminal-professional-project-management",
+    },
+    {
       id: "lexica_launch",
       category: "New Project",
       heading: "Lexica: Linguistic Vault [Deployment Complete]",

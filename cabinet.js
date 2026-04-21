@@ -14,7 +14,6 @@
     window.location.href = p;
   }
 
-
   function _injectStyles() {
     if (document.getElementById("_cp_st")) return;
     const s = document.createElement("style");
@@ -172,10 +171,10 @@
       const ql = q.toLowerCase().trim();
       const items = ql
         ? GHOST_COMMANDS.filter(
-          (c) =>
-            c.label.toLowerCase().includes(ql) ||
-            c.desc.toLowerCase().includes(ql),
-        )
+            (c) =>
+              c.label.toLowerCase().includes(ql) ||
+              c.desc.toLowerCase().includes(ql),
+          )
         : [...GHOST_COMMANDS];
       return {
         isSecret: true,
@@ -186,10 +185,10 @@
     const ql = raw.toLowerCase().trim();
     const items = ql
       ? PUBLIC_COMMANDS.filter(
-        (c) =>
-          c.label.toLowerCase().includes(ql) ||
-          c.desc.toLowerCase().includes(ql),
-      )
+          (c) =>
+            c.label.toLowerCase().includes(ql) ||
+            c.desc.toLowerCase().includes(ql),
+        )
       : [...PUBLIC_COMMANDS];
     return {
       isSecret: false,
@@ -292,6 +291,12 @@
       action: () => _go("/blogs/"),
     },
     {
+      label: "Kinetic Terminal - Professional Task Management",
+      desc: "A powerful, minimalist project management tool featuring Kanban boards, backlogs, and Eisenhower matrices.",
+      icon: "tactic",
+      action: () => _go("/projects/kinetic-terminal/"),
+    },
+    {
       label: "Lumina - Habit Tracker",
       desc: "Your personal browser based habit tracker",
       icon: "tactic",
@@ -304,7 +309,7 @@
       action: () => _go("/projects/lexica/"),
     },
     {
-      label: "BotBook - Text Editor",
+      label: "BotBook - Minimal Note Companion",
       desc: "Your browser based notebook for quick access.",
       icon: "tactic",
       action: () => _go("/projects/botbook/"),
@@ -329,7 +334,7 @@
    */
 
   /**
-   * Steps to follow after adding any project : 
+   * Steps to follow after adding any project :
    * Add project and test thoroughly then publish.
    * Add the project to the PUBLIC_COMMANDS / GHOST_COMMANDS array in cabinet.js file..
    * Add project info and links in the projects section in script.js file.
@@ -339,7 +344,6 @@
    * [Mandatory] Create notifications for all (New Project, Announcement, Privacy Policy, Blog, etc.) in notification.js file.
    * Commit and Push the files.
    */
-
 
   function _setActive(i) {
     _ai = i;
