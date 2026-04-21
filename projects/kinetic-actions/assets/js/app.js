@@ -173,6 +173,37 @@ class KineticTerminal {
       this.handleGlobalSearch(e.target.value);
     });
 
+    // Global search keyboard navigation
+    document.getElementById("globalSearch")?.addEventListener("keydown", (e) => {
+      const searchResults = document.getElementById("searchResults");
+      if (!searchResults?.classList.contains("active")) return;
+
+      const items = Array.from(searchResults.querySelectorAll(".search-result-item"));
+      if (!items.length) return;
+
+      const currentIndex = items.findIndex((item) => item.classList.contains("search-result-highlighted"));
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        items.forEach((item) => item.classList.remove("search-result-highlighted"));
+        items[nextIndex].classList.add("search-result-highlighted");
+        items[nextIndex].scrollIntoView({ block: "nearest" });
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        items.forEach((item) => item.classList.remove("search-result-highlighted"));
+        items[prevIndex].classList.add("search-result-highlighted");
+        items[prevIndex].scrollIntoView({ block: "nearest" });
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const highlighted = searchResults.querySelector(".search-result-highlighted");
+        if (highlighted) {
+          highlighted.click();
+        }
+      }
+    });
+
     // Keyboard shortcuts
     window.addEventListener(
       "keydown",
@@ -699,25 +730,25 @@ class KineticTerminal {
         </button>
         <div class="dropdown-menu manage-views-menu" style="min-width:200px; padding: 0.75rem 0;">
           ${allStatuses
-            .map((s) => {
-              const checked = this.boardVisibleColumns.includes(s.key);
-              const disabled = checked && this.boardVisibleColumns.length === 1;
-              return `<label class="manage-views-item${disabled ? " disabled" : ""}">
+        .map((s) => {
+          const checked = this.boardVisibleColumns.includes(s.key);
+          const disabled = checked && this.boardVisibleColumns.length === 1;
+          return `<label class="manage-views-item${disabled ? " disabled" : ""}">
               <input type="checkbox" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}
                 data-col-key="${s.key}" onchange="window.app.toggleBoardColumn('${s.key}', this.checked)">
               <span>${s.label}</span>
             </label>`;
-            })
-            .join("")}
+        })
+        .join("")}
         </div>
       </div>`;
 
     if (tasks.filter((t) => t.status !== "backlog").length === 0) {
       return `
         ${this.renderPageHeader(
-          this.currentProject.name,
-          [this.currentProject.name, "Board"],
-          `
+        this.currentProject.name,
+        [this.currentProject.name, "Board"],
+        `
            ${manageViewsDropdown}
            ${this.renderSortDropdown()}
            <button class="btn btn-primary" id="createTaskBtn">
@@ -728,7 +759,7 @@ class KineticTerminal {
             Create Issue
           </button>
         `,
-        )}
+      )}
         <div class="content-centered">
           ${this.renderEmptyState("No Issues found", "Start adding by clicking button above or ALT+N")}
         </div>
@@ -770,9 +801,9 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-        this.currentProject.name,
-        [this.currentProject.name, "Board"],
-        `
+      this.currentProject.name,
+      [this.currentProject.name, "Board"],
+      `
         ${manageViewsDropdown}
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
@@ -782,7 +813,7 @@ class KineticTerminal {
           </svg>
           Create Issue
         </button>`,
-      )}
+    )}
       <div class="kanban-board" id="kanbanBoard" style="grid-template-columns: repeat(${visibleStatuses.length}, 1fr);">
         ${columnsHTML}
       </div>
@@ -803,16 +834,16 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-        "Prioritization Matrix",
-        [this.currentProject.name, "Matrix"],
-        `<button class="btn btn-primary" id="createTaskBtn">
+      "Prioritization Matrix",
+      [this.currentProject.name, "Matrix"],
+      `<button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
         </button>`,
-      )}
+    )}
       <div style="max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl); width: 100%;">
         <div class="matrix-grid">
           <div class="matrix-quadrant do-quadrant">
@@ -982,20 +1013,19 @@ class KineticTerminal {
         <div class="card-footer">
           <div class="card-meta">
             <span class="priority-badge ${task.priority}">${task.priority}</span>
-            ${
-              task.tags.length > 0
-                ? `
+            ${task.tags.length > 0
+        ? `
               <div class="tags">
                 ${task.tags
-                  .slice(0, 2)
-                  .map(
-                    (tag) => `<span class="tag">${this.escapeHtml(tag)}</span>`,
-                  )
-                  .join("")}
+          .slice(0, 2)
+          .map(
+            (tag) => `<span class="tag">${this.escapeHtml(tag)}</span>`,
+          )
+          .join("")}
               </div>
             `
-                : ""
-            }
+        : ""
+      }
           </div>
           ${task.assignee ? `<div class="card-assignee" title="${this.escapeHtml(task.assignee)}">${task.assignee.charAt(0).toUpperCase()}</div>` : ""}
         </div>
@@ -1017,9 +1047,9 @@ class KineticTerminal {
     if (tasks.length === 0) {
       return `
         ${this.renderPageHeader(
-          this.currentProject.name,
-          [this.currentProject.name, "Backlog"],
-          `
+        this.currentProject.name,
+        [this.currentProject.name, "Backlog"],
+        `
           ${this.renderSortDropdown()}
           <button class="btn btn-primary" id="createTaskBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1029,7 +1059,7 @@ class KineticTerminal {
             Create Issue
           </button>
         `,
-        )}
+      )}
         <div class="content-centered">
           ${this.renderEmptyState("No Backlogs yet", "You will see here if there is any kind of that")}
         </div>
@@ -1038,16 +1068,16 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-        "Backlog",
-        [this.currentProject.name, "Backlog"],
-        `<button class="btn btn-primary" id="createTaskBtn">
+      "Backlog",
+      [this.currentProject.name, "Backlog"],
+      `<button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
         </button>`,
-      )}
+    )}
       <div class="table-view full-width">
         ${this.renderTaskTable(tasks)}
       </div>
@@ -1067,9 +1097,9 @@ class KineticTerminal {
     if (allTasks.length === 0) {
       return `
         ${this.renderPageHeader(
-          this.currentProject.name,
-          [this.currentProject.name, "Issues"],
-          `
+        this.currentProject.name,
+        [this.currentProject.name, "Issues"],
+        `
           ${this.renderSortDropdown()}
           <button class="btn btn-primary" id="createTaskBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1079,7 +1109,7 @@ class KineticTerminal {
             Create Issue
           </button>
         `,
-        )}
+      )}
         <div class="content-centered">
           ${this.renderEmptyState("No Issues found", "Start adding by clicking button above or ALT+N")}
         </div>
@@ -1089,9 +1119,9 @@ class KineticTerminal {
     // Normal view with filters (even if filtered result is empty)
     return `
       ${this.renderPageHeader(
-        "All Issues",
-        [this.currentProject.name, "Issues"],
-        `
+      "All Issues",
+      [this.currentProject.name, "Issues"],
+      `
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1100,7 +1130,7 @@ class KineticTerminal {
           </svg>
           Create Issue
         </button>`,
-      )}
+    )}
       <div class="filters-bar">
         <div class="filter-group">
           <span class="filter-label">Status:</span>
@@ -1128,13 +1158,13 @@ class KineticTerminal {
           <select class="filter-select" id="assigneeFilter" onchange="app.applyFilters()">
             <option value="all" ${this.filters.assignee === "all" ? "selected" : ""}>All Assignees</option>
             ${storage
-              .getPeople()
-              .map(
-                (p) => `
+        .getPeople()
+        .map(
+          (p) => `
               <option value="${p.name}" ${this.filters.assignee === p.name ? "selected" : ""}>${p.name}</option>
             `,
-              )
-              .join("")}
+        )
+        .join("")}
           </select>
         </div>
         <div class="filter-group">
@@ -1142,13 +1172,13 @@ class KineticTerminal {
           <select class="filter-select" id="reporterFilter" onchange="app.applyFilters()">
             <option value="all" ${this.filters.reporter === "all" ? "selected" : ""}>All Reporters</option>
             ${storage
-              .getPeople()
-              .map(
-                (p) => `
+        .getPeople()
+        .map(
+          (p) => `
               <option value="${p.name}" ${this.filters.reporter === p.name ? "selected" : ""}>${p.name}</option>
             `,
-              )
-              .join("")}
+        )
+        .join("")}
           </select>
         </div>
         <div class="view-toggle">
@@ -1157,16 +1187,15 @@ class KineticTerminal {
         </div>
       </div>
       <div class="issues-view-container">
-        ${
-          tasks.length === 0
-            ? `<div class="text-center" style="padding: 4rem;">
+        ${tasks.length === 0
+        ? `<div class="text-center" style="padding: 4rem;">
                <h3 style="color: var(--text-secondary);">No issues found matching filters</h3>
                <button class="btn btn-secondary mt-lg" onclick="window.app.clearFilters()">Clear Filters</button>
              </div>`
-            : isTable
-              ? this.renderTaskTable(tasks)
-              : this.renderTaskCards(tasks)
-        }
+        : isTable
+          ? this.renderTaskTable(tasks)
+          : this.renderTaskCards(tasks)
+      }
       </div>
     `;
   }
@@ -1193,8 +1222,8 @@ class KineticTerminal {
     return `
       <div class="issues-grid">
         ${tasks
-          .map(
-            (task) => `
+        .map(
+          (task) => `
           <div class="issue-card" data-task-id="${task.id}">
             <div class="issue-card-header">
               <div class="issue-card-identity">
@@ -1215,8 +1244,8 @@ class KineticTerminal {
             </div>
           </div>
         `,
-          )
-          .join("")}
+        )
+        .join("")}
       </div>
     `;
   }
@@ -1258,8 +1287,8 @@ class KineticTerminal {
           </thead>
           <tbody>
             ${tasks
-              .map(
-                (task) => `
+        .map(
+          (task) => `
               <tr data-task-id="${task.id}">
                 <td>${this.escapeHtml(task.id)}</td>
                 <td style="font-weight: 600;">${this.escapeHtml(task.title)}</td>
@@ -1270,8 +1299,8 @@ class KineticTerminal {
                 <td>${new Date(task.createdAt).toLocaleDateString()}</td>
               </tr>
             `,
-              )
-              .join("")}
+        )
+        .join("")}
           </tbody>
         </table>
       </div>
@@ -1332,18 +1361,18 @@ class KineticTerminal {
             
             <!-- Tooltip Hover Points -->
             ${velocityCounts
-              .map((count, i) => {
-                const x = (i / (velocityCounts.length - 1)) * chartWidth;
-                const y = chartHeight - (count / maxCount) * chartHeight;
-                const date = new Date(last7Days[i]).toLocaleDateString(
-                  undefined,
-                  { month: "short", day: "numeric" },
-                );
-                return `<circle cx="${x}" cy="${y}" r="7" class="chart-dot">
+        .map((count, i) => {
+          const x = (i / (velocityCounts.length - 1)) * chartWidth;
+          const y = chartHeight - (count / maxCount) * chartHeight;
+          const date = new Date(last7Days[i]).toLocaleDateString(
+            undefined,
+            { month: "short", day: "numeric" },
+          );
+          return `<circle cx="${x}" cy="${y}" r="7" class="chart-dot">
                         <title>${count} issue${count !== 1 ? "s" : ""} — ${date}</title>
                       </circle>`;
-              })
-              .join("")}
+        })
+        .join("")}
           </svg>
           <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; color: var(--text-tertiary);">
             ${last7Days.map((date) => `<span>${new Date(date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>`).join("")}
@@ -1359,19 +1388,18 @@ class KineticTerminal {
               Key Milestones & Deadlines
             </div>
             
-            ${
-              tasksWithDueDate.length > 0
-                ? `
+            ${tasksWithDueDate.length > 0
+        ? `
               <div class="milestones-grid">
                 ${tasksWithDueDate
-                  .slice(0, 6)
-                  .map((task) => {
-                    const date = new Date(task.dueDate);
-                    const day = date.getDate();
-                    const month = date.toLocaleDateString(undefined, {
-                      month: "short",
-                    });
-                    return `
+          .slice(0, 6)
+          .map((task) => {
+            const date = new Date(task.dueDate);
+            const day = date.getDate();
+            const month = date.toLocaleDateString(undefined, {
+              month: "short",
+            });
+            return `
                     <div class="milestone-card" onclick="window.app.switchView('issueDetail', '${task.id}')">
                       <div class="milestone-date-box">
                         <span class="ms-day">${day}</span>
@@ -1383,17 +1411,17 @@ class KineticTerminal {
                       </div>
                     </div>
                   `;
-                  })
-                  .join("")}
+          })
+          .join("")}
               </div>
             `
-                : `
+        : `
               <div class="empty-timeline">
                 <p>No issues with deadlines yet.</p>
                 <button class="btn btn-secondary mt-3" style="margin-top: 1rem;" onclick="window.app.openTaskForm()">Schedule a Task</button>
               </div>
             `
-            }
+      }
           </div>
 
           <!-- Project Health & Stability (Middle) -->
@@ -1407,19 +1435,19 @@ class KineticTerminal {
               <div class="health-meta">
                 <div class="health-progress-ring">
                   ${(() => {
-                    const completed = tasks.filter(
-                      (t) => t.status === "done",
-                    ).length;
-                    const total = tasks.length || 1;
-                    const percent = Math.round((completed / total) * 100);
-                    return `
+        const completed = tasks.filter(
+          (t) => t.status === "done",
+        ).length;
+        const total = tasks.length || 1;
+        const percent = Math.round((completed / total) * 100);
+        return `
                     <svg width="80" height="80" viewBox="0 0 36 36">
                       <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
                       <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="${percent}, 100" />
                       <text x="18" y="20.35" class="ring-text" fill="white" font-size="8" text-anchor="middle">${percent}%</text>
                     </svg>
                     `;
-                  })()}
+      })()}
                 </div>
                 <div class="health-stats">
                   <div class="health-stat-item">
@@ -1437,22 +1465,22 @@ class KineticTerminal {
                 <div class="dist-title">Priority Spread</div>
                 <div class="dist-bar">
                   ${(() => {
-                    const high = tasks.filter(
-                      (t) => t.priority === "critical" || t.priority === "high",
-                    ).length;
-                    const med = tasks.filter(
-                      (t) => t.priority === "medium",
-                    ).length;
-                    const low = tasks.filter(
-                      (t) => t.priority === "low",
-                    ).length;
-                    const total = tasks.length || 1;
-                    return `
+        const high = tasks.filter(
+          (t) => t.priority === "critical" || t.priority === "high",
+        ).length;
+        const med = tasks.filter(
+          (t) => t.priority === "medium",
+        ).length;
+        const low = tasks.filter(
+          (t) => t.priority === "low",
+        ).length;
+        const total = tasks.length || 1;
+        return `
                       <div class="dist-segment urgent" style="width: ${(high / total) * 100}%" title="High/Critical"></div>
                       <div class="dist-segment medium" style="width: ${(med / total) * 100}%" title="Medium"></div>
                       <div class="dist-segment low" style="width: ${(low / total) * 100}%" title="Low"></div>
                     `;
-                  })()}
+      })()}
                 </div>
                 <div class="dist-legend">
                   <span>Critical: ${tasks.filter((t) => t.priority === "critical").length}</span>
@@ -1503,9 +1531,9 @@ class KineticTerminal {
             </div>
             <div class="roadmap-visual">
               ${tasks
-                .slice(0, 5)
-                .map(
-                  (task) => `
+        .slice(0, 5)
+        .map(
+          (task) => `
                 <div class="roadmap-item">
                   <div class="roadmap-content" onclick="window.app.switchView('issueDetail', '${task.id}')">
                     <div style="flex: 1;">
@@ -1521,9 +1549,9 @@ class KineticTerminal {
                   </div>
                 </div>
               `,
-                )
-                .slice(0, 5)
-                .join("")}
+        )
+        .slice(0, 5)
+        .join("")}
               ${tasks.length === 0 ? '<div style="color: var(--text-tertiary);">No activity yet.</div>' : ""}
             </div>
           </div>
@@ -1541,9 +1569,9 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-        "Reports & Analytics",
-        [this.currentProject.name, "Reports"],
-        `
+      "Reports & Analytics",
+      [this.currentProject.name, "Reports"],
+      `
         <button class="btn btn-secondary" onclick="window.app.openProjectForm('${p.id}')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -1552,7 +1580,7 @@ class KineticTerminal {
           Edit Project
         </button>
       `,
-      )}
+    )}
       <div class="reports-container">
         <!-- Project Context Section -->
         <div class="project-brand-section">
@@ -1683,9 +1711,8 @@ class KineticTerminal {
               <div class="settings-stat-label">Database Size</div>
             </div>
           </div>
-          ${
-            stats.lastBackup
-              ? `
+          ${stats.lastBackup
+        ? `
           <div class="settings-stat-card">
             <div class="settings-stat-icon" style="background: rgba(16,185,129,0.1); color: var(--success)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1695,8 +1722,8 @@ class KineticTerminal {
               <div class="settings-stat-label">Last Backup</div>
             </div>
           </div>`
-              : ""
-          }
+        : ""
+      }
         </div>
 
         <div class="settings-card">
@@ -1979,12 +2006,12 @@ class KineticTerminal {
         </button>
         <div class="dropdown-menu">
           ${options
-            .map(
-              (opt) => `
+        .map(
+          (opt) => `
             <a href="#" class="${opt.value === current ? "active" : ""}" data-sort-value="${opt.value}">${opt.label}</a>
           `,
-            )
-            .join("")}
+        )
+        .join("")}
         </div>
       </div>
     `;
@@ -2420,7 +2447,26 @@ class KineticTerminal {
     }
     this.transformSelects();
 
+    // Reset scroll on all scrollable containers inside the side-panel
+    const taskModal = document.getElementById("taskModal");
+    if (taskModal) {
+      taskModal.scrollTop = 0;
+      taskModal.querySelectorAll(".modal-content, .modal-body, form").forEach(
+        (el) => (el.scrollTop = 0),
+      );
+    }
+
     this.openModal("taskModal");
+
+    // Also reset after render in case layout shifts restore old position
+    setTimeout(() => {
+      if (taskModal) {
+        taskModal.scrollTop = 0;
+        taskModal.querySelectorAll(".modal-content, .modal-body, form").forEach(
+          (el) => (el.scrollTop = 0),
+        );
+      }
+    }, 50);
   }
 
   populatePeopleSelects(selectedAssignee = "", selectedReporter = "Me") {
@@ -2649,29 +2695,29 @@ class KineticTerminal {
     // Blockers rendering
     const blockers = task.dependency
       ? task.dependency
-          .split(",")
-          .map((id) => id.trim())
-          .filter((id) => id)
+        .split(",")
+        .map((id) => id.trim())
+        .filter((id) => id)
       : [];
     const blockersHTML =
       blockers.length > 0
         ? blockers
-            .map((bid) => {
-              const btask = storage.getTask(bid);
-              return `<div class="blocker-item clickable" data-blocker-id="${bid}">
+          .map((bid) => {
+            const btask = storage.getTask(bid);
+            return `<div class="blocker-item clickable" data-blocker-id="${bid}">
             <span class="blocker-id">${bid}</span>
             <span class="blocker-title">${btask ? this.escapeHtml(btask.title) : "Unknown Task"}</span>
           </div>`;
-            })
-            .join("")
+          })
+          .join("")
         : '<span class="sidebar-value">None</span>';
 
     return `
       <div class="issue-view">
         ${this.renderPageHeader(
-          task.id,
-          breadcrumbData,
-          `
+      task.id,
+      breadcrumbData,
+      `
           <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle">
               ${this.formatStatus(task.status)}
@@ -2702,7 +2748,7 @@ class KineticTerminal {
             Delete
           </button>
         `,
-        )}
+    )}
 
         <div class="issue-content">
           <div class="issue-main">
@@ -2777,16 +2823,15 @@ class KineticTerminal {
               <div class="sidebar-item">
                 <span class="sidebar-label">Labels</span>
                 <span class="sidebar-value">
-                  ${
-                    task.tags && task.tags.length > 0
-                      ? task.tags
-                          .map(
-                            (tag) =>
-                              `<span class="tag">${this.escapeHtml(tag)}</span>`,
-                          )
-                          .join("")
-                      : '<span style="color: var(--text-tertiary)">None</span>'
-                  }
+                  ${task.tags && task.tags.length > 0
+        ? task.tags
+          .map(
+            (tag) =>
+              `<span class="tag">${this.escapeHtml(tag)}</span>`,
+          )
+          .join("")
+        : '<span style="color: var(--text-tertiary)">None</span>'
+      }
                 </span>
               </div>
             </div>
@@ -3039,11 +3084,16 @@ class KineticTerminal {
 
     const data = storage.getData();
     const tasks = data.tasks || [];
+    const currentProjectId = this.currentProject?.id;
+
     const results = tasks.filter(
       (task) =>
-        task.title.toLowerCase().includes(query.toLowerCase()) ||
-        task.description.toLowerCase().includes(query.toLowerCase()) ||
-        task.id.toLowerCase().includes(query.toLowerCase()),
+        (!currentProjectId || task.projectId === currentProjectId) &&
+        (
+          task.title.toLowerCase().includes(query.toLowerCase()) ||
+          (task.description || "").toLowerCase().includes(query.toLowerCase()) ||
+          task.id.toLowerCase().includes(query.toLowerCase())
+        ),
     );
 
     this.renderSearchResults(results);
@@ -3073,6 +3123,12 @@ class KineticTerminal {
     searchResults.classList.add("active");
 
     // Add listeners to results
+    const closeSearch = () => {
+      searchResults.classList.remove("active");
+      searchResults.querySelectorAll(".search-result-highlighted").forEach((el) => el.classList.remove("search-result-highlighted"));
+      document.getElementById("globalSearch").value = "";
+    };
+
     searchResults.querySelectorAll(".search-result-item").forEach((item) => {
       item.addEventListener("click", () => {
         const taskId = item.dataset.taskId;
@@ -3087,8 +3143,7 @@ class KineticTerminal {
           this.openTaskDetails(taskId);
         }, 100);
 
-        searchResults.classList.remove("active");
-        document.getElementById("globalSearch").value = "";
+        closeSearch();
       });
     });
   }
@@ -3212,35 +3267,35 @@ class KineticTerminal {
       breadcrumbData.length > 0
         ? `<div class="breadcrumb">
           ${breadcrumbData
-            .map((item, index) => {
-              let isClickable = false;
-              let targetView = "";
-              let targetId = null;
+          .map((item, index) => {
+            let isClickable = false;
+            let targetView = "";
+            let targetId = null;
 
-              if (index === 0) {
-                // Project Name -> Overview
-                isClickable = true;
-                targetView = "overview";
-              } else if (index === 1 && breadcrumbData.length > 2) {
-                // View Name
-                isClickable = true;
-                targetView = this.previousView || "board";
-              } else if (index >= 2 && index < breadcrumbData.length - 1) {
-                // Middle items (could be nested tasks)
-                isClickable = true;
-                targetView = "issueDetail";
-                targetId = item;
-              }
+            if (index === 0) {
+              // Project Name -> Overview
+              isClickable = true;
+              targetView = "overview";
+            } else if (index === 1 && breadcrumbData.length > 2) {
+              // View Name
+              isClickable = true;
+              targetView = this.previousView || "board";
+            } else if (index >= 2 && index < breadcrumbData.length - 1) {
+              // Middle items (could be nested tasks)
+              isClickable = true;
+              targetView = "issueDetail";
+              targetId = item;
+            }
 
-              return `
+            return `
                   <span class="breadcrumb-item ${isClickable ? "clickable" : ""}"
                         ${isClickable ? `data-breadcrumb-view="${targetView}" ${targetId ? `data-breadcrumb-id="${targetId}"` : ""}` : ""}>
                     ${this.escapeHtml(item)}
                   </span>
                   ${index < breadcrumbData.length - 1 ? '<span class="breadcrumb-separator">/</span>' : ""}
                 `;
-            })
-            .join("")}
+          })
+          .join("")}
          </div>`
         : "";
 
@@ -3264,9 +3319,9 @@ class KineticTerminal {
     const people = storage.getPeople();
     return `
       ${this.renderPageHeader(
-        "People",
-        [this.currentProject ? this.currentProject.name : "Project", "People"],
-        `
+      "People",
+      [this.currentProject ? this.currentProject.name : "Project", "People"],
+      `
         <button class="btn btn-primary" onclick="window.app.openPersonForm()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
@@ -3274,7 +3329,7 @@ class KineticTerminal {
           Add Person
         </button>
       `,
-      )}
+    )}
       <div class="content-wrapper" style="padding:0">
         <div class="table-wrapper">
           <table class="issue-table">
@@ -3288,8 +3343,8 @@ class KineticTerminal {
             </thead>
             <tbody>
               ${people
-                .map(
-                  (person) => `
+        .map(
+          (person) => `
                 <tr data-person-id="${person.id}">
                   <td>
                     <div class="person-cell">
@@ -3315,8 +3370,8 @@ class KineticTerminal {
                   </td>
                 </tr>
               `,
-                )
-                .join("")}
+        )
+        .join("")}
             </tbody>
           </table>
         </div>
@@ -3457,8 +3512,8 @@ class KineticTerminal {
 
         <div class="shortcuts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; width: 100%; text-align: left;">
           ${shortcuts
-            .map(
-              (s) => `
+        .map(
+          (s) => `
             <div class="feature-card shortcut-card" style="opacity: 0; transform: translateY(20px); padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default); transition: all 0.3s ease-out; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
               <div style="color: ${s.color}; margin-bottom: 1.25rem;">
                 ${s.icon}
@@ -3469,8 +3524,8 @@ class KineticTerminal {
               <div class="shortcut-desc" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-top: 1rem;">${s.desc}</div>
             </div>
           `,
-            )
-            .join("")}
+        )
+        .join("")}
         </div>
       </div>
     `;

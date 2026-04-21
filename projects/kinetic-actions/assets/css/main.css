@@ -329,6 +329,12 @@ body {
   background: var(--bg-hover);
 }
 
+.search-result-item.search-result-highlighted {
+  background: rgba(var(--primary-rgb), 0.1);
+  border-left: 3px solid var(--primary);
+  padding-left: calc(var(--spacing-md) - 3px);
+}
+
 .search-result-header {
   display: flex;
   justify-content: space-between;
