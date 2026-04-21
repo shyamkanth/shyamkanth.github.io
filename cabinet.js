@@ -291,10 +291,10 @@
       action: () => _go("/blogs/"),
     },
     {
-      label: "Kinetic Terminal - Professional Task Management",
+      label: "Kinetic Actions - Professional Task Management",
       desc: "A powerful, minimalist project management tool featuring Kanban boards, backlogs, and Eisenhower matrices.",
       icon: "tactic",
-      action: () => _go("/projects/kinetic-terminal/"),
+      action: () => _go("/projects/kinetic-actions/"),
     },
     {
       label: "Lumina - Habit Tracker",

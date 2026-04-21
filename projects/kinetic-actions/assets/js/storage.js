@@ -32,9 +32,7 @@ class Storage {
         sortPreference: "updated-desc",
       },
       activityLog: [],
-      people: [
-        { id: "person-1", name: "Me", email: "me@example.com" }
-      ],
+      people: [{ id: "person-1", name: "Me", email: "me@example.com" }],
       metadata: {
         created: new Date().toISOString(),
         lastBackup: null,
@@ -54,13 +52,16 @@ class Storage {
       settings: {
         theme: oldData.settings?.theme || "dark",
         autoSaveInterval: oldData.settings?.autoSaveInterval || 30,
-        viewMode: oldData.settings?.viewMode === "kanban" ? "board" : (oldData.settings?.viewMode || "board"),
+        viewMode:
+          oldData.settings?.viewMode === "kanban"
+            ? "board"
+            : oldData.settings?.viewMode || "board",
         notifications: true,
         sortPreference: oldData.settings?.sortPreference || "updated-desc",
       },
       activityLog: oldData.activityLog || [],
       people: oldData.people || [
-        { id: "person-1", name: "Me", email: "me@example.com" }
+        { id: "person-1", name: "Me", email: "me@example.com" },
       ],
       metadata: {
         created: oldData.metadata?.created || new Date().toISOString(),
@@ -207,7 +208,7 @@ class Storage {
       "Task created",
       `Created task: ${task.id} - ${task.title}`,
       task.id,
-      task.projectId
+      task.projectId,
     );
     return task;
   }
@@ -251,10 +252,16 @@ class Storage {
         "Task status changed",
         `${task.id}: ${oldStatus} → ${updates.status}`,
         taskId,
-        task.projectId
+        task.projectId,
       );
     } else {
-      this.logActivity("update", "Task updated", `Updated task: ${task.id}`, taskId, task.projectId);
+      this.logActivity(
+        "update",
+        "Task updated",
+        `Updated task: ${task.id}`,
+        taskId,
+        task.projectId,
+      );
     }
     return task;
   }
@@ -283,7 +290,7 @@ class Storage {
       "Comment added",
       `Added comment to ${taskId}`,
       taskId,
-      task.projectId
+      task.projectId,
     );
     return comment;
   }
@@ -317,7 +324,7 @@ class Storage {
         "Task deleted",
         `Deleted task: ${taskId}`,
         taskId,
-        task.projectId
+        task.projectId,
       );
       return true;
     }
@@ -352,7 +359,11 @@ class Storage {
         updatedAt: new Date().toISOString(),
       });
       this.setData(data);
-      this.logActivity("update", "Person updated", `Updated person: ${person.name}`);
+      this.logActivity(
+        "update",
+        "Person updated",
+        `Updated person: ${person.name}`,
+      );
     }
     return person;
   }
@@ -363,7 +374,11 @@ class Storage {
     if (person) {
       data.people = data.people.filter((p) => p.id !== personId);
       this.setData(data);
-      this.logActivity("delete", "Person removed", `Removed person: ${person.name}`);
+      this.logActivity(
+        "delete",
+        "Person removed",
+        `Removed person: ${person.name}`,
+      );
     }
   }
 
@@ -395,11 +410,13 @@ class Storage {
   getActivityLog(limit = 100, projectId = null) {
     const data = this.getData();
     let logs = data?.activityLog || [];
-    
+
     if (projectId) {
-      logs = logs.filter(l => l.projectId === projectId || l.type === "system");
+      logs = logs.filter(
+        (l) => l.projectId === projectId || l.type === "system",
+      );
     }
-    
+
     return logs.slice(0, limit);
   }
 
@@ -442,7 +459,7 @@ class Storage {
 
     return {
       data: JSON.stringify(data, null, 2),
-      filename: `kinetic-terminal-backup-${this.formatDateForFilename()}.json`,
+      filename: `kinetic-actions-backup-${this.formatDateForFilename()}.json`,
     };
   }
 
@@ -578,7 +595,9 @@ class Storage {
 
       // Merge people
       importedData.people?.forEach((person) => {
-        const exists = currentData.people.find((p) => p.email === person.email && p.name === person.name);
+        const exists = currentData.people.find(
+          (p) => p.email === person.email && p.name === person.name,
+        );
         if (!exists) {
           currentData.people.push(person);
         }
@@ -684,7 +703,8 @@ class Storage {
 
     const totalTasks = tasks.length;
     const doneTasks = tasks.filter((t) => t.status === "done").length;
-    const completionRate = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+    const completionRate =
+      totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
 
     return {
       totalProjects: data.projects.length,
@@ -710,13 +730,13 @@ class Storage {
         story: tasks.filter((t) => t.type === "story").length,
         subtask: tasks.filter((t) => t.type === "subtask").length,
       },
-      recentActivityCount: tasks.filter(t => {
+      recentActivityCount: tasks.filter((t) => {
         const fiveDaysAgo = new Date();
         fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
         return new Date(t.updatedAt) > fiveDaysAgo;
       }).length,
       databaseSize: JSON.stringify(data).length,
-      lastBackup: data.metadata?.lastExport
+      lastBackup: data.metadata?.lastExport,
     };
   }
 }

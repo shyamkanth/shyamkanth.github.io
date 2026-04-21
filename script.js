@@ -101,13 +101,13 @@ const industrialProjects = [
 
 const personalProjects = [
   {
-    name: "Kinetic Terminal - Project Management",
+    name: "Kinetic Actions - Project Management",
     role: "Web Developer",
     duration: "25 Days",
     tags: ["HTML", "CSS", "JavaScript", "PWA"],
     description:
       "A high-velocity, terminal-inspired project management suite. Features Kanban boards, Eisenhower matrices, and sprint tracking with a local-first architecture. Designed for power users who value speed and data privacy.",
-    link: "/projects/kinetic-terminal/",
+    link: "/projects/kinetic-actions/",
     image:
       "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=800&h=400&fit=crop",
   },

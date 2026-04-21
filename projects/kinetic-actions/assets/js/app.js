@@ -7,25 +7,40 @@ class KineticTerminal {
     this.taskDescEditor = null;
     this.commentEditor = null;
     this.issuesViewType = "table";
-    this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
+    this.filters = {
+      status: "all",
+      priority: "all",
+      assignee: "all",
+      reporter: "all",
+    };
     this.breadcrumbStack = [];
     const allCols = ["todo", "in-progress", "in-review", "done"];
-    const saved = (() => { try { return JSON.parse(localStorage.getItem("boardVisibleColumns")); } catch { return null; } })();
-    this.boardVisibleColumns = (Array.isArray(saved) && saved.length > 0) ? saved : [...allCols];
+    const saved = (() => {
+      try {
+        return JSON.parse(localStorage.getItem("boardVisibleColumns"));
+      } catch {
+        return null;
+      }
+    })();
+    this.boardVisibleColumns =
+      Array.isArray(saved) && saved.length > 0 ? saved : [...allCols];
     this.init();
   }
 
   init() {
-
     console.log("app.js init");
 
     // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(err => console.log('Service Worker registration failed:', err));
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("./sw.js")
+        .catch((err) =>
+          console.log("Service Worker registration failed:", err),
+        );
     }
 
     // Capture PWA install prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault();
       window.deferredPrompt = e;
     });
@@ -97,13 +112,17 @@ class KineticTerminal {
     });
 
     // Project switching
-    document.getElementById("switchProjectBtn")?.addEventListener("click", () => {
-      this.openProjectsModal();
-    });
+    document
+      .getElementById("switchProjectBtn")
+      ?.addEventListener("click", () => {
+        this.openProjectsModal();
+      });
 
-    document.getElementById("switchProjectFooterBtn")?.addEventListener("click", () => {
-      this.openProjectsModal();
-    });
+    document
+      .getElementById("switchProjectFooterBtn")
+      ?.addEventListener("click", () => {
+        this.openProjectsModal();
+      });
 
     // Settings
     document.getElementById("settingsBtn")?.addEventListener("click", () => {
@@ -111,14 +130,20 @@ class KineticTerminal {
     });
 
     // Create project
-    document.getElementById("createNewProjectBtn")?.addEventListener("click", () => {
-      this.openProjectForm();
-    });
+    document
+      .getElementById("createNewProjectBtn")
+      ?.addEventListener("click", () => {
+        this.openProjectForm();
+      });
 
     // Form submissions
-    this.projectForm?.addEventListener("submit", (e) => this.handleProjectSubmit(e));
+    this.projectForm?.addEventListener("submit", (e) =>
+      this.handleProjectSubmit(e),
+    );
     this.taskForm?.addEventListener("submit", (e) => this.handleTaskSubmit(e));
-    this.personForm?.addEventListener("submit", (e) => this.handlePersonSubmit(e));
+    this.personForm?.addEventListener("submit", (e) =>
+      this.handlePersonSubmit(e),
+    );
 
     // Modal closing
     document.querySelectorAll(".btn-close").forEach((btn) => {
@@ -149,42 +174,54 @@ class KineticTerminal {
     });
 
     // Keyboard shortcuts
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        this.closeAllModals();
-      }
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (e.key === "Escape") {
+          this.closeAllModals();
+        }
 
-      const isTyping = ["INPUT", "TEXTAREA"].includes(document.activeElement.tagName);
+        const isTyping = ["INPUT", "TEXTAREA"].includes(
+          document.activeElement.tagName,
+        );
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        e.stopPropagation();
-        document.getElementById("globalSearch")?.focus();
-      }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+          e.preventDefault();
+          e.stopPropagation();
+          document.getElementById("globalSearch")?.focus();
+        }
 
-      if (e.altKey && e.key.toLowerCase() === "n") {
-        e.preventDefault();
-        e.stopPropagation();
-        this.openTaskForm();
-      }
+        if (e.altKey && e.key.toLowerCase() === "n") {
+          e.preventDefault();
+          e.stopPropagation();
+          this.openTaskForm();
+        }
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
-        e.preventDefault();
-        e.stopPropagation();
-        this.openProjectForm();
-      }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+          e.preventDefault();
+          e.stopPropagation();
+          this.openProjectForm();
+        }
 
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
-        e.preventDefault();
-        e.stopPropagation();
-        this.openProjectsModal();
-      }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "b") {
+          e.preventDefault();
+          e.stopPropagation();
+          this.openProjectsModal();
+        }
 
-      if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && !isTyping) {
-        const views = { "1": "board", "2": "backlog", "3": "timeline", "4": "issues", "5": "reports" };
-        if (views[e.key]) this.switchView(views[e.key]);
-      }
-    }, true);
+        if (!e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey && !isTyping) {
+          const views = {
+            1: "board",
+            2: "backlog",
+            3: "timeline",
+            4: "issues",
+            5: "reports",
+          };
+          if (views[e.key]) this.switchView(views[e.key]);
+        }
+      },
+      true,
+    );
 
     // Global click listener for delegation and UI management
     document.addEventListener("click", (e) => {
@@ -258,7 +295,8 @@ class KineticTerminal {
       }
 
       // 7. Project selection
-      const projectTarget = e.target.closest(".project-card") || e.target.closest(".project-item");
+      const projectTarget =
+        e.target.closest(".project-card") || e.target.closest(".project-item");
       if (projectTarget) {
         const projectId = projectTarget.dataset.projectId;
         this.selectProject(projectId);
@@ -266,15 +304,26 @@ class KineticTerminal {
       }
 
       // 8. Task click (Board or Issues)
-      const taskTarget = e.target.closest(".kanban-card, .issue-card, .issue-table tbody tr[data-task-id]");
-      if (taskTarget && !e.target.closest("button") && !e.target.closest("a") && !e.target.closest(".dropdown")) {
+      const taskTarget = e.target.closest(
+        ".kanban-card, .issue-card, .issue-table tbody tr[data-task-id]",
+      );
+      if (
+        taskTarget &&
+        !e.target.closest("button") &&
+        !e.target.closest("a") &&
+        !e.target.closest(".dropdown")
+      ) {
         const taskId = taskTarget.dataset.taskId;
         this.openTaskDetails(taskId);
         return;
       }
 
       // 9. Generic Create Task buttons
-      if (e.target.closest(".kanban-add-btn") || e.target.id === "createTaskBtn" || e.target.closest("#createTaskBtn")) {
+      if (
+        e.target.closest(".kanban-add-btn") ||
+        e.target.id === "createTaskBtn" ||
+        e.target.closest("#createTaskBtn")
+      ) {
         this.openTaskForm();
         return;
       }
@@ -284,7 +333,10 @@ class KineticTerminal {
         this.editCurrentTask();
         return;
       }
-      if (e.target.id === "deleteTaskBtn" || e.target.closest("#deleteTaskBtn")) {
+      if (
+        e.target.id === "deleteTaskBtn" ||
+        e.target.closest("#deleteTaskBtn")
+      ) {
         this.deleteCurrentTask();
         return;
       }
@@ -427,7 +479,9 @@ class KineticTerminal {
     if (renderFn) {
       this.contentArea.innerHTML = renderFn();
       // Scroll the parent scrollable container (not contentArea itself)
-      const scroller = this.contentArea.closest(".main-container") || this.contentArea.parentElement;
+      const scroller =
+        this.contentArea.closest(".main-container") ||
+        this.contentArea.parentElement;
       if (scroller) scroller.scrollTop = 0;
       this.setupDynamicEventListeners();
       this.transformSelects();
@@ -435,166 +489,188 @@ class KineticTerminal {
   }
 
   transformSelects() {
-    document.querySelectorAll(".custom-select, .filter-select").forEach((select) => {
-      // Don't transform if already transformed
-      if (select.nextElementSibling && select.nextElementSibling.classList.contains("custom-dropdown-wrapper")) {
-        const wrapper = select.nextElementSibling;
-        const buttonText = wrapper.querySelector("button span");
+    document
+      .querySelectorAll(".custom-select, .filter-select")
+      .forEach((select) => {
+        // Don't transform if already transformed
+        if (
+          select.nextElementSibling &&
+          select.nextElementSibling.classList.contains(
+            "custom-dropdown-wrapper",
+          )
+        ) {
+          const wrapper = select.nextElementSibling;
+          const buttonText = wrapper.querySelector("button span");
 
-        // Helper to get display text
+          // Helper to get display text
+          const getDisplayText = () => {
+            if (select.multiple) {
+              const selected = Array.from(select.selectedOptions);
+              if (selected.length === 0)
+                return select.dataset.placeholder || "Select...";
+              if (selected.length === 1) return selected[0].text;
+              return `${selected.length} selected`;
+            }
+            return (
+              select.options[select.selectedIndex]?.text ||
+              select.dataset.placeholder ||
+              "Select..."
+            );
+          };
+
+          if (buttonText) buttonText.textContent = getDisplayText();
+
+          // Update active class in menu
+          const menu = wrapper.querySelector(".dropdown-menu");
+          if (menu) {
+            const selectedValues = select.multiple
+              ? Array.from(select.selectedOptions).map((o) => o.value)
+              : [select.value];
+            menu.querySelectorAll("a").forEach((a) => {
+              const val = a.dataset.value;
+              a.classList.toggle("active", selectedValues.includes(val));
+            });
+          }
+
+          if (select.classList.contains("searchable-select")) {
+            this.refreshSearchableSelect(select);
+          }
+          return;
+        }
+
+        const isSearchable = select.classList.contains("searchable-select");
+        const isMultiple = select.multiple;
+
+        select.style.display = "none";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = `dropdown custom-dropdown-wrapper ${isSearchable ? "searchable-dropdown" : ""}`;
+        if (select.classList.contains("filter-select")) {
+          wrapper.style.minWidth = "150px";
+        } else {
+          wrapper.style.width = "100%";
+        }
+
+        const button = document.createElement("button");
+        button.className = "btn btn-secondary dropdown-toggle w-100";
+        button.style.justifyContent = "space-between";
+        button.style.width = "100%";
+        button.type = "button";
+
         const getDisplayText = () => {
-          if (select.multiple) {
+          if (isMultiple) {
             const selected = Array.from(select.selectedOptions);
-            if (selected.length === 0) return select.dataset.placeholder || "Select...";
+            if (selected.length === 0)
+              return select.dataset.placeholder || "Select...";
             if (selected.length === 1) return selected[0].text;
             return `${selected.length} selected`;
           }
-          return select.options[select.selectedIndex]?.text || select.dataset.placeholder || "Select...";
+          return (
+            select.options[select.selectedIndex]?.text ||
+            select.dataset.placeholder ||
+            "Select..."
+          );
         };
 
-        if (buttonText) buttonText.textContent = getDisplayText();
-
-        // Update active class in menu
-        const menu = wrapper.querySelector(".dropdown-menu");
-        if (menu) {
-          const selectedValues = select.multiple ? Array.from(select.selectedOptions).map(o => o.value) : [select.value];
-          menu.querySelectorAll("a").forEach(a => {
-            const val = a.dataset.value;
-            a.classList.toggle("active", selectedValues.includes(val));
-          });
-        }
-
-        if (select.classList.contains("searchable-select")) {
-          this.refreshSearchableSelect(select);
-        }
-        return;
-      }
-
-      const isSearchable = select.classList.contains("searchable-select");
-      const isMultiple = select.multiple;
-
-      select.style.display = "none";
-
-      const wrapper = document.createElement("div");
-      wrapper.className = `dropdown custom-dropdown-wrapper ${isSearchable ? "searchable-dropdown" : ""}`;
-      if (select.classList.contains("filter-select")) {
-        wrapper.style.minWidth = "150px";
-      } else {
-        wrapper.style.width = "100%";
-      }
-
-      const button = document.createElement("button");
-      button.className = "btn btn-secondary dropdown-toggle w-100";
-      button.style.justifyContent = "space-between";
-      button.style.width = "100%";
-      button.type = "button";
-
-      const getDisplayText = () => {
-        if (isMultiple) {
-          const selected = Array.from(select.selectedOptions);
-          if (selected.length === 0) return select.dataset.placeholder || "Select...";
-          if (selected.length === 1) return selected[0].text;
-          return `${selected.length} selected`;
-        }
-        return select.options[select.selectedIndex]?.text || select.dataset.placeholder || "Select...";
-      };
-
-      button.innerHTML = `<span>${getDisplayText()}</span>
+        button.innerHTML = `<span>${getDisplayText()}</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-left: 8px;">
           <polyline points="6 9 12 15 18 9"/>
         </svg>`;
 
-      const menu = document.createElement("div");
-      menu.className = "dropdown-menu";
-      menu.style.width = "100%";
+        const menu = document.createElement("div");
+        menu.className = "dropdown-menu";
+        menu.style.width = "100%";
 
-      if (isSearchable) {
-        const searchInput = document.createElement("input");
-        searchInput.type = "text";
-        searchInput.className = "dropdown-search-input";
-        searchInput.placeholder = "Search...";
-        searchInput.style.width = "calc(100% - 16px)";
-        searchInput.style.margin = "8px";
-        searchInput.style.padding = "8px";
-        searchInput.style.background = "var(--bg-secondary)";
-        searchInput.style.border = "1px solid var(--border-default)";
-        searchInput.style.borderRadius = "var(--radius-sm)";
-        searchInput.style.color = "var(--text-primary)";
+        if (isSearchable) {
+          const searchInput = document.createElement("input");
+          searchInput.type = "text";
+          searchInput.className = "dropdown-search-input";
+          searchInput.placeholder = "Search...";
+          searchInput.style.width = "calc(100% - 16px)";
+          searchInput.style.margin = "8px";
+          searchInput.style.padding = "8px";
+          searchInput.style.background = "var(--bg-secondary)";
+          searchInput.style.border = "1px solid var(--border-default)";
+          searchInput.style.borderRadius = "var(--radius-sm)";
+          searchInput.style.color = "var(--text-primary)";
 
-        searchInput.addEventListener("input", (e) => {
-          const val = e.target.value.toLowerCase();
-          menu.querySelectorAll("a").forEach(a => {
-            const text = a.textContent.toLowerCase();
-            a.style.display = text.includes(val) ? "block" : "none";
+          searchInput.addEventListener("input", (e) => {
+            const val = e.target.value.toLowerCase();
+            menu.querySelectorAll("a").forEach((a) => {
+              const text = a.textContent.toLowerCase();
+              a.style.display = text.includes(val) ? "block" : "none";
+            });
           });
-        });
 
-        menu.appendChild(searchInput);
-      }
-
-      const optionsContainer = document.createElement("div");
-      optionsContainer.className = "dropdown-options-container";
-      optionsContainer.style.maxHeight = "250px";
-      optionsContainer.style.overflowY = "auto";
-
-      const renderOptions = () => {
-        optionsContainer.innerHTML = "";
-        Array.from(select.options).forEach((option) => {
-          const a = document.createElement("a");
-          a.href = "#";
-          a.dataset.value = option.value;
-          a.className = option.selected ? "selected" : "";
-          a.textContent = option.text;
-          a.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (isMultiple) {
-              option.selected = !option.selected;
-              a.classList.toggle("selected");
-              button.querySelector("span").textContent = getDisplayText();
-            } else {
-              select.value = option.value;
-              button.querySelector("span").textContent = option.text;
-              menu.classList.remove("show");
-            }
-            select.dispatchEvent(new Event("change"));
-          });
-          optionsContainer.appendChild(a);
-        });
-      };
-
-      renderOptions();
-      menu.appendChild(optionsContainer);
-
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        // Close others
-        document.querySelectorAll(".dropdown-menu.show").forEach(m => {
-          if (m !== menu) m.classList.remove("show");
-        });
-        menu.classList.toggle("show");
-        if (isSearchable && menu.classList.contains("show")) {
-          setTimeout(() => menu.querySelector("input")?.focus(), 10);
+          menu.appendChild(searchInput);
         }
+
+        const optionsContainer = document.createElement("div");
+        optionsContainer.className = "dropdown-options-container";
+        optionsContainer.style.maxHeight = "250px";
+        optionsContainer.style.overflowY = "auto";
+
+        const renderOptions = () => {
+          optionsContainer.innerHTML = "";
+          Array.from(select.options).forEach((option) => {
+            const a = document.createElement("a");
+            a.href = "#";
+            a.dataset.value = option.value;
+            a.className = option.selected ? "selected" : "";
+            a.textContent = option.text;
+            a.addEventListener("click", (e) => {
+              e.preventDefault();
+              if (isMultiple) {
+                option.selected = !option.selected;
+                a.classList.toggle("selected");
+                button.querySelector("span").textContent = getDisplayText();
+              } else {
+                select.value = option.value;
+                button.querySelector("span").textContent = option.text;
+                menu.classList.remove("show");
+              }
+              select.dispatchEvent(new Event("change"));
+            });
+            optionsContainer.appendChild(a);
+          });
+        };
+
+        renderOptions();
+        menu.appendChild(optionsContainer);
+
+        button.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Close others
+          document.querySelectorAll(".dropdown-menu.show").forEach((m) => {
+            if (m !== menu) m.classList.remove("show");
+          });
+          menu.classList.toggle("show");
+          if (isSearchable && menu.classList.contains("show")) {
+            setTimeout(() => menu.querySelector("input")?.focus(), 10);
+          }
+        });
+
+        wrapper.appendChild(button);
+        wrapper.appendChild(menu);
+
+        select.parentNode.insertBefore(wrapper, select.nextSibling);
       });
-
-      wrapper.appendChild(button);
-      wrapper.appendChild(menu);
-
-      select.parentNode.insertBefore(wrapper, select.nextSibling);
-    });
   }
 
   syncCustomSelects() {
-    document.querySelectorAll(".custom-select, .filter-select").forEach((select) => {
-      const wrapper = select.nextElementSibling;
-      if (wrapper && wrapper.classList.contains("custom-dropdown-wrapper")) {
-        const buttonText = wrapper.querySelector("button span");
-        if (buttonText) {
-          buttonText.textContent = select.options[select.selectedIndex]?.text || "";
+    document
+      .querySelectorAll(".custom-select, .filter-select")
+      .forEach((select) => {
+        const wrapper = select.nextElementSibling;
+        if (wrapper && wrapper.classList.contains("custom-dropdown-wrapper")) {
+          const buttonText = wrapper.querySelector("button span");
+          if (buttonText) {
+            buttonText.textContent =
+              select.options[select.selectedIndex]?.text || "";
+          }
         }
-      }
-    });
+      });
   }
 
   renderBoard() {
@@ -609,7 +685,9 @@ class KineticTerminal {
       { key: "in-review", label: "In Review" },
       { key: "done", label: "Done" },
     ];
-    const visibleStatuses = allStatuses.filter(s => this.boardVisibleColumns.includes(s.key));
+    const visibleStatuses = allStatuses.filter((s) =>
+      this.boardVisibleColumns.includes(s.key),
+    );
 
     const manageViewsDropdown = `
       <div class="dropdown" id="manageViewsDropdown">
@@ -620,21 +698,26 @@ class KineticTerminal {
           Manage Views
         </button>
         <div class="dropdown-menu manage-views-menu" style="min-width:200px; padding: 0.75rem 0;">
-          ${allStatuses.map(s => {
-      const checked = this.boardVisibleColumns.includes(s.key);
-      const disabled = checked && this.boardVisibleColumns.length === 1;
-      return `<label class="manage-views-item${disabled ? " disabled" : ""}">
+          ${allStatuses
+            .map((s) => {
+              const checked = this.boardVisibleColumns.includes(s.key);
+              const disabled = checked && this.boardVisibleColumns.length === 1;
+              return `<label class="manage-views-item${disabled ? " disabled" : ""}">
               <input type="checkbox" ${checked ? "checked" : ""} ${disabled ? "disabled" : ""}
                 data-col-key="${s.key}" onchange="window.app.toggleBoardColumn('${s.key}', this.checked)">
               <span>${s.label}</span>
             </label>`;
-    }).join("")}
+            })
+            .join("")}
         </div>
       </div>`;
 
-    if (tasks.filter(t => t.status !== 'backlog').length === 0) {
+    if (tasks.filter((t) => t.status !== "backlog").length === 0) {
       return `
-        ${this.renderPageHeader(this.currentProject.name, [this.currentProject.name, "Board"], `
+        ${this.renderPageHeader(
+          this.currentProject.name,
+          [this.currentProject.name, "Board"],
+          `
            ${manageViewsDropdown}
            ${this.renderSortDropdown()}
            <button class="btn btn-primary" id="createTaskBtn">
@@ -644,7 +727,8 @@ class KineticTerminal {
             </svg>
             Create Issue
           </button>
-        `)}
+        `,
+        )}
         <div class="content-centered">
           ${this.renderEmptyState("No Issues found", "Start adding by clicking button above or ALT+N")}
         </div>
@@ -686,9 +770,9 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-      this.currentProject.name,
-      [this.currentProject.name, "Board"],
-      `
+        this.currentProject.name,
+        [this.currentProject.name, "Board"],
+        `
         ${manageViewsDropdown}
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
@@ -697,8 +781,8 @@ class KineticTerminal {
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
-        </button>`
-    )}
+        </button>`,
+      )}
       <div class="kanban-board" id="kanbanBoard" style="grid-template-columns: repeat(${visibleStatuses.length}, 1fr);">
         ${columnsHTML}
       </div>
@@ -709,25 +793,26 @@ class KineticTerminal {
     if (!this.currentProject) return this.renderNoProject();
 
     const tasks = storage.getTasks(this.currentProject.id);
-    const getTasksByPriority = (priority) => tasks.filter(t => t.priority === priority && t.status !== 'done');
+    const getTasksByPriority = (priority) =>
+      tasks.filter((t) => t.priority === priority && t.status !== "done");
 
-    const doTasks = getTasksByPriority('critical');
-    const scheduleTasks = getTasksByPriority('high');
-    const delegateTasks = getTasksByPriority('medium');
-    const eliminateTasks = getTasksByPriority('low');
+    const doTasks = getTasksByPriority("critical");
+    const scheduleTasks = getTasksByPriority("high");
+    const delegateTasks = getTasksByPriority("medium");
+    const eliminateTasks = getTasksByPriority("low");
 
     return `
       ${this.renderPageHeader(
-      "Prioritization Matrix",
-      [this.currentProject.name, "Matrix"],
-      `<button class="btn btn-primary" id="createTaskBtn">
+        "Prioritization Matrix",
+        [this.currentProject.name, "Matrix"],
+        `<button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
-        </button>`
-    )}
+        </button>`,
+      )}
       <div style="max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl); width: 100%;">
         <div class="matrix-grid">
           <div class="matrix-quadrant do-quadrant">
@@ -736,7 +821,7 @@ class KineticTerminal {
                 <span class="quadrant-subtitle">Urgent & Important (Critical Tasks)</span>
              </div>
              <div class="quadrant-tasks">
-                ${doTasks.length > 0 ? doTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to do immediately</div>'}
+                ${doTasks.length > 0 ? doTasks.map((t) => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to do immediately</div>'}
              </div>
           </div>
           <div class="matrix-quadrant schedule-quadrant">
@@ -745,7 +830,7 @@ class KineticTerminal {
                 <span class="quadrant-subtitle">Not Urgent & Important (High Priority)</span>
              </div>
              <div class="quadrant-tasks">
-                ${scheduleTasks.length > 0 ? scheduleTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to schedule</div>'}
+                ${scheduleTasks.length > 0 ? scheduleTasks.map((t) => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to schedule</div>'}
              </div>
           </div>
           <div class="matrix-quadrant delegate-quadrant">
@@ -754,7 +839,7 @@ class KineticTerminal {
                 <span class="quadrant-subtitle">Urgent & Not Important (Medium Priority)</span>
              </div>
              <div class="quadrant-tasks">
-                ${delegateTasks.length > 0 ? delegateTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to delegate</div>'}
+                ${delegateTasks.length > 0 ? delegateTasks.map((t) => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to delegate</div>'}
              </div>
           </div>
           <div class="matrix-quadrant eliminate-quadrant">
@@ -763,7 +848,7 @@ class KineticTerminal {
                 <span class="quadrant-subtitle">Not Urgent & Not Important (Low Priority)</span>
              </div>
              <div class="quadrant-tasks">
-                ${eliminateTasks.length > 0 ? eliminateTasks.map(t => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to eliminate</div>'}
+                ${eliminateTasks.length > 0 ? eliminateTasks.map((t) => this.renderMinimalCard(t)).join("") : '<div class="empty-quadrant">No tasks to eliminate</div>'}
              </div>
           </div>
         </div>
@@ -790,9 +875,14 @@ class KineticTerminal {
       }
     } else {
       if (this.boardVisibleColumns.length <= 1) return; // can't remove last
-      this.boardVisibleColumns = this.boardVisibleColumns.filter(k => k !== key);
+      this.boardVisibleColumns = this.boardVisibleColumns.filter(
+        (k) => k !== key,
+      );
     }
-    localStorage.setItem("boardVisibleColumns", JSON.stringify(this.boardVisibleColumns));
+    localStorage.setItem(
+      "boardVisibleColumns",
+      JSON.stringify(this.boardVisibleColumns),
+    );
     this.renderCurrentView();
   }
 
@@ -863,7 +953,10 @@ class KineticTerminal {
           storage.updateTask(taskId, { status: targetStatus });
           this.updateSidebarProject();
           this.renderCurrentView();
-          this.showNotification(`Moved to ${targetStatus.replace(/-/g, " ")}`, "success");
+          this.showNotification(
+            `Moved to ${targetStatus.replace(/-/g, " ")}`,
+            "success",
+          );
         }
         column.classList.remove("drag-over");
       });
@@ -889,19 +982,20 @@ class KineticTerminal {
         <div class="card-footer">
           <div class="card-meta">
             <span class="priority-badge ${task.priority}">${task.priority}</span>
-            ${task.tags.length > 0
-        ? `
+            ${
+              task.tags.length > 0
+                ? `
               <div class="tags">
                 ${task.tags
-          .slice(0, 2)
-          .map(
-            (tag) => `<span class="tag">${this.escapeHtml(tag)}</span>`,
-          )
-          .join("")}
+                  .slice(0, 2)
+                  .map(
+                    (tag) => `<span class="tag">${this.escapeHtml(tag)}</span>`,
+                  )
+                  .join("")}
               </div>
             `
-        : ""
-      }
+                : ""
+            }
           </div>
           ${task.assignee ? `<div class="card-assignee" title="${this.escapeHtml(task.assignee)}">${task.assignee.charAt(0).toUpperCase()}</div>` : ""}
         </div>
@@ -914,11 +1008,18 @@ class KineticTerminal {
       return this.renderNoProject();
     }
 
-    const tasks = this.sortTasks(storage.getTasks(this.currentProject.id).filter((t) => t.status === "backlog"));
+    const tasks = this.sortTasks(
+      storage
+        .getTasks(this.currentProject.id)
+        .filter((t) => t.status === "backlog"),
+    );
 
     if (tasks.length === 0) {
       return `
-        ${this.renderPageHeader(this.currentProject.name, [this.currentProject.name, "Backlog"], `
+        ${this.renderPageHeader(
+          this.currentProject.name,
+          [this.currentProject.name, "Backlog"],
+          `
           ${this.renderSortDropdown()}
           <button class="btn btn-primary" id="createTaskBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -927,7 +1028,8 @@ class KineticTerminal {
             </svg>
             Create Issue
           </button>
-        `)}
+        `,
+        )}
         <div class="content-centered">
           ${this.renderEmptyState("No Backlogs yet", "You will see here if there is any kind of that")}
         </div>
@@ -936,16 +1038,16 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-      "Backlog",
-      [this.currentProject.name, "Backlog"],
-      `<button class="btn btn-primary" id="createTaskBtn">
+        "Backlog",
+        [this.currentProject.name, "Backlog"],
+        `<button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
-        </button>`
-    )}
+        </button>`,
+      )}
       <div class="table-view full-width">
         ${this.renderTaskTable(tasks)}
       </div>
@@ -964,7 +1066,10 @@ class KineticTerminal {
     // If project is completely empty (no tasks at all)
     if (allTasks.length === 0) {
       return `
-        ${this.renderPageHeader(this.currentProject.name, [this.currentProject.name, "Issues"], `
+        ${this.renderPageHeader(
+          this.currentProject.name,
+          [this.currentProject.name, "Issues"],
+          `
           ${this.renderSortDropdown()}
           <button class="btn btn-primary" id="createTaskBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -973,7 +1078,8 @@ class KineticTerminal {
             </svg>
             Create Issue
           </button>
-        `)}
+        `,
+        )}
         <div class="content-centered">
           ${this.renderEmptyState("No Issues found", "Start adding by clicking button above or ALT+N")}
         </div>
@@ -983,9 +1089,9 @@ class KineticTerminal {
     // Normal view with filters (even if filtered result is empty)
     return `
       ${this.renderPageHeader(
-      "All Issues",
-      [this.currentProject.name, "Issues"],
-      `
+        "All Issues",
+        [this.currentProject.name, "Issues"],
+        `
         ${this.renderSortDropdown()}
         <button class="btn btn-primary" id="createTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -993,8 +1099,8 @@ class KineticTerminal {
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Create Issue
-        </button>`
-    )}
+        </button>`,
+      )}
       <div class="filters-bar">
         <div class="filter-group">
           <span class="filter-label">Status:</span>
@@ -1021,18 +1127,28 @@ class KineticTerminal {
           <span class="filter-label">Assignee:</span>
           <select class="filter-select" id="assigneeFilter" onchange="app.applyFilters()">
             <option value="all" ${this.filters.assignee === "all" ? "selected" : ""}>All Assignees</option>
-            ${storage.getPeople().map(p => `
+            ${storage
+              .getPeople()
+              .map(
+                (p) => `
               <option value="${p.name}" ${this.filters.assignee === p.name ? "selected" : ""}>${p.name}</option>
-            `).join("")}
+            `,
+              )
+              .join("")}
           </select>
         </div>
         <div class="filter-group">
           <span class="filter-label">Reporter:</span>
           <select class="filter-select" id="reporterFilter" onchange="app.applyFilters()">
             <option value="all" ${this.filters.reporter === "all" ? "selected" : ""}>All Reporters</option>
-            ${storage.getPeople().map(p => `
+            ${storage
+              .getPeople()
+              .map(
+                (p) => `
               <option value="${p.name}" ${this.filters.reporter === p.name ? "selected" : ""}>${p.name}</option>
-            `).join("")}
+            `,
+              )
+              .join("")}
           </select>
         </div>
         <div class="view-toggle">
@@ -1041,12 +1157,16 @@ class KineticTerminal {
         </div>
       </div>
       <div class="issues-view-container">
-        ${tasks.length === 0
-        ? `<div class="text-center" style="padding: 4rem;">
+        ${
+          tasks.length === 0
+            ? `<div class="text-center" style="padding: 4rem;">
                <h3 style="color: var(--text-secondary);">No issues found matching filters</h3>
                <button class="btn btn-secondary mt-lg" onclick="window.app.clearFilters()">Clear Filters</button>
              </div>`
-        : (isTable ? this.renderTaskTable(tasks) : this.renderTaskCards(tasks))}
+            : isTable
+              ? this.renderTaskTable(tasks)
+              : this.renderTaskCards(tasks)
+        }
       </div>
     `;
   }
@@ -1073,8 +1193,8 @@ class KineticTerminal {
     return `
       <div class="issues-grid">
         ${tasks
-        .map(
-          (task) => `
+          .map(
+            (task) => `
           <div class="issue-card" data-task-id="${task.id}">
             <div class="issue-card-header">
               <div class="issue-card-identity">
@@ -1095,8 +1215,8 @@ class KineticTerminal {
             </div>
           </div>
         `,
-        )
-        .join("")}
+          )
+          .join("")}
       </div>
     `;
   }
@@ -1112,7 +1232,12 @@ class KineticTerminal {
   }
 
   clearFilters() {
-    this.filters = { status: "all", priority: "all", assignee: "all", reporter: "all" };
+    this.filters = {
+      status: "all",
+      priority: "all",
+      assignee: "all",
+      reporter: "all",
+    };
     this.renderCurrentView();
   }
 
@@ -1133,8 +1258,8 @@ class KineticTerminal {
           </thead>
           <tbody>
             ${tasks
-        .map(
-          (task) => `
+              .map(
+                (task) => `
               <tr data-task-id="${task.id}">
                 <td>${this.escapeHtml(task.id)}</td>
                 <td style="font-weight: 600;">${this.escapeHtml(task.title)}</td>
@@ -1145,8 +1270,8 @@ class KineticTerminal {
                 <td>${new Date(task.createdAt).toLocaleDateString()}</td>
               </tr>
             `,
-        )
-        .join("")}
+              )
+              .join("")}
           </tbody>
         </table>
       </div>
@@ -1156,27 +1281,31 @@ class KineticTerminal {
     if (!this.currentProject) return this.renderNoProject();
 
     const tasks = storage.getTasks(this.currentProject.id);
-    const tasksWithDueDate = tasks.filter(t => t.dueDate).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    const tasksWithDueDate = tasks
+      .filter((t) => t.dueDate)
+      .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
     // Calculate Velocity (tasks created per day for last 7 days)
     const last7Days = [...Array(7)].map((_, i) => {
       const d = new Date();
       d.setDate(d.getDate() - (6 - i));
-      return d.toISOString().split('T')[0];
+      return d.toISOString().split("T")[0];
     });
 
-    const velocityCounts = last7Days.map(date => {
-      return tasks.filter(t => t.createdAt.startsWith(date)).length;
+    const velocityCounts = last7Days.map((date) => {
+      return tasks.filter((t) => t.createdAt.startsWith(date)).length;
     });
 
     const maxCount = Math.max(...velocityCounts, 1);
     const chartWidth = 1000;
     const chartHeight = 120;
-    const points = velocityCounts.map((count, i) => {
-      const x = (i / (velocityCounts.length - 1)) * chartWidth;
-      const y = chartHeight - (count / maxCount) * chartHeight;
-      return `${x},${y}`;
-    }).join(' ');
+    const points = velocityCounts
+      .map((count, i) => {
+        const x = (i / (velocityCounts.length - 1)) * chartWidth;
+        const y = chartHeight - (count / maxCount) * chartHeight;
+        return `${x},${y}`;
+      })
+      .join(" ");
 
     const polylinePoints = points;
     const areaPoints = `0,${chartHeight} ${points} ${chartWidth},${chartHeight}`;
@@ -1202,17 +1331,22 @@ class KineticTerminal {
             <polygon class="chart-area" points="${areaPoints}" />
             
             <!-- Tooltip Hover Points -->
-            ${velocityCounts.map((count, i) => {
-      const x = (i / (velocityCounts.length - 1)) * chartWidth;
-      const y = chartHeight - (count / maxCount) * chartHeight;
-      const date = new Date(last7Days[i]).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-      return `<circle cx="${x}" cy="${y}" r="7" class="chart-dot">
-                        <title>${count} issue${count !== 1 ? 's' : ''} — ${date}</title>
+            ${velocityCounts
+              .map((count, i) => {
+                const x = (i / (velocityCounts.length - 1)) * chartWidth;
+                const y = chartHeight - (count / maxCount) * chartHeight;
+                const date = new Date(last7Days[i]).toLocaleDateString(
+                  undefined,
+                  { month: "short", day: "numeric" },
+                );
+                return `<circle cx="${x}" cy="${y}" r="7" class="chart-dot">
+                        <title>${count} issue${count !== 1 ? "s" : ""} — ${date}</title>
                       </circle>`;
-    }).join('')}
+              })
+              .join("")}
           </svg>
           <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.75rem; color: var(--text-tertiary);">
-            ${last7Days.map(date => `<span>${new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>`).join('')}
+            ${last7Days.map((date) => `<span>${new Date(date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>`).join("")}
           </div>
         </div>
 
@@ -1225,13 +1359,19 @@ class KineticTerminal {
               Key Milestones & Deadlines
             </div>
             
-            ${tasksWithDueDate.length > 0 ? `
+            ${
+              tasksWithDueDate.length > 0
+                ? `
               <div class="milestones-grid">
-                ${tasksWithDueDate.slice(0, 6).map(task => {
-      const date = new Date(task.dueDate);
-      const day = date.getDate();
-      const month = date.toLocaleDateString(undefined, { month: 'short' });
-      return `
+                ${tasksWithDueDate
+                  .slice(0, 6)
+                  .map((task) => {
+                    const date = new Date(task.dueDate);
+                    const day = date.getDate();
+                    const month = date.toLocaleDateString(undefined, {
+                      month: "short",
+                    });
+                    return `
                     <div class="milestone-card" onclick="window.app.switchView('issueDetail', '${task.id}')">
                       <div class="milestone-date-box">
                         <span class="ms-day">${day}</span>
@@ -1243,14 +1383,17 @@ class KineticTerminal {
                       </div>
                     </div>
                   `;
-    }).join('')}
+                  })
+                  .join("")}
               </div>
-            ` : `
+            `
+                : `
               <div class="empty-timeline">
                 <p>No issues with deadlines yet.</p>
                 <button class="btn btn-secondary mt-3" style="margin-top: 1rem;" onclick="window.app.openTaskForm()">Schedule a Task</button>
               </div>
-            `}
+            `
+            }
           </div>
 
           <!-- Project Health & Stability (Middle) -->
@@ -1264,17 +1407,19 @@ class KineticTerminal {
               <div class="health-meta">
                 <div class="health-progress-ring">
                   ${(() => {
-        const completed = tasks.filter(t => t.status === 'done').length;
-        const total = tasks.length || 1;
-        const percent = Math.round((completed / total) * 100);
-        return `
+                    const completed = tasks.filter(
+                      (t) => t.status === "done",
+                    ).length;
+                    const total = tasks.length || 1;
+                    const percent = Math.round((completed / total) * 100);
+                    return `
                     <svg width="80" height="80" viewBox="0 0 36 36">
                       <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
                       <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="${percent}, 100" />
                       <text x="18" y="20.35" class="ring-text" fill="white" font-size="8" text-anchor="middle">${percent}%</text>
                     </svg>
                     `;
-      })()}
+                  })()}
                 </div>
                 <div class="health-stats">
                   <div class="health-stat-item">
@@ -1283,7 +1428,7 @@ class KineticTerminal {
                   </div>
                   <div class="health-stat-item">
                     <span class="label">Completed</span>
-                    <span class="value">${tasks.filter(t => t.status === 'done').length}</span>
+                    <span class="value">${tasks.filter((t) => t.status === "done").length}</span>
                   </div>
                 </div>
               </div>
@@ -1292,20 +1437,26 @@ class KineticTerminal {
                 <div class="dist-title">Priority Spread</div>
                 <div class="dist-bar">
                   ${(() => {
-        const high = tasks.filter(t => t.priority === 'critical' || t.priority === 'high').length;
-        const med = tasks.filter(t => t.priority === 'medium').length;
-        const low = tasks.filter(t => t.priority === 'low').length;
-        const total = tasks.length || 1;
-        return `
+                    const high = tasks.filter(
+                      (t) => t.priority === "critical" || t.priority === "high",
+                    ).length;
+                    const med = tasks.filter(
+                      (t) => t.priority === "medium",
+                    ).length;
+                    const low = tasks.filter(
+                      (t) => t.priority === "low",
+                    ).length;
+                    const total = tasks.length || 1;
+                    return `
                       <div class="dist-segment urgent" style="width: ${(high / total) * 100}%" title="High/Critical"></div>
                       <div class="dist-segment medium" style="width: ${(med / total) * 100}%" title="Medium"></div>
                       <div class="dist-segment low" style="width: ${(low / total) * 100}%" title="Low"></div>
                     `;
-      })()}
+                  })()}
                 </div>
                 <div class="dist-legend">
-                  <span>Critical: ${tasks.filter(t => t.priority === 'critical').length}</span>
-                  <span>Active: ${tasks.filter(t => t.status === 'in-progress').length}</span>
+                  <span>Critical: ${tasks.filter((t) => t.priority === "critical").length}</span>
+                  <span>Active: ${tasks.filter((t) => t.status === "in-progress").length}</span>
                 </div>
               </div>
 
@@ -1314,31 +1465,31 @@ class KineticTerminal {
                   <div class="item-header">
                     <span class="dot story"></span>
                     <span class="label">User Stories</span>
-                    <span class="val">${tasks.filter(t => t.type === 'story').length}</span>
+                    <span class="val">${tasks.filter((t) => t.type === "story").length}</span>
                   </div>
-                  <div class="mini-bar-bg"><div class="mini-bar story" style="width: ${(tasks.filter(t => t.type === 'story').length / tasks.length) * 100}%"></div></div>
+                  <div class="mini-bar-bg"><div class="mini-bar story" style="width: ${(tasks.filter((t) => t.type === "story").length / tasks.length) * 100}%"></div></div>
                 </div>
                 <div class="breakdown-item">
                   <div class="item-header">
                     <span class="dot bug"></span>
                     <span class="label">Bugs & Fixes</span>
-                    <span class="val">${tasks.filter(t => t.type === 'bug').length}</span>
+                    <span class="val">${tasks.filter((t) => t.type === "bug").length}</span>
                   </div>
-                  <div class="mini-bar-bg"><div class="mini-bar bug" style="width: ${(tasks.filter(t => t.type === 'bug').length / tasks.length) * 100}%"></div></div>
+                  <div class="mini-bar-bg"><div class="mini-bar bug" style="width: ${(tasks.filter((t) => t.type === "bug").length / tasks.length) * 100}%"></div></div>
                 </div>
                 <div class="breakdown-item">
                   <div class="item-header">
                     <span class="dot task"></span>
                     <span class="label">General Tasks</span>
-                    <span class="val">${tasks.filter(t => t.type === 'task').length}</span>
+                    <span class="val">${tasks.filter((t) => t.type === "task").length}</span>
                   </div>
-                  <div class="mini-bar-bg"><div class="mini-bar task" style="width: ${(tasks.filter(t => t.type === 'task').length / tasks.length) * 100}%"></div></div>
+                  <div class="mini-bar-bg"><div class="mini-bar task" style="width: ${(tasks.filter((t) => t.type === "task").length / tasks.length) * 100}%"></div></div>
                 </div>
               </div>
 
               <div class="project-pace-widget">
                  <div class="pace-label">Project Pace</div>
-                 <div class="pace-value">${tasks.length > 5 ? 'Stable' : 'Building'}</div>
+                 <div class="pace-value">${tasks.length > 5 ? "Stable" : "Building"}</div>
                  <div class="pace-sub">Based on last 7 days activity</div>
               </div>
             </div>
@@ -1351,7 +1502,10 @@ class KineticTerminal {
               Project Roadmap
             </div>
             <div class="roadmap-visual">
-              ${tasks.slice(0, 5).map(task => `
+              ${tasks
+                .slice(0, 5)
+                .map(
+                  (task) => `
                 <div class="roadmap-item">
                   <div class="roadmap-content" onclick="window.app.switchView('issueDetail', '${task.id}')">
                     <div style="flex: 1;">
@@ -1366,8 +1520,11 @@ class KineticTerminal {
                     </div>
                   </div>
                 </div>
-              `).slice(0, 5).join('')}
-              ${tasks.length === 0 ? '<div style="color: var(--text-tertiary);">No activity yet.</div>' : ''}
+              `,
+                )
+                .slice(0, 5)
+                .join("")}
+              ${tasks.length === 0 ? '<div style="color: var(--text-tertiary);">No activity yet.</div>' : ""}
             </div>
           </div>
 
@@ -1384,9 +1541,9 @@ class KineticTerminal {
 
     return `
       ${this.renderPageHeader(
-      "Reports & Analytics",
-      [this.currentProject.name, "Reports"],
-      `
+        "Reports & Analytics",
+        [this.currentProject.name, "Reports"],
+        `
         <button class="btn btn-secondary" onclick="window.app.openProjectForm('${p.id}')">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -1394,8 +1551,8 @@ class KineticTerminal {
           </svg>
           Edit Project
         </button>
-      `
-    )}
+      `,
+      )}
       <div class="reports-container">
         <!-- Project Context Section -->
         <div class="project-brand-section">
@@ -1526,7 +1683,9 @@ class KineticTerminal {
               <div class="settings-stat-label">Database Size</div>
             </div>
           </div>
-          ${stats.lastBackup ? `
+          ${
+            stats.lastBackup
+              ? `
           <div class="settings-stat-card">
             <div class="settings-stat-icon" style="background: rgba(16,185,129,0.1); color: var(--success)">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1535,7 +1694,9 @@ class KineticTerminal {
               <div class="settings-stat-value" style="font-size:0.9rem">${new Date(stats.lastBackup).toLocaleDateString()}</div>
               <div class="settings-stat-label">Last Backup</div>
             </div>
-          </div>` : ""}
+          </div>`
+              : ""
+          }
         </div>
 
         <div class="settings-card">
@@ -1707,7 +1868,7 @@ class KineticTerminal {
         </div>
         <h2 style="color: var(--text-primary); font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem;">Let's get started</h2>
         <p style="color: var(--text-tertiary); max-width: 440px; line-height: 1.7; margin: 0 auto 2rem;">
-          Create your first project to start tracking issues, managing your backlog, and building with Kinetic Terminal.
+          Create your first project to start tracking issues, managing your backlog, and building with Kinetic Actions.
         </p>
         <button class="btn btn-primary" style="font-size: 1rem; padding: 14px 28px;" id="selectProjectBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1752,22 +1913,22 @@ class KineticTerminal {
       overview: "Overview",
       reports: "Reports",
       settings: "Settings",
-      matrix: "Matrix"
+      matrix: "Matrix",
     };
     return map[viewId] || viewId;
   }
 
   unformatViewName(name) {
     const map = {
-      "Board": "board",
-      "Backlog": "backlog",
-      "Timeline": "timeline",
-      "Issues": "issues",
-      "Overview": "overview",
-      "Reports": "reports",
-      "Settings": "settings",
-      "People": "people",
-      "Matrix": "matrix"
+      Board: "board",
+      Backlog: "backlog",
+      Timeline: "timeline",
+      Issues: "issues",
+      Overview: "overview",
+      Reports: "reports",
+      Settings: "settings",
+      People: "people",
+      Matrix: "matrix",
     };
     return map[name] || name.toLowerCase();
   }
@@ -1805,7 +1966,8 @@ class KineticTerminal {
     ];
 
     const current = this.sortPreference || "updated-desc";
-    const currentLabel = options.find((o) => o.value === current)?.label || "Recently Updated";
+    const currentLabel =
+      options.find((o) => o.value === current)?.label || "Recently Updated";
 
     return `
       <div class="dropdown sort-dropdown">
@@ -1816,9 +1978,13 @@ class KineticTerminal {
           Sort: ${currentLabel}
         </button>
         <div class="dropdown-menu">
-          ${options.map((opt) => `
+          ${options
+            .map(
+              (opt) => `
             <a href="#" class="${opt.value === current ? "active" : ""}" data-sort-value="${opt.value}">${opt.label}</a>
-          `).join("")}
+          `,
+            )
+            .join("")}
         </div>
       </div>
     `;
@@ -1855,13 +2021,25 @@ class KineticTerminal {
       if (this.commentEditor) {
         this.commentEditor.toTextArea();
       }
-      if (typeof EasyMDE !== 'undefined') {
+      if (typeof EasyMDE !== "undefined") {
         this.commentEditor = new EasyMDE({
           element: commentInput,
           spellChecker: false,
           status: false,
-          toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "code", "preview"],
-          placeholder: "Add a comment... (Markdown supported)"
+          toolbar: [
+            "bold",
+            "italic",
+            "heading",
+            "|",
+            "quote",
+            "unordered-list",
+            "ordered-list",
+            "|",
+            "link",
+            "code",
+            "preview",
+          ],
+          placeholder: "Add a comment... (Markdown supported)",
         });
       }
     } else {
@@ -1874,16 +2052,18 @@ class KineticTerminal {
     });
 
     // Sub-install button
-    document.getElementById("triggerInstallBtn")?.addEventListener("click", () => {
-      this.handleInstallApp();
-    });
+    document
+      .getElementById("triggerInstallBtn")
+      ?.addEventListener("click", () => {
+        this.handleInstallApp();
+      });
 
     // Sub-install card animation trigger
-    const featureCards = document.querySelectorAll('.feature-card');
+    const featureCards = document.querySelectorAll(".feature-card");
     featureCards.forEach((card, index) => {
       setTimeout(() => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
       }, 150 * index);
     });
 
@@ -1910,14 +2090,18 @@ class KineticTerminal {
     });
 
     // Import single project
-    document.getElementById("importProjectFile")?.addEventListener("change", (e) => {
-      this.importProjectFile(e.target.files[0]);
-    });
+    document
+      .getElementById("importProjectFile")
+      ?.addEventListener("change", (e) => {
+        this.importProjectFile(e.target.files[0]);
+      });
 
     // Delete current project
-    document.getElementById("deleteCurrentProjectBtn")?.addEventListener("click", () => {
-      this.deleteCurrentProject();
-    });
+    document
+      .getElementById("deleteCurrentProjectBtn")
+      ?.addEventListener("click", () => {
+        this.deleteCurrentProject();
+      });
 
     // Clear all data
     document
@@ -1935,7 +2119,7 @@ class KineticTerminal {
               this.updateSidebarProject();
               this.render();
             }
-          }
+          },
         );
       });
 
@@ -1945,12 +2129,11 @@ class KineticTerminal {
       this.applySettings();
     });
 
-    document.getElementById("viewModeSelect")
+    document
+      .getElementById("viewModeSelect")
       ?.addEventListener("change", (e) => {
         storage.setSetting("viewMode", e.target.value);
       });
-
-
 
     // Filters
     document.getElementById("statusFilter")?.addEventListener("change", () => {
@@ -1964,7 +2147,7 @@ class KineticTerminal {
       });
 
     // View Toggle
-    document.querySelectorAll(".view-toggle-btn").forEach(btn => {
+    document.querySelectorAll(".view-toggle-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const viewType = e.target.dataset.issuesView;
         if (viewType) {
@@ -2003,13 +2186,20 @@ class KineticTerminal {
 
   updateSidebarProject() {
     if (this.currentProject) {
-      if (this.sidebarProjectName) this.sidebarProjectName.textContent = this.currentProject.name;
-      if (this.sidebarProjectName) this.sidebarProjectName.setAttribute("data-tooltip", this.currentProject.name);
-      if (this.sidebarProjectKey) this.sidebarProjectKey.textContent = this.currentProject.key;
+      if (this.sidebarProjectName)
+        this.sidebarProjectName.textContent = this.currentProject.name;
+      if (this.sidebarProjectName)
+        this.sidebarProjectName.setAttribute(
+          "data-tooltip",
+          this.currentProject.name,
+        );
+      if (this.sidebarProjectKey)
+        this.sidebarProjectKey.textContent = this.currentProject.key;
       const tasks = storage.getTasks(this.currentProject.id);
       if (this.issuesBadge) this.issuesBadge.textContent = tasks.length;
     } else {
-      if (this.sidebarProjectName) this.sidebarProjectName.textContent = "Select Project";
+      if (this.sidebarProjectName)
+        this.sidebarProjectName.textContent = "Select Project";
       if (this.sidebarProjectKey) this.sidebarProjectKey.textContent = "---";
       if (this.issuesBadge) this.issuesBadge.textContent = "0";
     }
@@ -2047,7 +2237,9 @@ class KineticTerminal {
         )
         .join("");
 
-      let currentIndex = projects.findIndex(p => p.id === this.currentProject?.id);
+      let currentIndex = projects.findIndex(
+        (p) => p.id === this.currentProject?.id,
+      );
       if (currentIndex === -1) currentIndex = 0;
 
       const updateFocus = (index) => {
@@ -2059,10 +2251,13 @@ class KineticTerminal {
         // Center the active item
         const activeItem = items[index];
         if (activeItem) {
-          const scrollLeft = activeItem.offsetLeft - (projectList.offsetWidth / 2) + (activeItem.offsetWidth / 2);
+          const scrollLeft =
+            activeItem.offsetLeft -
+            projectList.offsetWidth / 2 +
+            activeItem.offsetWidth / 2;
           projectList.scrollTo({
             left: scrollLeft,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       };
@@ -2158,13 +2353,27 @@ class KineticTerminal {
       return;
     }
 
-    if (typeof EasyMDE !== 'undefined' && !this.taskDescEditor) {
+    if (typeof EasyMDE !== "undefined" && !this.taskDescEditor) {
       this.taskDescEditor = new EasyMDE({
         element: document.getElementById("taskDesc"),
         spellChecker: false,
         status: false,
-        toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "code", "preview", "guide"],
-        placeholder: "Add details, requirements, acceptance criteria... (Markdown supported)"
+        toolbar: [
+          "bold",
+          "italic",
+          "heading",
+          "|",
+          "quote",
+          "unordered-list",
+          "ordered-list",
+          "|",
+          "link",
+          "code",
+          "preview",
+          "guide",
+        ],
+        placeholder:
+          "Add details, requirements, acceptance criteria... (Markdown supported)",
       });
     }
 
@@ -2189,7 +2398,9 @@ class KineticTerminal {
       document.getElementById("taskSprint").value = task.sprint || "";
       document.getElementById("taskDueDate").value = task.dueDate || "";
       document.getElementById("taskEstimate").value = task.estimate || "";
-      document.getElementById("taskTags").value = task.tags ? task.tags.join(", ") : "";
+      document.getElementById("taskTags").value = task.tags
+        ? task.tags.join(", ")
+        : "";
 
       // Setup Blockers Select
       this.populateBlockerSelect(task.dependency);
@@ -2218,26 +2429,44 @@ class KineticTerminal {
     const reporterSelect = document.getElementById("taskReporter");
 
     if (assigneeSelect) {
-      assigneeSelect.innerHTML = '<option value="">Unassigned</option>' +
-        people.map(p => `<option value="${p.name}" ${p.name === selectedAssignee ? 'selected' : ''}>${p.name}</option>`).join("");
+      assigneeSelect.innerHTML =
+        '<option value="">Unassigned</option>' +
+        people
+          .map(
+            (p) =>
+              `<option value="${p.name}" ${p.name === selectedAssignee ? "selected" : ""}>${p.name}</option>`,
+          )
+          .join("");
     }
 
     if (reporterSelect) {
-      reporterSelect.innerHTML = people.map(p => `<option value="${p.name}" ${p.name === selectedReporter ? 'selected' : ''}>${p.name}</option>`).join("");
+      reporterSelect.innerHTML = people
+        .map(
+          (p) =>
+            `<option value="${p.name}" ${p.name === selectedReporter ? "selected" : ""}>${p.name}</option>`,
+        )
+        .join("");
     }
   }
 
   populateBlockerSelect(selectedBlockers = "") {
     if (!this.currentProject) return;
 
-    const tasks = storage.getTasks(this.currentProject.id).filter(t => t.status !== 'done' && t.id !== this.currentTaskId);
+    const tasks = storage
+      .getTasks(this.currentProject.id)
+      .filter((t) => t.status !== "done" && t.id !== this.currentTaskId);
     const blockerSelect = document.getElementById("taskDependency");
 
     if (blockerSelect) {
-      const selected = selectedBlockers ? selectedBlockers.split(",").map(s => s.trim()) : [];
-      blockerSelect.innerHTML = tasks.map(t =>
-        `<option value="${t.id}" ${selected.includes(t.id) ? 'selected' : ''}>${t.id}: ${t.title}</option>`
-      ).join("");
+      const selected = selectedBlockers
+        ? selectedBlockers.split(",").map((s) => s.trim())
+        : [];
+      blockerSelect.innerHTML = tasks
+        .map(
+          (t) =>
+            `<option value="${t.id}" ${selected.includes(t.id) ? "selected" : ""}>${t.id}: ${t.title}</option>`,
+        )
+        .join("");
     }
   }
 
@@ -2245,18 +2474,25 @@ class KineticTerminal {
     // Logic to refresh the custom dropdown options when the base select changes
     const wrapper = select.nextElementSibling;
     if (wrapper && wrapper.classList.contains("searchable-dropdown")) {
-      const optionsContainer = wrapper.querySelector(".dropdown-options-container");
+      const optionsContainer = wrapper.querySelector(
+        ".dropdown-options-container",
+      );
       const buttonText = wrapper.querySelector("button span");
       const isMultiple = select.multiple;
 
       const getDisplayText = () => {
         if (isMultiple) {
           const selected = Array.from(select.selectedOptions);
-          if (selected.length === 0) return select.dataset.placeholder || "Select...";
+          if (selected.length === 0)
+            return select.dataset.placeholder || "Select...";
           if (selected.length === 1) return selected[0].text;
           return `${selected.length} selected`;
         }
-        return select.options[select.selectedIndex]?.text || select.dataset.placeholder || "Select...";
+        return (
+          select.options[select.selectedIndex]?.text ||
+          select.dataset.placeholder ||
+          "Select..."
+        );
       };
 
       if (optionsContainer) {
@@ -2292,7 +2528,9 @@ class KineticTerminal {
 
     const taskData = {
       title: document.getElementById("taskTitle").value.trim(),
-      description: this.taskDescEditor ? this.taskDescEditor.value().trim() : document.getElementById("taskDesc").value.trim(),
+      description: this.taskDescEditor
+        ? this.taskDescEditor.value().trim()
+        : document.getElementById("taskDesc").value.trim(),
       type: document.getElementById("taskType").value,
       status: document.getElementById("taskStatus").value,
       priority: document.getElementById("taskPriority").value,
@@ -2306,7 +2544,11 @@ class KineticTerminal {
         .value.split(",")
         .map((t) => t.trim())
         .filter((t) => t),
-      dependency: Array.from(document.getElementById("taskDependency").selectedOptions).map(o => o.value).join(", "),
+      dependency: Array.from(
+        document.getElementById("taskDependency").selectedOptions,
+      )
+        .map((o) => o.value)
+        .join(", "),
     };
 
     if (this.currentTaskId) {
@@ -2333,8 +2575,10 @@ class KineticTerminal {
   sortTasks(tasks) {
     const pref = this.sortPreference;
     return tasks.sort((a, b) => {
-      if (pref === "updated-desc") return new Date(b.updatedAt) - new Date(a.updatedAt);
-      if (pref === "updated-asc") return new Date(a.updatedAt) - new Date(b.updatedAt);
+      if (pref === "updated-desc")
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      if (pref === "updated-asc")
+        return new Date(a.updatedAt) - new Date(b.updatedAt);
       if (pref === "priority-desc") {
         const pMap = { critical: 4, high: 3, medium: 2, low: 1 };
         return pMap[b.priority] - pMap[a.priority];
@@ -2369,12 +2613,16 @@ class KineticTerminal {
     }
 
     const tasks = storage.getTasks(this.currentProject.id);
-    if (issuesBadge) issuesBadge.textContent = tasks.filter(t => t.status !== 'backlog' && t.status !== 'done').length;
-    if (backlogBadge) backlogBadge.textContent = tasks.filter(t => t.status === 'backlog').length;
+    if (issuesBadge)
+      issuesBadge.textContent = tasks.filter(
+        (t) => t.status !== "backlog" && t.status !== "done",
+      ).length;
+    if (backlogBadge)
+      backlogBadge.textContent = tasks.filter(
+        (t) => t.status === "backlog",
+      ).length;
     if (boardBadge) boardBadge.textContent = tasks.length;
   }
-
-
 
   openTaskDetails(taskId) {
     this.switchView("issueDetail", taskId);
@@ -2393,23 +2641,37 @@ class KineticTerminal {
     };
 
     // Breadcrumb logic
-    const breadcrumbData = [project ? project.name : "Project", ...this.breadcrumbStack];
+    const breadcrumbData = [
+      project ? project.name : "Project",
+      ...this.breadcrumbStack,
+    ];
 
     // Blockers rendering
-    const blockers = task.dependency ? task.dependency.split(",").map(id => id.trim()).filter(id => id) : [];
-    const blockersHTML = blockers.length > 0
-      ? blockers.map(bid => {
-        const btask = storage.getTask(bid);
-        return `<div class="blocker-item clickable" data-blocker-id="${bid}">
+    const blockers = task.dependency
+      ? task.dependency
+          .split(",")
+          .map((id) => id.trim())
+          .filter((id) => id)
+      : [];
+    const blockersHTML =
+      blockers.length > 0
+        ? blockers
+            .map((bid) => {
+              const btask = storage.getTask(bid);
+              return `<div class="blocker-item clickable" data-blocker-id="${bid}">
             <span class="blocker-id">${bid}</span>
             <span class="blocker-title">${btask ? this.escapeHtml(btask.title) : "Unknown Task"}</span>
           </div>`;
-      }).join("")
-      : '<span class="sidebar-value">None</span>';
+            })
+            .join("")
+        : '<span class="sidebar-value">None</span>';
 
     return `
       <div class="issue-view">
-        ${this.renderPageHeader(task.id, breadcrumbData, `
+        ${this.renderPageHeader(
+          task.id,
+          breadcrumbData,
+          `
           <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle">
               ${this.formatStatus(task.status)}
@@ -2439,7 +2701,8 @@ class KineticTerminal {
             </svg>
             Delete
           </button>
-        `)}
+        `,
+        )}
 
         <div class="issue-content">
           <div class="issue-main">
@@ -2453,7 +2716,7 @@ class KineticTerminal {
                 </svg>
                 Description
               </div>
-              <div class="issue-description markdown-body">${task.description ? (typeof marked !== 'undefined' ? marked.parse(task.description) : this.escapeHtml(task.description)) : "<em>No description provided.</em>"}</div>
+              <div class="issue-description markdown-body">${task.description ? (typeof marked !== "undefined" ? marked.parse(task.description) : this.escapeHtml(task.description)) : "<em>No description provided.</em>"}</div>
             </div>
 
             <div class="comments-section">
@@ -2514,9 +2777,16 @@ class KineticTerminal {
               <div class="sidebar-item">
                 <span class="sidebar-label">Labels</span>
                 <span class="sidebar-value">
-                  ${task.tags && task.tags.length > 0
-        ? task.tags.map(tag => `<span class="tag">${this.escapeHtml(tag)}</span>`).join("")
-        : '<span style="color: var(--text-tertiary)">None</span>'}
+                  ${
+                    task.tags && task.tags.length > 0
+                      ? task.tags
+                          .map(
+                            (tag) =>
+                              `<span class="tag">${this.escapeHtml(tag)}</span>`,
+                          )
+                          .join("")
+                      : '<span style="color: var(--text-tertiary)">None</span>'
+                  }
                 </span>
               </div>
             </div>
@@ -2552,7 +2822,9 @@ class KineticTerminal {
       return `<p style="color: var(--text-tertiary); margin-bottom: 2rem;">No comments yet.</p>`;
     }
 
-    return comments.map(comment => `
+    return comments
+      .map(
+        (comment) => `
       <div class="comment-item">
         <div class="comment-avatar">${comment.author.charAt(0)}</div>
         <div class="comment-content-wrapper">
@@ -2560,10 +2832,12 @@ class KineticTerminal {
             <span class="comment-author">${comment.author}</span>
             <span class="comment-time">${new Date(comment.createdAt).toLocaleString()}</span>
           </div>
-          <div class="comment-text markdown-body">${(typeof marked !== 'undefined' ? marked.parse(comment.content) : this.escapeHtml(comment.content))}</div>
+          <div class="comment-text markdown-body">${typeof marked !== "undefined" ? marked.parse(comment.content) : this.escapeHtml(comment.content)}</div>
         </div>
       </div>
-    `).join("");
+    `,
+      )
+      .join("");
   }
 
   handleAddComment(taskId) {
@@ -2587,7 +2861,10 @@ class KineticTerminal {
     storage.updateTask(taskId, { status: newStatus });
     this.updateSidebarBadges();
     this.renderCurrentView();
-    this.showNotification(`Status updated to ${this.formatStatus(newStatus)}`, "success");
+    this.showNotification(
+      `Status updated to ${this.formatStatus(newStatus)}`,
+      "success",
+    );
   }
 
   editCurrentTask() {
@@ -2607,7 +2884,7 @@ class KineticTerminal {
           storage.deleteTask(this.currentTaskId);
           this.switchView(this.previousView || "board");
           this.showNotification("Task deleted successfully", "success");
-        }
+        },
       );
     }
   }
@@ -2660,7 +2937,10 @@ class KineticTerminal {
         const parsed = JSON.parse(e.target.result);
         // Force treat as single-project export
         if (!parsed.project) {
-          this.showNotification("Invalid project file — missing project data.", "error");
+          this.showNotification(
+            "Invalid project file — missing project data.",
+            "error",
+          );
           return;
         }
         const result = storage.importProject(parsed, false);
@@ -2710,7 +2990,10 @@ class KineticTerminal {
           localStorage.setItem("lastProjectId", remaining[0].id);
           this.updateSidebarProject();
           this.switchView("board");
-          this.showNotification(`"${projectName}" deleted. Switched to "${remaining[0].name}".`, "success");
+          this.showNotification(
+            `"${projectName}" deleted. Switched to "${remaining[0].name}".`,
+            "success",
+          );
         } else {
           // No projects left — show welcome screen on the board tab
           this.currentProject = null;
@@ -2719,7 +3002,7 @@ class KineticTerminal {
           this.switchView("board");
           this.showNotification(`"${projectName}" deleted.`, "success");
         }
-      }
+      },
     );
   }
 
@@ -2736,10 +3019,14 @@ class KineticTerminal {
   }
 
   applyFilters() {
-    this.filters.status = document.getElementById("statusFilter")?.value || "all";
-    this.filters.priority = document.getElementById("priorityFilter")?.value || "all";
-    this.filters.assignee = document.getElementById("assigneeFilter")?.value || "all";
-    this.filters.reporter = document.getElementById("reporterFilter")?.value || "all";
+    this.filters.status =
+      document.getElementById("statusFilter")?.value || "all";
+    this.filters.priority =
+      document.getElementById("priorityFilter")?.value || "all";
+    this.filters.assignee =
+      document.getElementById("assigneeFilter")?.value || "all";
+    this.filters.reporter =
+      document.getElementById("reporterFilter")?.value || "all";
     this.renderCurrentView();
   }
 
@@ -2807,15 +3094,19 @@ class KineticTerminal {
   }
 
   closeAllMenus() {
-    document.querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show").forEach((menu) => {
-      menu.classList.remove("show");
-    });
+    document
+      .querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show")
+      .forEach((menu) => {
+        menu.classList.remove("show");
+      });
   }
 
   closeAllMenus() {
-    document.querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show").forEach((menu) => {
-      menu.classList.remove("show");
-    });
+    document
+      .querySelectorAll(".dropdown-menu.show, .notifications-dropdown.show")
+      .forEach((menu) => {
+        menu.classList.remove("show");
+      });
   }
 
   applySettings(isInitialLoad = false) {
@@ -2847,7 +3138,9 @@ class KineticTerminal {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove("active");
-      const activeModals = document.querySelector(".modal.active, .side-panel.active");
+      const activeModals = document.querySelector(
+        ".modal.active, .side-panel.active",
+      );
       if (!activeModals) {
         this.modalOverlay.classList.remove("active");
       }
@@ -2919,8 +3212,7 @@ class KineticTerminal {
       breadcrumbData.length > 0
         ? `<div class="breadcrumb">
           ${breadcrumbData
-          .map(
-            (item, index) => {
+            .map((item, index) => {
               let isClickable = false;
               let targetView = "";
               let targetId = null;
@@ -2947,9 +3239,8 @@ class KineticTerminal {
                   </span>
                   ${index < breadcrumbData.length - 1 ? '<span class="breadcrumb-separator">/</span>' : ""}
                 `;
-            },
-          )
-          .join("")}
+            })
+            .join("")}
          </div>`
         : "";
 
@@ -2972,14 +3263,18 @@ class KineticTerminal {
   renderPeople() {
     const people = storage.getPeople();
     return `
-      ${this.renderPageHeader("People", [this.currentProject ? this.currentProject.name : "Project", "People"], `
+      ${this.renderPageHeader(
+        "People",
+        [this.currentProject ? this.currentProject.name : "Project", "People"],
+        `
         <button class="btn btn-primary" onclick="window.app.openPersonForm()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
           Add Person
         </button>
-      `)}
+      `,
+      )}
       <div class="content-wrapper" style="padding:0">
         <div class="table-wrapper">
           <table class="issue-table">
@@ -2992,7 +3287,9 @@ class KineticTerminal {
               </tr>
             </thead>
             <tbody>
-              ${people.map(person => `
+              ${people
+                .map(
+                  (person) => `
                 <tr data-person-id="${person.id}">
                   <td>
                     <div class="person-cell">
@@ -3017,7 +3314,9 @@ class KineticTerminal {
                     </div>
                   </td>
                 </tr>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </div>
@@ -3027,18 +3326,23 @@ class KineticTerminal {
 
   openPersonForm(personId = null) {
     if (personId) {
-      const person = storage.getPeople().find(p => p.id === personId);
+      const person = storage.getPeople().find((p) => p.id === personId);
       if (person) {
         document.getElementById("personName").value = person.name;
         document.getElementById("personEmail").value = person.email;
-        document.getElementById("personJoinedDate").value = person.createdAt ? person.createdAt.split('T')[0] : '';
+        document.getElementById("personJoinedDate").value = person.createdAt
+          ? person.createdAt.split("T")[0]
+          : "";
         this.currentPersonId = personId;
         document.querySelector("#personModal h3").textContent = "Edit Person";
-        document.getElementById("personFormSubmitBtn").textContent = "Update Person";
+        document.getElementById("personFormSubmitBtn").textContent =
+          "Update Person";
       }
     } else {
       document.getElementById("personForm").reset();
-      document.getElementById("personJoinedDate").value = new Date().toISOString().split('T')[0];
+      document.getElementById("personJoinedDate").value = new Date()
+        .toISOString()
+        .split("T")[0];
       this.currentPersonId = null;
       document.querySelector("#personModal h3").textContent = "Add Person";
       document.getElementById("personFormSubmitBtn").textContent = "Add Person";
@@ -3056,7 +3360,9 @@ class KineticTerminal {
       const personData = {
         name,
         email,
-        createdAt: joinedDate ? new Date(joinedDate).toISOString() : new Date().toISOString()
+        createdAt: joinedDate
+          ? new Date(joinedDate).toISOString()
+          : new Date().toISOString(),
       };
 
       if (this.currentPersonId) {
@@ -3081,18 +3387,48 @@ class KineticTerminal {
         storage.deletePerson(personId);
         this.renderCurrentView();
         this.showNotification("Person removed", "success");
-      }
+      },
     );
   }
 
   renderKeyboardShortcuts() {
     const shortcuts = [
-      { key: "Ctrl/Cmd + K", desc: "Focus Global Search", color: "var(--info)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>' },
-      { key: "Alt + N", desc: "Create New Issue", color: "var(--primary)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' },
-      { key: "Ctrl/Cmd + P", desc: "Create New Project", color: "var(--warning)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>' },
-      { key: "Ctrl/Cmd + B", desc: "Open Switch Project Modal", color: "var(--priority-high)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>' },
-      { key: "Numbers 1-5", desc: "Switch Views Dynamically", color: "var(--text-secondary)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>' },
-      { key: "Esc", desc: "Close all Modals/Panels", color: "var(--danger)", icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' }
+      {
+        key: "Ctrl/Cmd + K",
+        desc: "Focus Global Search",
+        color: "var(--info)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+      },
+      {
+        key: "Alt + N",
+        desc: "Create New Issue",
+        color: "var(--primary)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+      },
+      {
+        key: "Ctrl/Cmd + P",
+        desc: "Create New Project",
+        color: "var(--warning)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
+      },
+      {
+        key: "Ctrl/Cmd + B",
+        desc: "Open Switch Project Modal",
+        color: "var(--priority-high)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+      },
+      {
+        key: "Numbers 1-5",
+        desc: "Switch Views Dynamically",
+        color: "var(--text-secondary)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',
+      },
+      {
+        key: "Esc",
+        desc: "Close all Modals/Panels",
+        color: "var(--danger)",
+        icon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      },
     ];
 
     return `
@@ -3116,11 +3452,13 @@ class KineticTerminal {
         
         <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--text-primary); font-weight: 700;">Accelerate Your Workflow</h2>
         <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.6;">
-          Master these keyboard shortcuts to navigate Kinetic Terminal at lightning speed.
+          Master these keyboard shortcuts to navigate Kinetic Actions at lightning speed.
         </p>
 
         <div class="shortcuts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; width: 100%; text-align: left;">
-          ${shortcuts.map(s => `
+          ${shortcuts
+            .map(
+              (s) => `
             <div class="feature-card shortcut-card" style="opacity: 0; transform: translateY(20px); padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-default); transition: all 0.3s ease-out; cursor: default;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
               <div style="color: ${s.color}; margin-bottom: 1.25rem;">
                 ${s.icon}
@@ -3130,13 +3468,21 @@ class KineticTerminal {
               </div>
               <div class="shortcut-desc" style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-top: 1rem;">${s.desc}</div>
             </div>
-          `).join("")}
+          `,
+            )
+            .join("")}
         </div>
       </div>
     `;
   }
 
-  confirmAction(title, message, confirmText = "Confirm", type = "primary", callback) {
+  confirmAction(
+    title,
+    message,
+    confirmText = "Confirm",
+    type = "primary",
+    callback,
+  ) {
     const dialog = document.createElement("div");
     dialog.className = "custom-confirm-overlay active";
     dialog.innerHTML = `
@@ -3168,12 +3514,15 @@ class KineticTerminal {
     if (window.deferredPrompt) {
       window.deferredPrompt.prompt();
       const { outcome } = await window.deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
+      if (outcome === "accepted") {
         this.showNotification("Installation started!", "success");
       }
       window.deferredPrompt = null;
     } else {
-      this.showNotification("App is already installed or browser doesn't support PWA installation.", "info");
+      this.showNotification(
+        "App is already installed or browser doesn't support PWA installation.",
+        "info",
+      );
     }
   }
 
@@ -3190,9 +3539,9 @@ class KineticTerminal {
            </svg>
         </div>
         
-        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary); font-weight: 700;">Install Kinetic Terminal</h2>
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary); font-weight: 700;">Install Kinetic Actions</h2>
         <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 2.5rem; line-height: 1.6;">
-          Take your project management offline. Install Kinetic Terminal as a standalone desktop application. 
+          Take your project management offline. Install Kinetic Actions as a standalone desktop application. 
           It's blazingly fast, runs completely local, and fits perfectly with your workflow.
         </p>
 
@@ -3241,7 +3590,7 @@ class KineticTerminal {
 
   renderAboutPage() {
     return `
-      ${this.renderPageHeader("About Kinetic Terminal", ["Settings", "About"])}
+      ${this.renderPageHeader("About Kinetic Actions", ["Settings", "About"])}
       <div class="content-wrapper" style="padding: var(--spacing-xl); max-width: 900px; margin: 0 auto;">
         
         <div class="feature-card" style="padding: 2.5rem; background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-default); margin-bottom: 2rem; position: relative; overflow: hidden;">
@@ -3260,13 +3609,13 @@ class KineticTerminal {
               <path d="M2 12L12 17L22 12" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             <div>
-              <h2 style="font-size: 2rem; color: var(--text-primary); font-weight: 700; margin-bottom: 0.2rem;">Kinetic Terminal</h2>
+              <h2 style="font-size: 2rem; color: var(--text-primary); font-weight: 700; margin-bottom: 0.2rem;">Kinetic Actions</h2>
               <p style="color: var(--primary); font-family: var(--font-mono); font-size: 0.9rem;">v1.0.0 — Offline-First Task Management</p>
             </div>
           </div>
           
           <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 2rem;">
-            Kinetic Terminal was born out of a desire for a distraction-free, lightning-fast project management tool. Modern tools are bloated, slow, and heavily dependent on continuous internet connections. Kinetic Terminal brings back the retro, terminal-style aesthetic, utilizing advanced PWA technology and local storage to give you a Kanban board that operates at the speed of thought.
+            Kinetic Actions was born out of a desire for a distraction-free, lightning-fast project management tool. Modern tools are bloated, slow, and heavily dependent on continuous internet connections. Kinetic Actions brings back the retro, terminal-style aesthetic, utilizing advanced PWA technology and local storage to give you a Kanban board that operates at the speed of thought.
           </p>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
@@ -3301,7 +3650,7 @@ class KineticTerminal {
            <p style="color: var(--text-tertiary); margin-bottom: 1.5rem;">Software Developer & Creator</p>
            
            <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; max-width: 600px; margin-bottom: 2rem;">
-             I am an Android and full-stack developer deeply passionate about crafting elegant, high-performance software. My goal with Kinetic Terminal was to provide developers a powerful tool that respects their time and workflow.
+             I am an Android and full-stack developer deeply passionate about crafting elegant, high-performance software. My goal with Kinetic Actions was to provide developers a powerful tool that respects their time and workflow.
            </p>
 
            <div style="display: flex; gap: 1rem;">
@@ -3324,8 +3673,6 @@ class KineticTerminal {
     `;
   }
 }
-
-
 
 // Add notification animations
 const notifStyle = document.createElement("style");
