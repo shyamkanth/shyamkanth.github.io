@@ -8,7 +8,7 @@
 </p>
 
 ### 🚀 About Me
-High-performance mobile and web experiences are crafted at **Daffodil Software**, where the role of **Android Developer** is held. Beyond the development of code, insights into modern development patterns are shared through educational content.
+I am an Android Developer dedicated to building high-performance mobile and web experiences that solve real-world problems. My work revolves around writing clean, efficient code and implementing robust architecture. In addition to my development work, I am a firm believer in knowledge-sharing, regularly creating educational content to help others navigate the complexities of modern development patterns.
 
 - 📱 **Currently being built:** PayDay - Android Application
 - 🛠️ **Environment:** **Ubuntu Linux** is utilized as the primary development OS.
