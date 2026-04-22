@@ -1,4 +1,4 @@
-const CACHE_NAME = "kinetic-actions-v4";
+const CACHE_NAME = "kinetic-actions-v5";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",

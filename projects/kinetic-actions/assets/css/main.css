@@ -827,7 +827,7 @@ body {
   padding: var(--spacing-xl) var(--spacing-2xl);
   overflow-x: auto;
   min-height: 600px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .kanban-column {
