@@ -1,94 +1,71 @@
-# Shyam Sunder Kanth - Android & Angular Developer
+# Hi there, I'm Shyam Sunder Kanth 👋 
 
-> Crafting high-performance, scalable mobile and web experiences with modern technologies.
+<p align="left">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" />
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" />
+  <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+</p>
 
----
+### 🚀 About Me
+High-performance mobile and web experiences are crafted at **Daffodil Software**, where the role of **Android Developer** is held. Beyond the development of code, insights into modern development patterns are shared through educational content.
 
-## 📋 Quick Overview
-
-- **Current Tech Stack:** Android (Kotlin) & Angular
-- **Location:** Gurugram, Haryana, India
-- **Email:** shyamkanth0805@gmail.com
-- **Phone:** +91 9546389117
-- **GitHub:** https://github.com/shyamkanth
-- **LinkedIn:** https://www.linkedin.com/in/shyam-sunder-kanth/
-
----
-
-## 🎯 Core Strengths
-
-### Android Development
-
-**01 // Architecture - Clean & Maintainable**
-Implementing MVVM and MVI patterns to ensure testable, robust codebases that scale with enterprise growth. Focus on modularity and separation of concerns.
-
-**02 // Modern UI - Declarative Design**
-Expertise in Jetpack Compose for building fluid, hardware-accelerated animations and responsive layouts with modern Android development practices.
-
-**03 // Reliability - Performance First**
-Deep-dive profiling with Android Studio tools to optimize memory leaks, frame drops, and battery usage ensuring smooth user experiences.
-
-### Angular Development
-
-**01 // Architecture - Scalable Structure**
-Building Angular applications with feature modules, lazy loading, and clean separation of concerns using services, guards, and resolvers.
-
-**02 // Reactive UI - RxJS & State**
-Leveraging RxJS observables, Angular signals, and NgRx for predictable state management and seamless reactive data flows in complex UIs.
-
-**03 // Developer Experience - Type-Safe & Fast**
-Strict TypeScript practices, standalone components, and optimized change detection strategies to keep builds lean and teams productive.
+- 📱 **Currently being built:** PayDay - Android Application
+- 🛠️ **Environment:** **Ubuntu Linux** is utilized as the primary development OS.
+- 📫 **Contact:** [shyamkanth0805@gmail.com](mailto:shyamkanth0805@gmail.com)
 
 ---
 
-## 💻 Technical Stack
+### 🛠️ Technical Arsenal
 
-### Android Development Skills
-
-| Skill | Details |
-|-------|---------|
-| **Kotlin** | Coroutines, Flow, Core |
-| **Compose** | Design Systems, Animations |
-| **Persistence** | Room, DataStore, SQLite |
-| **Dependency Injection** | Dagger Hilt, Koin |
-| **Networking** | Retrofit, OkHttp |
-| **Testing** | JUnit, Mockk, Espresso |
-| **Architecture** | MVVM, MVI, Clean |
-| **Tools** | Git, Firebase, Postman |
-
-### Angular Development Skills
-
-| Skill | Details |
-|-------|---------|
-| **Angular** | v15+, Standalone, Signals |
-| **TypeScript** | Strict Mode, Generics |
-| **RxJS** | Observables, Operators |
-| **State Management** | NgRx, Services, Signals |
-| **Styling** | SCSS, TailwindCSS, Bootstrap |
-| **HTTP** | HttpClient, Interceptors |
-| **Routing** | Guards, Resolvers, Lazy Load |
-| **Tooling** | Angular CLI, Nx, Webpack |
+<table border="0">
+  <tr>
+    <td width="50%" valign="top">
+      <h4>📱 Android (Kotlin)</h4>
+      <ul>
+        <li><b>Architecture:</b> MVVM, MVI, and Clean Architecture are implemented.</li>
+        <li><b>UI:</b> Jetpack Compose and Material Design are utilized.</li>
+        <li><b>Async:</b> Coroutines and Flow are leveraged.</li>
+        <li><b>DI:</b> Hilt and Koin are used for injection.</li>
+        <li><b>Local DB:</b> Room and DataStore are managed.</li>
+      </ul>
+    </td>
+    <td width="50%" valign="top">
+      <h4>🌐 Web (Angular)</h4>
+      <ul>
+        <li><b>State:</b> NgRx and Angular Signals are employed.</li>
+        <li><b>Styling:</b> TailwindCSS and SCSS are applied.</li>
+        <li><b>Concepts:</b> Lazy Loading and Guards are integrated.</li>
+        <li><b>Languages:</b> Strict Mode TypeScript is maintained.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 📞 Contact Information
+### 📊 GitHub Stats
 
-**Email:** shyamkanth0805@gmail.com
-
-**Phone:** +91 9546389117
-
-**Social Links:**
-- GitHub: https://github.com/shyamkanth
-- LinkedIn: https://www.linkedin.com/in/shyam-sunder-kanth/
-- Portfolio: https://shyamkanth.github.io
+<p align="center">
+  <img width="100%" src="https://github-readme-streak-stats.herokuapp.com/?user=shyamkanth&theme=tokyonight&hide_border=true" alt="Shyam's Streak Stats" />
+</p>
 
 ---
 
-## 🔗 Additional Resources
+### 🌐 Connect With Me
+<p align="left">
+<a href="https://www.linkedin.com/in/shyam-sunder-kanth-0a8934182/" target="blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+<a href="https://shyamkanth.github.io" target="blank"><img src="https://img.shields.io/badge/Portfolio-252525?style=for-the-badge&logo=google-chrome&logoColor=white" /></a>
+</p>
 
-Currently accepting inquiries for:
-- Full-time Android developer roles
-- Freelance projects
-- Collaborative opportunities
+---
 
-© 2025 Shyam Sunder Kanth
+### ⚡ Highlights
+- 🔭 **Portfolio:** Hosted at [shyamkanth.github.io](https://shyamkanth.github.io).
+- 💬 Expertise in **Room Migrations** and **Android Animations** can be discussed.
+- ⚡ **Note:** A critical Intel AX211 firmware bug was successfully resolved manually on Linux.
+
+---
+<p align="center">
+  <i>"Scalable experiences are crafted, one commit at a time."</i>
+</p>
