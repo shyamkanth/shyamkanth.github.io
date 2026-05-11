@@ -5,7 +5,7 @@
       "title": "Understanding Kotlin Coroutines: From Basics to Advanced",
       "author": "Shyam Sunder Kanth",
       "date": "2024-03-15",
-      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIIRE-dstlxbzVdyuuDse41ixhGhxc-T-rsg&s",
       "tags": ["kotlin", "android", "coroutines", "async"],
       "excerpt": "A comprehensive guide to Kotlin coroutines, exploring structured concurrency, exception handling, and real-world use cases.",
       "readTime": "8 min read",
@@ -102,7 +102,7 @@
       "title": "State Management in Jetpack Compose",
       "author": "Shyam Sunder Kanth",
       "date": "2024-03-08",
-      "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=400&fit=crop",
+      "thumbnail": "data:image/png;base64,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",
       "tags": ["android", "jetpack-compose", "ui", "state"],
       "excerpt": "Master the art of managing state in Jetpack Compose with practical examples and best practices.",
       "readTime": "10 min read",
@@ -288,7 +288,7 @@
       "title": "Room Database Best Practices for Android",
       "author": "Shyam Sunder Kanth",
       "date": "2024-02-15",
-      "thumbnail": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=400&fit=crop",
+      "thumbnail": "data:image/png;base64,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",
       "tags": ["android", "room", "database", "kotlin"],
       "excerpt": "Master the Room persistence library with proven patterns and best practices for robust data storage.",
       "readTime": "9 min read",
@@ -359,6 +359,111 @@
           "type": "code",
           "language": "kotlin",
           "text": "@get:Rule\nval instantExecutorRule = InstantTaskExecutorRule()\n\n@Test\nfun insertAndRetrieveUser() = runTest {\n    val user = User(\"1\", \"John\", \"john@email.com\", System.currentTimeMillis())\n    userDao.insertUser(user)\n    \n    val retrieved = userDao.getUser(\"1\").first()\n    assertEquals(user, retrieved)\n}"
+        }
+      ]
+    },
+    {
+      "id": "the-red-toggle-why-banking-apps-demand-developer-mode-to-be-off",
+      "title": "The Red Toggle: Why Banking Apps Demand Developer Mode to Be Off",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-05-11",
+      "thumbnail": "https://media.istockphoto.com/id/1044646398/photo/smartphone-or-mobile-phone-security-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=9QC8bd68GxjMaU7t-ZMJ2ShJJ4CZKsaMVB9PF3Fhk2M=",
+      "tags": ["kotlin", "android", "SECURITY"],
+      "readTime": "8 min read",
+      "excerpt": "Ever wondered why your bank asks you to lock the \"Back Door\": Understanding Developer Mode",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introduction"
+        },
+        {
+          "type": "paragraph",
+          "text": "In the world of smartphones, there is a hidden world under the surface called Developer Mode. While it sounds like something reserved for Silicon Valley engineers, many regular users stumble upon it or enable it for specific features. However, the moment you try to open your banking app, you’re often met with a stern warning: \"Security Risk Detected: Please disable Developer Options to continue.\"\n\nTo the average person, this feels like an unnecessary hurdle. But in reality, this is one of the most important digital safety features your bank provides. Here is a simple guide to why that \"Back Door\" needs to be locked before you handle your money."
+        },
+        {
+          "type": "heading",
+          "text": "What is Developer Mode? (The Master Key)"
+        },
+        {
+          "type": "paragraph",
+          "text": "Think of your smartphone like a high-security apartment building. Normally, the \"Management\" (the phone's operating system) keeps the maintenance tunnels, utility rooms, and electrical panels locked away. This keeps the residents safe and prevents them from accidentally breaking something important.\n\nDeveloper Mode is like having a master key to all those restricted areas. It was created so that software builders (developers) could go behind the scenes to fix bugs or test new features. While it’s a powerful tool for pros, it creates \"weak spots\" in your phone’s armor that hackers love to exploit."
+        },
+        {
+          "type": "heading",
+          "text": "Stopping the \"Remote Control\" Scammers",
+          "level": "h3"
+        },
+        {
+          "type": "paragraph",
+          "text": "The number one reason banks insist on turning this mode off is to protect you from Remote Access Scams.\n\nImagine a scammer calls you, pretending to be from \"Tech Support.\" They claim your account is compromised and ask you to turn on Developer Mode so they can \"help\" you remotely."
+        },
+        {
+          "type": "list",
+          "items": [
+            "The Threat: Once Developer Mode is active, certain tools allow a stranger to see your screen in real-time or even control your phone as if they were holding it.",
+            " The Guardrail: Banking apps are programmed to detect if these \"back doors\" are open. If the app sees Developer Mode is on, it assumes a scammer might be watching your screen and shuts down immediately to protect your PINs and balances."
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Preventing the \"Invisible Ink\" Trick",
+          "level": "h3"
+        },
+        {
+          "type": "paragraph",
+          "text": "In the tech world, there is a sneaky attack called an Overlay. When Developer Mode is on, it becomes much easier for a malicious app to \"draw\" on top of other apps.\n\nImagine placing a piece of clear plastic over your bank’s login screen. You think you are typing your password into your bank’s secure keypad, but you are actually typing it onto the \"clear plastic\" layer that a hacker placed there. They capture your password, and you never even realized there was a middleman. Disabling Developer Mode makes it much harder for hackers to pull off this \"invisible ink\" trick."
+        },
+        {
+          "type": "heading",
+          "text": "Closing the \"USB Debugging\" Window",
+          "level": "h3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Inside the Developer menu is a specific setting called USB Debugging. This allows your phone to \"talk\" deeply with any computer it is plugged into.\n\nIf you happen to plug your phone into a public charging station (like at an airport) or a friend’s laptop while this is on, that computer could potentially:"
+        },
+        {
+          "type": "list",
+          "items": [
+            " Steal your photos and messages.",
+            " Copy your banking session data.",
+            "Install \"spy\" apps without you clicking a single button."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "By forcing you to turn off Developer Mode, the bank ensures that your data stays strictly inside your phone and doesn't \"leak\" out through the charging cable."
+        },
+        {
+          "type": "heading",
+          "text": "Keeping Your GPS Truthful",
+          "level": "h3"
+        },
+        {
+          "type": "paragraph",
+          "text": "Banks use your location as a security filter. If you live in London and a transaction suddenly happens in Tokyo, the bank’s \"red alert\" goes off.\n\nHowever, Developer Mode allows for something called \"Mock Locations.\" This feature lets you trick your phone into thinking it’s anywhere in the world. If a hacker or a sophisticated virus turns this on, they can bypass the bank’s location security, making it look like a fraudulent transfer is coming from your own living room."
+        },
+        {
+          "type": "heading",
+          "text": "Summary: A Better Safe Than Sorry Approach"
+        },
+        {
+          "type": "paragraph",
+          "text": "Your bank isn't trying to be bossy or limit what you can do with your phone. They are simply ensuring that you are standing in a secure, private room before you open your \"digital vault.\"\n\nThe Bottom Line: If you need Developer Mode for work or a specific app, that’s fine! Just remember to toggle the main switch to Off before you check your balance. It takes five seconds, but it prevents some of the most common and devastating financial crimes in the world today."
+        },
+        {
+          "type": "heading",
+          "text": "How to Fix It",
+          "level": "h3"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Open your phone Settings.",
+            "Search for \"Developer Options.",
+            "Flip the main toggle to Off.",
+            "Restart your banking app—it should now work perfectly!"
+          ]
         }
       ]
     }

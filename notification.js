@@ -1,6 +1,17 @@
 (function () {
   const notifications = [
     {
+      id: "blog_developer_mode",
+      category: "Blog Added",
+      heading:
+        "The Red Toggle: Why Banking Apps Demand Developer Mode to Be Off",
+      description:
+        "Ever wondered why your bank asks you to lock the Back Door : Understanding Developer Mode",
+      date_added: "05/11/2026",
+      navigateTo:
+        "/blogs/article.html?id=the-red-toggle-why-banking-apps-demand-developer-mode-to-be-off",
+    },
+    {
       id: "kinetic_actions_launch",
       category: "New Project",
       heading: "Kinetic Actions: Deployment Successful",
