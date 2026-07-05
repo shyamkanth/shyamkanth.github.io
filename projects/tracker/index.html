@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BreatheEasy - Smoking Quitting Tracker</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icons/icon-192.svg" type="image/svg+xml">
+    <meta name="theme-color" content="#071026">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+                </svg>
+                <span class="brand-name">BreatheEasy</span>
+            </div>
+            
+            <!-- Quick Streak Info inside Sidebar -->
+            <div class="sidebar-streak-card" id="sidebar-streak-card" style="display: none;">
+                <span class="streak-label">SMOKE FREE STREAK</span>
+                <span class="streak-value" id="sidebar-streak-value">0 Days</span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <button class="menu-item active" id="btn-dashboard" onclick="switchTab('dashboard')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                    </svg>
+                    <span class="menu-label">Dashboard</span>
+                </button>
+                <button class="menu-item" id="btn-logs" onclick="switchTab('logs')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                    <span class="menu-label">Daily Logs</span>
+                </button>
+                <button class="menu-item" id="btn-health" onclick="switchTab('health')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.75 3.75 0 0 1 21 12Z" />
+                    </svg>
+                    <span class="menu-label">Health Progress</span>
+                </button>
+                <button class="menu-item" id="btn-settings" onclick="switchTab('settings')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.682-.196-1.361-.417-2.029-.661M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.829a1.125 1.125 0 0 1 .26 1.43l-1.297 2.247a1.125 1.125 0 0 1-1.37.491l-1.216-.456c-.356-.133-.751-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.828c.292-.242.437-.614.43-.993a7.747 7.747 0 0 1 0-.256c.007-.378-.138-.75-.43-.991l-1.004-.83a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.49l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <span class="menu-label">Settings</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="version">v1.1.0</span>
+                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m0 13.5V21M4.22 4.22l1.58 1.58m12.42 12.42l1.58 1.58M3 12h2.25m13.5 0H21M4.22 19.78l1.58-1.58m12.42-12.42l1.58-1.58M12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z" />
+                    </svg>
+                    <svg class="moon-icon" style="display: none;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                    </svg>
+                    <span>Light Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-area">
+            <header class="main-header">
+                <div>
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle" class="text-muted">Track your progress and celebrate life.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary-action" id="btn-quick-checkin" onclick="openLogSheetModal()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        <span class="action-full">Log Check-in</span>
+                        <span class="action-short">Log</span>
+                    </button>
+                        <button class="btn btn-secondary-action" id="btn-install" style="display:none; margin-left:8px;" onclick="triggerInstallPrompt()" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px;margin-right:6px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <span>Install</span>
+                        </button>
+                </div>
+            </header>
+
+            <!-- TABS CONTAINER -->
+            <div class="tab-content-container">
+                
+                <!-- TAB 1: DASHBOARD -->
+                <section class="tab-pane active" id="tab-dashboard">
+                    <!-- Timer Hero Card -->
+                    <div class="card counter-hero-card">
+                        <div class="card-glow"></div>
+                        <h2 class="card-title-small">TIME SMOKE-FREE</h2>
+                        <div class="counter-display">
+                            <div class="counter-unit-box">
+                                <span class="counter-value" id="count-days">00</span>
+                                <span class="counter-label">Days</span>
+                            </div>
+                            <div class="counter-divider">:</div>
+                            <div class="counter-unit-box">
+                                <span class="counter-value" id="count-hours">00</span>
+                                <span class="counter-label">Hours</span>
+                            </div>
+                            <div class="counter-divider">:</div>
+                            <div class="counter-unit-box">
+                                <span class="counter-value" id="count-minutes">00</span>
+                                <span class="counter-label">Mins</span>
+                            </div>
+                            <div class="counter-divider">:</div>
+                            <div class="counter-unit-box">
+                                <span class="counter-value" id="count-seconds">00</span>
+                                <span class="counter-label">Secs</span>
+                            </div>
+                        </div>
+                        <p class="counter-start-date">Since: <span id="quit-date-display">--/--/---- --:--</span></p>
+                    </div>
+
+                    <!-- Grid of Financial/Health Stats -->
+                    <div class="stats-grid">
+                        <!-- Money Saved -->
+                        <div class="card stat-card">
+                            <div class="stat-icon-wrapper money-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Money Saved</span>
+                                <span class="stat-value" id="stat-money-saved">$0.00</span>
+                                <span class="stat-subtext" id="stat-money-rate">Saving --/day</span>
+                            </div>
+                        </div>
+
+                        <!-- Cigarettes Avoided -->
+                        <div class="card stat-card">
+                            <div class="stat-icon-wrapper cigarettes-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75 9 12m2.586-2.586L10.5 12M18 12a6 6 0 1 1-12 0 6 6 0 0 1 12 0Zm-3 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Cigarettes Avoided</span>
+                                <span class="stat-value" id="stat-cigarettes-avoided">0</span>
+                                <span class="stat-subtext" id="stat-cigarettes-rate">-- per day skipped</span>
+                            </div>
+                        </div>
+
+                        <!-- Life Regained -->
+                        <div class="card stat-card">
+                            <div class="stat-icon-wrapper life-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">Life Regained</span>
+                                <span class="stat-value" id="stat-life-regained">0h 0m</span>
+                                <span class="stat-subtext">Estimated 11 mins / cig</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row of Sub-Content (Motivational Quote, Next Milestone, Quick Cravings info) -->
+                    <div class="dashboard-grid-row">
+                        <!-- Next Milestone Card -->
+                        <div class="card progress-overview-card">
+                            <h3 class="card-title">Next Milestone Progress</h3>
+                            <div class="next-milestone-info">
+                                <div class="milestone-text-details">
+                                    <span class="milestone-next-title" id="next-milestone-title">Loading next milestone...</span>
+                                    <span class="milestone-time-left" id="next-milestone-timeleft">Calculating...</span>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" id="next-milestone-progressbar" style="width: 0%;"></div>
+                                </div>
+                                <div class="milestone-progress-percentage" id="next-milestone-percent">0%</div>
+                            </div>
+                        </div>
+
+                        <!-- Motivation / Quote Card -->
+                        <div class="card quote-card">
+                            <span class="quote-quote-icon">“</span>
+                            <p class="quote-text" id="quote-text">Your body begins to heal just 20 minutes after your last cigarette.</p>
+                            <span class="quote-author" id="quote-author">World Health Organization</span>
+                        </div>
+                    </div>
+
+                    <div class="card recent-checkins-card" style="margin-top: 24px;">
+                        <h3 class="card-title">Last 10 Check-ins</h3>
+                        <div class="recent-checkins-container" id="recent-checkins-list">
+                            <div class="no-data-msg">No check-ins yet. Click the log button to add your first entry.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: HEALTH MILESTONES -->
+                <section class="tab-pane" id="tab-health">
+                    <div class="health-header-summary">
+                        <h3>Your Body's Recovery Timeline</h3>
+                        <p class="text-muted">Watch your body heal in real-time. Milestones unlock automatically as you stay smoke-free.</p>
+                        <div class="milestones-scorecard">
+                            <div class="score-item">
+                                <span class="score-value" id="unlocked-milestones-count">0/11</span>
+                                <span class="score-label">Milestones Unlocked</span>
+                            </div>
+                            <div class="score-progress-bar">
+                                <div class="score-progress-fill" id="milestones-total-progress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="milestones-timeline-list" id="milestones-list">
+                        <!-- Filled Dynamically by script.js -->
+                </section>
+
+                <!-- TAB 3: DAILY LOG SHEETS -->
+                <section class="tab-pane" id="tab-logs">
+                    <div class="health-header-summary" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+                        <div>
+                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 4px;">Daily Health & Habit Logs</h3>
+                            <p class="text-muted" style="margin-bottom: 0;">Log your daily health checks and track key progress factors over time.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openLogSheetModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 16px; height: 16px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                                <span class="action-full">New check-in</span>
+                                <span class="action-short">+ Log</span>
+                        </button>
+                    </div>
+
+                    <!-- Log stats summary row -->
+                    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 24px; gap: 16px;">
+                        <div class="card stat-card" style="padding: 16px; gap: 12px;">
+                            <div class="stat-icon-wrapper" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); width: 42px; height: 42px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z" /></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" style="font-size: 11px;">Total check-ins</span>
+                                <span class="stat-value" id="log-count-val" style="font-size: 20px;">0</span>
+                            </div>
+                        </div>
+                        <div class="card stat-card" style="padding: 16px; gap: 12px;">
+                            <div class="stat-icon-wrapper" style="background: rgba(244, 63, 94, 0.1); color: var(--accent-rose); width: 42px; height: 42px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3Z" /></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" style="font-size: 11px;">Avg Craving</span>
+                                <span class="stat-value" id="avg-craving-val" style="font-size: 20px;">0.0</span>
+                            </div>
+                        </div>
+                        <div class="card stat-card" style="padding: 16px; gap: 12px;">
+                            <div class="stat-icon-wrapper" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); width: 42px; height: 42px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" style="font-size: 11px;">Avg Mood</span>
+                                <span class="stat-value" id="avg-mood-val" style="font-size: 20px;">0.0</span>
+                            </div>
+                        </div>
+                        <div class="card stat-card" style="padding: 16px; gap: 12px;">
+                            <div class="stat-icon-wrapper" style="background: rgba(6, 182, 212, 0.1); color: var(--accent-teal); width: 42px; height: 42px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 20px; height: 20px;"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label" style="font-size: 11px;">Avg Energy</span>
+                                <span class="stat-value" id="avg-energy-val" style="font-size: 20px;">0.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Table -->
+                    <div class="card log-table-card" style="margin-bottom: 24px;">
+                        <h3 class="card-title">Past Log Sheets History</h3>
+                        <div class="table-container wide-table-container">
+                            <table class="cravings-table" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Log Time</th>
+                                        <th>Quit Date</th>
+                                        <th>Status</th>
+                                        <th>Duration</th>
+                                        <th>Cigs Saved</th>
+                                        <th>Saved Money</th>
+                                        <th>Craving</th>
+                                        <th>Mood</th>
+                                        <th>Sleep</th>
+                                        <th>Breathing</th>
+                                        <th>Appetite</th>
+                                        <th>Energy</th>
+                                        <th>Exercise</th>
+                                        <th class="notes-column">Notes</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log-sheets-body">
+                                    <!-- Filled dynamically by script.js -->
+                                </tbody>
+                            </table>
+                            <div id="no-logs-msg" class="no-data-msg">
+                                No check-in log sheets found. Click "New Check-in Entry" to record your progress!
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: SETTINGS & LOGS -->
+                <section class="tab-pane" id="tab-settings">
+                    <div class="settings-grid">
+                        <!-- Configuration Form -->
+                        <div class="card settings-form-card">
+                            <h3 class="card-title">Tracker Settings</h3>
+                            <form id="settings-form" onsubmit="saveSettings(event)">
+                                <div class="form-group">
+                                    <label for="quit-date">Quit Date & Time</label>
+                                    <input type="datetime-local" id="quit-date" required>
+                                    <span class="form-help">When did you smoke your last cigarette?</span>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="cigs-per-day">Cigarettes per Day</label>
+                                        <input type="number" id="cigs-per-day" min="1" max="100" required>
+                                        <span class="form-help">Average daily consumption.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cigs-per-pack">Cigarettes per Pack</label>
+                                        <input type="number" id="cigs-per-pack" min="1" max="100" required>
+                                        <span class="form-help">Usually 20.</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="age">Your Age</label>
+                                        <input type="number" id="age" min="10" max="120" required>
+                                        <span class="form-help">Current age in years.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="smoking-history-value">Smoking History</label>
+                                        <div style="display: flex; gap: 10px; align-items: center;">
+                                            <input type="number" id="smoking-history-value" min="0" max="120" placeholder="e.g. 3" required style="flex: 1;">
+                                            <select id="smoking-history-unit" required style="width: 120px;">
+                                                <option value="years">Years</option>
+                                                <option value="months">Months</option>
+                                            </select>
+                                        </div>
+                                        <span class="form-help">How long have you been smoking?</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="pack-cost">Cost per Pack</label>
+                                        <input type="number" id="pack-cost" step="0.01" min="0.01" required>
+                                        <span class="form-help">Price paid per pack.</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="currency">Currency Symbol</label>
+                                        <select id="currency" required>
+                                            <option value="$">USD ($)</option>
+                                            <option value="₹">INR (₹)</option>
+                                            <option value="£">GBP (£)</option>
+                                            <option value="€">EUR (€)</option>
+                                            <option value="¥">JPY (¥)</option>
+                                            <option value="A$">AUD (A$)</option>
+                                            <option value="C$">CAD (C$)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <div class="form-row" style="margin-top: 18px; gap: 12px;">
+                                    <button type="button" class="btn btn-outline" id="btn-export-data">Export Data</button>
+                                    <button type="button" class="btn btn-outline" id="btn-import-data">Import Data</button>
+                                </div>
+                            </form>
+                        </div>
+
+
+
+                        <!-- Danger Zone Card -->
+                        <div class="card danger-zone-card">
+                            <h3 class="card-title text-danger">Reset Options</h3>
+                            <p class="card-subtitle text-muted">Had a slip up or want to clear all data? Choose an option below.</p>
+                            
+                            <div class="danger-actions">
+                                <button class="btn btn-outline-warning" onclick="triggerRelapseReset()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                    </svg>
+                                    I Had a Cigarette (Reset Timer)
+                                </button>
+                                <button class="btn btn-outline-danger" onclick="triggerFullReset()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                    Reset All Data & App Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- ONBOARDING / SETUP MODAL -->
+    <div class="modal-backdrop" id="setup-modal">
+        <div class="modal-container">
+            <div class="modal-header-large">
+                <div class="logo-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+                    </svg>
+                </div>
+                <h2>Start Your Smoke-Free Journey</h2>
+                <p>Welcome to BreatheEasy. Let's customize your tracker by setting a few quick parameters about your habit.</p>
+            </div>
+            
+            <form id="onboarding-form" onsubmit="submitOnboarding(event)">
+                <div class="form-group">
+                    <label for="onboard-quit-date">When was your last cigarette?</label>
+                    <input type="datetime-local" id="onboard-quit-date" required>
+                    <span class="form-help">You can select a date/time in the past or present.</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="onboard-cigs-per-day">Cigarettes per Day</label>
+                        <input type="number" id="onboard-cigs-per-day" min="1" max="100" placeholder="e.g. 15" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboard-cigs-per-pack">Cigarettes per Pack</label>
+                        <input type="number" id="onboard-cigs-per-pack" min="1" max="100" value="20" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="onboard-age">Your Age</label>
+                        <input type="number" id="onboard-age" min="10" max="120" placeholder="e.g. 35" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboard-smoking-history-value">Smoking History</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="number" id="onboard-smoking-history-value" min="0" max="120" placeholder="e.g. 5" required style="flex: 1;">
+                            <select id="onboard-smoking-history-unit" required style="width: 120px;">
+                                <option value="years">Years</option>
+                                <option value="months">Months</option>
+                            </select>
+                        </div>
+                        <span class="form-help">How long have you been smoking?</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="onboard-pack-cost">Cost per Pack</label>
+                        <input type="number" id="onboard-pack-cost" step="0.01" min="0.01" placeholder="e.g. 12.50" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="onboard-currency">Currency</label>
+                        <select id="onboard-currency" required>
+                            <option value="$" selected>USD ($)</option>
+                            <option value="₹">INR (₹)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="¥">JPY (¥)</option>
+                            <option value="A$">AUD (A$)</option>
+                            <option value="C$">CAD (C$)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Confirm & Begin Journey</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APP DIALOG MODAL -->
+    <div class="modal-backdrop" id="app-dialog" onclick="handleAppDialogBackdropClick(event)">
+        <div class="modal-container app-dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-describedby="dialog-message">
+            <button class="modal-close-btn" onclick="handleAppDialogClose()" aria-label="Close dialog">&times;</button>
+            <div class="dialog-header">
+                <h3 class="dialog-title" id="dialog-title">Notice</h3>
+            </div>
+            <p class="dialog-message" id="dialog-message"></p>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary dialog-cancel" type="button">Cancel</button>
+                <button class="btn btn-primary dialog-confirm" type="button">OK</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- LOG SHEET MODAL (DAILY CHECK-IN) -->
+    <div class="modal-backdrop" id="logsheet-modal" onclick="closeLogSheetModalOutside(event)">
+        <div class="modal-container" style="max-width: 600px;">
+            <button class="modal-close-btn" onclick="closeLogSheetModal()">&times;</button>
+            <div class="modal-header-small">
+                <h3>Daily Health Check-in</h3>
+                <p>Record your metrics. All slider values are on a scale of 0 (Very Poor / None) to 10 (Excellent / High).</p>
+            </div>
+            
+            <form id="logsheet-form" onsubmit="submitLogSheet(event)">
+                <!-- Slider Metrics Grid -->
+                <div class="sliders-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 20px;">
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-craving" style="display: flex; justify-content: space-between;">
+                            <span>Craving Intensity</span>
+                            <span><strong id="val-craving" style="color: var(--accent-rose);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-craving" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('craving', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>None</span><span>Severe</span></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-mood" style="display: flex; justify-content: space-between;">
+                            <span>Mood / Calmness</span>
+                            <span><strong id="val-mood" style="color: var(--accent-emerald);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-mood" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('mood', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>Irritated</span><span>Happy</span></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-sleep" style="display: flex; justify-content: space-between;">
+                            <span>Sleep Quality</span>
+                            <span><strong id="val-sleep" style="color: var(--accent-teal);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-sleep" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('sleep', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>Poor</span><span>Excellent</span></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-breathing" style="display: flex; justify-content: space-between;">
+                            <span>Breathing / Lungs</span>
+                            <span><strong id="val-breathing" style="color: var(--accent-teal);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-breathing" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('breathing', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>Heavy/Tight</span><span>Clear/Light</span></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-appetite" style="display: flex; justify-content: space-between;">
+                            <span>Appetite Status</span>
+                            <span><strong id="val-appetite" style="color: var(--accent-emerald);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-appetite" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('appetite', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>Poor Control</span><span>Healthy</span></div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label for="log-energy" style="display: flex; justify-content: space-between;">
+                            <span>Energy Level</span>
+                            <span><strong id="val-energy" style="color: var(--accent-purple);">5</strong>/10</span>
+                        </label>
+                        <input type="range" id="log-energy" min="0" max="10" value="5" style="width: 100%; margin-top: 6px;" oninput="updateSliderLabel('energy', this.value)">
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted);"><span>Lethargic</span><span>Energetic</span></div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="log-exercise">Exercise / Workout</label>
+                        <select id="log-exercise" required>
+                            <option value="None">None</option>
+                            <option value="Light (Walking/Yoga)">Light (Walking/Yoga)</option>
+                            <option value="Moderate (Gym/Jogging)">Moderate (Gym/Jogging)</option>
+                            <option value="Intense (Cardio/HIIT)">Intense (Cardio/HIIT)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="log-status">Quit Status</label>
+                        <select id="log-status" required>
+                            <option value="Smoke-Free" selected>Smoke-Free</option>
+                            <option value="Slipped (Reset needed)">Slipped (Smoked)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="log-notes">Check-in Notes</label>
+                    <textarea id="log-notes" rows="2" placeholder="Write any cravings experienced, coping mechanisms used, or general reflections..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeLogSheetModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Check-in Log</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script loading -->
+    <script src="script.js?v=3"></script>
+</body>
+</html>
