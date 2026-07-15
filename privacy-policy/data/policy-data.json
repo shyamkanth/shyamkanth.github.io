@@ -142,5 +142,107 @@
         "contactEmail": "shyamsunderkanth+japnaam@gmail.com"
       }
     ]
-  }
+  },
+  {
+  "id": "openrec",
+  "appName": "OpenRec",
+  "tagline": "Free, 100% local screen recorder with no accounts or cloud storage",
+  "emoji": "🎥",
+  "platform": "Chrome Extension",
+  "version": "1.0.0",
+  "effectiveDate": "July 15, 2026",
+  "lastUpdated": "July 15, 2026",
+  "tags": ["CHROME EXTENSION", "LOCAL STORAGE", "NO CLOUD"],
+  "contact": "shyamsunderkanth+openrec@gmail.com",
+  "color": "#4f46e5",
+  "sections": [
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "content": "Welcome to OpenRec. Your privacy is important to us. This Privacy Policy explains how our extension handles your information, including what data we collect, how we use it, and your rights regarding that data."
+    },
+    {
+      "id": "information-we-collect",
+      "title": "Information We Collect",
+      "subsections": [
+        {
+          "subtitle": "Personal Data",
+          "content": "We do not collect, store, or share any personal data such as your name, email address, or phone number. OpenRec has no accounts, no sign-up, and no login of any kind."
+        },
+        {
+          "subtitle": "Recordings and Related Content",
+          "content": "Every screen recording, webcam clip, thumbnail, and GIF you create is saved locally in your browser's IndexedDB storage, on your own device. This content is never uploaded, transmitted, or made accessible to us or any third party."
+        },
+        {
+          "subtitle": "Preferences and Settings",
+          "content": "Your chosen recording quality, theme, accent color, webcam bubble style, capture mode, and similar preferences are saved locally using the browser's chrome.storage.local API, solely so your settings persist between sessions."
+        },
+        {
+          "subtitle": "Usage Data",
+          "content": "We do not collect any usage analytics, telemetry, error logs, or crash reports. OpenRec makes no network requests of any kind and has no server to send such data to, even if it wanted to."
+        }
+      ]
+    },
+    {
+      "id": "how-we-use-information",
+      "title": "How We Use Your Information",
+      "content": "Because everything OpenRec handles stays on your device, there is no server-side processing or use of your data by us. Your recordings and preferences are used only by the extension itself, running locally in your browser, to display your library, play back recordings, and apply the settings you chose."
+    },
+    {
+      "id": "data-storage-and-security",
+      "title": "Data Storage and Security",
+      "content": "Recordings, thumbnails, and library metadata are stored in your browser's local IndexedDB; preferences are stored via chrome.storage.local. Both are sandboxed to the OpenRec extension and this browser profile — they are not synced to any account or server we control. Deleting a recording moves it to the in-app Bin first, and permanently deleting it (or emptying the Bin) removes it from IndexedDB. Uninstalling the extension, or clearing your browser's extension data, permanently erases everything OpenRec has stored."
+    },
+    {
+      "id": "backups",
+      "title": "Backups and File Exports",
+      "content": "OpenRec lets you export your recordings and settings into a single backup file, or export an individual recording or GIF. These files are generated entirely on your device and saved wherever you choose using your browser's normal download/file picker. We never see, receive, or store a copy of any file you export or import."
+    },
+    {
+      "id": "permissions",
+      "title": "Permissions We Request",
+      "subsections": [
+        {
+          "subtitle": "Storage",
+          "content": "Used only to save your app preferences locally on your device, as described above. No personal data is stored through this permission."
+        },
+        {
+          "subtitle": "Screen, Microphone, and Camera Access",
+          "content": "These are not extension permissions but standard browser prompts (getDisplayMedia and getUserMedia), shown by Chrome itself only when you click Start recording, exactly as any website could request them. You choose what to share each time, and access ends when your recording session ends."
+        }
+      ]
+    },
+    {
+      "id": "data-sharing",
+      "title": "Data Sharing and Third Parties",
+      "content": "OpenRec does not share, sell, rent, or otherwise disclose your data to any third party, because it does not transmit your data anywhere in the first place. There are no advertising networks, analytics SDKs, or third-party services integrated into the extension."
+    },
+    {
+      "id": "remote-code",
+      "title": "No Remote Code",
+      "content": "All code that runs in OpenRec — its interface, video player, trimming, and GIF export — is bundled inside the extension package and runs entirely offline. OpenRec does not load or execute any code from external servers."
+    },
+    {
+      "id": "childrens-privacy",
+      "title": "Children's Privacy",
+      "content": "OpenRec is not directed at children and does not knowingly collect any information from children, in line with its broader practice of not collecting personal information from any user."
+    },
+    {
+      "id": "your-rights",
+      "title": "Your Rights and Control",
+      "content": "Since your data never leaves your device, you are always in full control of it. You can view, rename, trim, export, back up, restore, or permanently delete any recording at any time from within the extension, and you can remove all OpenRec data instantly by uninstalling the extension or clearing your browser's site/extension data."
+    },
+    {
+      "id": "changes-to-policy",
+      "title": "Changes to This Policy",
+      "content": "We may update this Privacy Policy from time to time to reflect changes in the extension or for other operational, legal, or regulatory reasons. Any changes will be posted with an updated \"Last Updated\" date above."
+    },
+    {
+      "id": "contact",
+      "title": "Contact Us",
+      "content": "If you have any questions or concerns about this Privacy Policy or OpenRec's data practices, please contact us at shyamsunderkanth+openrec@gmail.com."
+    }
+  ]
+}
+
 ]
