@@ -1,60 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- ── Portfolio Home ── -->
   <url>
     <loc>https://shyamkanth.github.io/</loc>
-    <lastmod>2026-03-31T09:00:00+00:00</lastmod>
+    <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.00</priority>
   </url>
 
+  <!-- ── Projects ── -->
+  <url>
+    <loc>https://shyamkanth.github.io/projects/openrec/</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/projects/kinetic-actions/</loc>
+    <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/projects/lexica/</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/projects/botbook/</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/projects/lumina/</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
+  <!-- ── Blogs ── -->
   <url>
     <loc>https://shyamkanth.github.io/blogs/</loc>
-    <lastmod>2026-03-31T09:00:00+00:00</lastmod>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
+  <url>
+    <loc>https://shyamkanth.github.io/blogs/article.html?id=the-red-toggle-why-banking-apps-demand-developer-mode-to-be-off</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/blogs/article.html?id=understanding-kotlin-coroutines</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/blogs/article.html?id=jetpack-compose-state-management</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/blogs/article.html?id=angular-performance-optimization</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/blogs/article.html?id=room-database-best-practices</loc>
+    <lastmod>2026-03-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <!-- ── Announcements ── -->
   <url>
     <loc>https://shyamkanth.github.io/announcements/</loc>
-    <lastmod>2026-03-31T09:00:00+00:00</lastmod>
+    <lastmod>2026-07-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
 
   <url>
-    <loc>https://shyamkanth.github.io/resume.pdf</loc>
-    <lastmod>2026-03-31T09:00:00+00:00</lastmod>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=openrec-free-screen-recorder-chrome-extension</loc>
+    <lastmod>2026-07-20</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.70</priority>
   </url>
 
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=kinetic-actions-professional-project-management</loc>
+    <lastmod>2026-04-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=lexica-personal-dictionary-a-private-linguistic-vault</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=botbook-v2-minimalist-notes-architecture</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=lumina-habit-a-beautiful-static-habit-tracker-built-with-van</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=payday-app-in-progress</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=portfolio-privacy-policy-section</loc>
+    <lastmod>2025-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=japnaam-v1-launch</loc>
+    <lastmod>2025-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <url>
+    <loc>https://shyamkanth.github.io/announcements/announcement.html?id=password-vault-v2-release</loc>
+    <lastmod>2025-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+
+  <!-- ── Privacy Policy ── -->
   <url>
     <loc>https://shyamkanth.github.io/privacy-policy/</loc>
-    <lastmod>2026-03-31T09:00:00+00:00</lastmod>
+    <lastmod>2026-03-31</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.50</priority>
   </url>
 
-    <url>
-    <loc>https://shyamkanth.github.io/projects/lumina/</loc>
-    <lastmod>2026-04-04T18:36:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+  <url>
+    <loc>https://shyamkanth.github.io/privacy-policy/policy.html?id=openrec</loc>
+    <lastmod>2026-07-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.50</priority>
   </url>
 
-    <url>
-    <loc>https://shyamkanth.github.io/projects/botbook/</loc>
-    <lastmod>2026-04-04T21:36:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+  <url>
+    <loc>https://shyamkanth.github.io/privacy-policy/policy.html?id=password-vault</loc>
+    <lastmod>2026-03-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.50</priority>
   </url>
 
-      <url>
-    <loc>https://shyamkanth.github.io/projects/lexica/</loc>
-    <lastmod>2026-04-05T20:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
+  <url>
+    <loc>https://shyamkanth.github.io/privacy-policy/policy.html?id=japnaam</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.50</priority>
   </url>
 
 </urlset>
