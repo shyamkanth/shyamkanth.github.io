@@ -1,6 +1,82 @@
 {
   "announcements": [
     {
+      "id": "openrec-free-screen-recorder-chrome-extension",
+      "title": "OpenRec — Free Screen Recorder for Chrome. No Watermark. No Limits.",
+      "author": "Shyam Sunder Kanth",
+      "date": "2026-07-20",
+      "thumbnail": "https://images.unsplash.com/photo-1536240478700-b869ad10e2ab?w=800&h=400&fit=crop",
+      "type": "RELEASE",
+      "priority": "high",
+      "excerpt": "OpenRec is a free Chrome extension that records your screen, camera, and audio entirely on your device — no accounts, no cloud uploads, no watermarks, and no time limits.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Introducing OpenRec"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenRec is a free Chrome extension built around one rule: your recordings belong to you and only you. Everything you capture is written straight to your browser's local storage — no account required, no file ever leaves your device, and no server exists on the other end to receive it even if it wanted to."
+        },
+        {
+          "type": "heading",
+          "text": "Key Features"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Record screen, webcam, or both — with picture-in-picture overlay",
+            "Capture mic audio, system audio, or a combined mix",
+            "Trim recordings and export clips as shareable GIFs — all done locally",
+            "Customizable webcam bubble: shape, size, opacity, position, and border",
+            "Countdown timer before recording starts",
+            "Favourites and bin management for your recording library",
+            "Full backup and restore — export every recording and setting as one file",
+            "Light and dark themes with 10 accent color options",
+            "Works fully offline — no internet connection ever needed"
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Why OpenRec?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Almost every screen recorder on the Chrome Web Store either slaps a watermark on your video, caps you at a few minutes, or silently uploads your recordings to a cloud server. OpenRec was built to fix all three. It is free, unlimited, watermark-free, and stores nothing anywhere except your own browser."
+        },
+        {
+          "type": "quote",
+          "text": "No cost. No cloud. No compromise.",
+          "author": "Shyam Sunder Kanth"
+        },
+        {
+          "type": "heading",
+          "text": "Tech Stack"
+        },
+        {
+          "type": "code",
+          "language": "javascript",
+          "text": "// Built with\nManifest V3 (Chrome Extension)\nWeb APIs: MediaRecorder, getUserMedia, getDisplayMedia\nIndexedDB / localStorage for recording storage\nVanilla HTML, CSS & JavaScript\nInter variable font — bundled locally for offline use"
+        },
+        {
+          "type": "heading",
+          "text": "Privacy Promise"
+        },
+        {
+          "type": "paragraph",
+          "text": "Zero servers exist. Zero analytics run. Zero bytes of your video data are transmitted anywhere. The extension requests only the permissions it actually needs: storage (for saving recordings locally) and the screen/camera/mic APIs triggered at record time. You can audit every line — the source is open."
+        },
+        {
+          "type": "heading",
+          "text": "Get It Now"
+        },
+        {
+          "type": "paragraph",
+          "text": "OpenRec is live on the Chrome Web Store. Search for 'OpenRec' or visit the landing page at /projects/openrec/ to learn more and grab the extension. It takes one click to install and zero seconds to configure."
+        }
+      ]
+    },
+    {
       "id": "password-vault-v2-release",
       "title": "Password Vault v2.0 — AES-256 Upgrade & New Bin Feature",
       "author": "Shyam Sunder Kanth",

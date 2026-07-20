@@ -101,6 +101,17 @@ const industrialProjects = [
 
 const personalProjects = [
   {
+    name: "OpenRec - Free Screen Recorder",
+    role: "Web Developer",
+    duration: "30 Days",
+    tags: ["HTML", "CSS", "JavaScript", "Chrome Extension"],
+    description:
+      "A free Chrome extension for recording your screen, camera, and audio directly in the browser. Saves everything locally — no accounts, no cloud uploads, no watermarks, and no time limit. Features webcam overlay, trim, GIF export, and full backup/restore.",
+    link: "/projects/openrec/",
+    image:
+      "https://images.unsplash.com/photo-1536240478700-b869ad10e2ab?w=800&h=400&fit=crop",
+  },
+  {
     name: "Kinetic Actions - Project Management",
     role: "Web Developer",
     duration: "25 Days",

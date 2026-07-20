@@ -1,6 +1,25 @@
 (function () {
   const notifications = [
     {
+      id: "openrec_launch",
+      category: "New Project",
+      heading: "OpenRec: Chrome Extension is Live",
+      description:
+        "Free screen recorder with no watermarks, no time limits, and zero cloud uploads. 100% local, 100% yours.",
+      date_added: "07/20/2026",
+      navigateTo: "/projects/openrec/",
+    },
+    {
+      id: "announcement_openrec",
+      category: "Announcement Added",
+      heading: "OpenRec: Free Screen Recorder for Chrome",
+      description:
+        "Record your screen, camera, and audio inside Chrome. No accounts, no uploads, no strings attached.",
+      date_added: "07/20/2026",
+      navigateTo:
+        "/announcements/announcement.html?id=openrec-free-screen-recorder-chrome-extension",
+    },
+    {
       id: "blog_developer_mode",
       category: "Blog Added",
       heading:

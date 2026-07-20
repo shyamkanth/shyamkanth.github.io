@@ -1,0 +1,2162 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenRec — Free Screen Recorder for Chrome</title>
+    <meta
+      name="description"
+      content="OpenRec is a free Chrome extension for screen recording with no watermarks, no time limits, no uploads, and no accounts. 100% local, 100% yours."
+    />
+    <meta
+      name="keywords"
+      content="OpenRec, free screen recorder, Chrome extension, screen recording, no watermark, local recording, webcam overlay"
+    />
+    <meta name="author" content="Shyam Sunder Kanth" />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://shyamkanth.github.io/projects/openrec/"
+    />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://shyamkanth.github.io/projects/openrec/"
+    />
+    <meta
+      property="og:title"
+      content="OpenRec — Free Screen Recorder for Chrome"
+    />
+    <meta
+      property="og:description"
+      content="Record your screen, camera, and audio right inside Chrome. No accounts, no uploads, no limits."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/images/icon.png" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+      :root {
+        --brand: #4f46e5;
+        --brand-dark: #4338ca;
+        --brand-light: #eef2ff;
+        --brand-glow: rgba(79, 70, 229, 0.35);
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --bg: #f1f4f9;
+        --surface: #ffffff;
+        --red: #e11d48;
+        --green: #16a34a;
+        --shadow-sm:
+          0 1px 3px rgba(15, 23, 42, 0.06),
+          0 4px 12px -4px rgba(15, 23, 42, 0.1);
+        --shadow:
+          0 2px 8px rgba(15, 23, 42, 0.06),
+          0 16px 40px -12px rgba(15, 23, 42, 0.14);
+        --shadow-lg:
+          0 4px 16px rgba(15, 23, 42, 0.08),
+          0 32px 64px -16px rgba(15, 23, 42, 0.2);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          "Segoe UI",
+          system-ui,
+          sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        min-height: 100vh;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+
+      /* ── Scrollbar ── */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line) transparent;
+      }
+      *::-webkit-scrollbar {
+        width: 6px;
+      }
+      *::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 999px;
+      }
+
+      /* ── Nav ── */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 clamp(20px, 5vw, 80px);
+        height: 68px;
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--line);
+        gap: 16px;
+      }
+
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .nav-logo {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(155deg, var(--brand), var(--brand-dark));
+        color: #fff;
+        box-shadow: 0 6px 16px -4px var(--brand-glow);
+        flex-shrink: 0;
+      }
+
+      .nav-logo-dot {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--red);
+        border: 2px solid white;
+        animation: pulse 2.2s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.35);
+          opacity: 0.6;
+        }
+      }
+
+      .nav-wordmark {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: var(--ink);
+      }
+      .nav-wordmark b {
+        color: var(--brand);
+        font-weight: 800;
+      }
+
+      .nav-tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        color: var(--brand);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .nav-link {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .nav-link:hover {
+        color: var(--ink);
+      }
+
+      .btn-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: var(--brand);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 4px 14px -4px var(--brand-glow);
+        transition:
+          background 0.15s,
+          transform 0.1s,
+          box-shadow 0.15s;
+      }
+      .btn-cta:hover {
+        background: var(--brand-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px -6px var(--brand-glow);
+      }
+      .btn-cta:active {
+        transform: scale(0.97) translateY(0);
+      }
+
+      .btn-cta.big {
+        padding: 16px 32px;
+        font-size: 16px;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px -6px var(--brand-glow);
+      }
+      .btn-cta.big:hover {
+        box-shadow: 0 12px 30px -8px var(--brand-glow);
+      }
+
+      /* ── Hero ── */
+      .hero {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 80px)
+          clamp(60px, 8vw, 100px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.28;
+        background: var(--brand);
+        animation: float 13s ease-in-out infinite;
+      }
+      .blob.b1 {
+        width: 500px;
+        height: 500px;
+        top: -160px;
+        right: -100px;
+      }
+      .blob.b2 {
+        width: 420px;
+        height: 420px;
+        bottom: -120px;
+        left: -80px;
+        background: var(--brand-dark);
+        animation-delay: -4s;
+      }
+      .blob.b3 {
+        width: 280px;
+        height: 280px;
+        top: 30%;
+        left: 30%;
+        opacity: 0.15;
+        animation-delay: -8s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-20px, 20px) scale(1.06);
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 780px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        color: var(--brand);
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: var(--shadow-sm);
+        animation: fadeUp 0.6s ease both;
+      }
+      .hero-badge svg {
+        animation: spin 6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-title {
+        font-size: clamp(36px, 6vw, 72px);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: var(--ink);
+        animation: fadeUp 0.6s ease 0.08s both;
+      }
+      .hero-title span {
+        color: var(--brand);
+      }
+
+      .hero-subtitle {
+        font-size: clamp(16px, 2vw, 20px);
+        color: var(--muted);
+        max-width: 560px;
+        line-height: 1.65;
+        animation: fadeUp 0.6s ease 0.16s both;
+      }
+
+      .hero-pills {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 0.6s ease 0.24s both;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .pill.primary {
+        background: var(--brand);
+        color: #fff;
+        box-shadow: 0 6px 18px -6px var(--brand-glow);
+      }
+      .pill.secondary {
+        background: var(--brand-dark);
+        color: #fff;
+      }
+
+      .hero-cta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+        animation: fadeUp 0.6s ease 0.32s both;
+      }
+
+      .hero-secondary-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--ink);
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        border-bottom: 2px solid transparent;
+        padding-bottom: 2px;
+        transition:
+          color 0.15s,
+          border-color 0.15s;
+      }
+      .hero-secondary-link:hover {
+        color: var(--brand);
+        border-color: var(--brand);
+      }
+
+      .chrome-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--muted);
+        font-weight: 600;
+        animation: fadeUp 0.6s ease 0.4s both;
+      }
+
+      /* ── App preview mockup ── */
+      .hero-mockup {
+        position: relative;
+        z-index: 1;
+        margin-top: 32px;
+        width: 100%;
+        max-width: 900px;
+        animation: fadeUp 0.8s ease 0.5s both;
+      }
+
+      .mockup-shell {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+      }
+
+      .mockup-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 20px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--line);
+      }
+      .mockup-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--line);
+      }
+      .mockup-dot:nth-child(1) {
+        background: #ff5f57;
+      }
+      .mockup-dot:nth-child(2) {
+        background: #ffbd2e;
+      }
+      .mockup-dot:nth-child(3) {
+        background: #28ca41;
+      }
+
+      .mockup-body {
+        display: flex;
+        min-height: 340px;
+      }
+
+      .mockup-sidebar {
+        width: 200px;
+        flex-shrink: 0;
+        background: var(--bg);
+        border-right: 1px solid var(--line);
+        padding: 20px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .mock-nav-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 0 8px 4px;
+        margin-top: 8px;
+      }
+      .mock-nav-label:first-child {
+        margin-top: 0;
+      }
+
+      .mock-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .mock-nav-item.active {
+        background: var(--brand);
+        color: #fff;
+      }
+      .mock-nav-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        background: currentColor;
+        opacity: 0.5;
+        flex-shrink: 0;
+      }
+      .mock-nav-item.active .mock-nav-dot {
+        opacity: 0.7;
+      }
+
+      .mockup-main {
+        flex: 1;
+        padding: 28px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .mock-hero-area {
+        border-radius: 18px;
+        padding: 28px 32px;
+        background: linear-gradient(
+          160deg,
+          var(--brand-light),
+          var(--surface) 70%
+        );
+        border: 1px solid var(--line);
+        display: grid;
+        gap: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mock-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        background: var(--brand);
+        opacity: 0.2;
+      }
+      .mock-blob.m1 {
+        width: 160px;
+        height: 160px;
+        top: -40px;
+        right: -20px;
+      }
+      .mock-blob.m2 {
+        width: 120px;
+        height: 120px;
+        bottom: -40px;
+        left: 0;
+        background: var(--brand-dark);
+      }
+
+      .mock-badge-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .mock-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--brand);
+      }
+      .mock-badge-spark {
+        width: 8px;
+        height: 8px;
+        background: var(--brand);
+        border-radius: 50%;
+        opacity: 0.8;
+      }
+
+      .mock-title-bar {
+        width: 65%;
+        height: 20px;
+        background: var(--ink);
+        border-radius: 6px;
+        opacity: 0.85;
+      }
+      .mock-title-bar.narrow {
+        width: 45%;
+        height: 12px;
+        background: var(--muted);
+        border-radius: 4px;
+        opacity: 0.5;
+        margin-top: 2px;
+      }
+
+      .mock-pills-row {
+        display: flex;
+        gap: 8px;
+      }
+      .mock-pill {
+        padding: 5px 12px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .mock-pill.p1 {
+        background: var(--brand);
+        color: #fff;
+      }
+      .mock-pill.p2 {
+        background: var(--brand-dark);
+        color: #fff;
+      }
+
+      .mock-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: var(--brand);
+        color: #fff;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        width: fit-content;
+      }
+      .mock-btn-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #fff;
+        opacity: 0.9;
+      }
+
+      .mock-features-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .mock-feature-card {
+        padding: 14px;
+        border-radius: 12px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        display: grid;
+        gap: 8px;
+      }
+      .mock-feature-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: var(--brand-light);
+      }
+      .mock-feature-bar {
+        height: 8px;
+        background: var(--ink);
+        border-radius: 3px;
+        opacity: 0.75;
+      }
+      .mock-feature-bar.sub {
+        height: 6px;
+        width: 80%;
+        background: var(--muted);
+        border-radius: 3px;
+        opacity: 0.35;
+        margin-top: 2px;
+      }
+
+      /* ── Trust Bar ── */
+      .trust-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 22px clamp(20px, 5vw, 80px);
+        background: var(--surface);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .trust-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .trust-item svg {
+        color: var(--green);
+        flex-shrink: 0;
+      }
+      .trust-sep {
+        font-size: 18px;
+        color: var(--line);
+      }
+
+      /* ── Section wrapper ── */
+      section {
+        padding: clamp(64px, 8vw, 100px) clamp(20px, 5vw, 80px);
+      }
+
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: var(--brand-light);
+        border: 1px solid rgba(79, 70, 229, 0.2);
+        color: var(--brand);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+      }
+
+      .section-title {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: var(--ink);
+        line-height: 1.15;
+        margin-bottom: 14px;
+      }
+      .section-title span {
+        color: var(--brand);
+      }
+
+      .section-subtitle {
+        font-size: 17px;
+        color: var(--muted);
+        max-width: 560px;
+        line-height: 1.65;
+      }
+
+      .section-header {
+        margin-bottom: 48px;
+      }
+      .section-header.centered {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ── Features grid ── */
+      .features-section {
+        background: var(--surface);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      .feature-card {
+        padding: 28px;
+        border-radius: 20px;
+        border: 1.5px solid var(--line);
+        background: var(--bg);
+        display: grid;
+        gap: 14px;
+        align-content: start;
+        transition:
+          transform 0.18s,
+          box-shadow 0.18s,
+          border-color 0.18s;
+        cursor: default;
+      }
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+        border-color: var(--brand);
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--brand-light);
+        color: var(--brand);
+        flex-shrink: 0;
+      }
+
+      .feature-card h3 {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+      .feature-card p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      /* ── Privacy section ── */
+      .privacy-section {
+        background: var(--bg);
+      }
+
+      .privacy-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+      }
+
+      .privacy-visual {
+        position: relative;
+      }
+
+      .privacy-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        padding: 36px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 20px;
+      }
+
+      .privacy-icon-wrap {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        background: linear-gradient(155deg, var(--brand), var(--brand-dark));
+        color: #fff;
+        box-shadow: 0 8px 24px -8px var(--brand-glow);
+      }
+
+      .privacy-card h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .privacy-card p {
+        font-size: 14.5px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .privacy-checks {
+        display: grid;
+        gap: 10px;
+      }
+      .privacy-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .check-icon {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: #dcfce7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--green);
+        flex-shrink: 0;
+      }
+
+      .privacy-floating-badge {
+        position: absolute;
+        bottom: -16px;
+        right: -16px;
+        background: var(--brand);
+        color: #fff;
+        border-radius: 16px;
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 8px 24px -8px var(--brand-glow);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--red);
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+
+      /* ── How it works ── */
+      .how-section {
+        background: var(--surface);
+      }
+
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        position: relative;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .step-number {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: var(--brand);
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 16px -6px var(--brand-glow);
+        flex-shrink: 0;
+      }
+
+      .step h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .step p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .steps-connector {
+        position: absolute;
+        top: 24px;
+        left: calc(33.33% - 16px);
+        right: calc(33.33% - 16px);
+        height: 2px;
+        background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+        opacity: 0.25;
+        display: flex;
+        pointer-events: none;
+      }
+
+      /* ── CTA Banner ── */
+      .cta-section {
+        background: linear-gradient(
+          160deg,
+          var(--brand),
+          var(--brand-dark) 80%
+        );
+        padding: clamp(64px, 8vw, 100px) clamp(20px, 5vw, 80px);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cta-bg {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      .cta-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .cta-blob.c1 {
+        width: 400px;
+        height: 400px;
+        top: -100px;
+        right: -80px;
+      }
+      .cta-blob.c2 {
+        width: 320px;
+        height: 320px;
+        bottom: -80px;
+        left: -60px;
+      }
+
+      .cta-content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .cta-content h2 {
+        font-size: clamp(30px, 5vw, 52px);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: #fff;
+        line-height: 1.15;
+      }
+
+      .cta-content p {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        max-width: 500px;
+      }
+
+      .btn-cta-white {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 18px 36px;
+        background: #fff;
+        color: var(--brand);
+        border-radius: 14px;
+        font-size: 17px;
+        font-weight: 800;
+        text-decoration: none;
+        box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .btn-cta-white:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.35);
+      }
+      .btn-cta-white:active {
+        transform: scale(0.97);
+      }
+
+      .cta-trust {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .cta-trust-item {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.75);
+      }
+      .cta-trust-check {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      /* ── Footer ── */
+      footer {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.6);
+        padding: 48px clamp(20px, 5vw, 80px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .footer-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        background: linear-gradient(155deg, var(--brand), var(--brand-dark));
+        color: #fff;
+      }
+
+      .footer-wordmark {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: #fff;
+      }
+      .footer-wordmark b {
+        color: rgba(139, 132, 245, 1);
+      }
+
+      .footer-text {
+        font-size: 13px;
+      }
+
+      .footer-links {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .footer-link {
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .footer-link:hover {
+        color: #fff;
+      }
+
+      /* ── Scroll reveal ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 {
+        transition-delay: 0.1s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.2s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.3s;
+      }
+      .reveal-delay-4 {
+        transition-delay: 0.4s;
+      }
+      .reveal-delay-5 {
+        transition-delay: 0.5s;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 1024px) {
+        .features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .privacy-layout {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .privacy-visual {
+          max-width: 500px;
+        }
+        .privacy-floating-badge {
+          right: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .mockup-sidebar {
+          display: none;
+        }
+        .mock-features-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+        .steps-connector {
+          display: none;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        nav .nav-tag {
+          display: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .mock-features-grid {
+          grid-template-columns: 1fr;
+        }
+        .mockup-main {
+          padding: 20px;
+        }
+        .mock-hero-area {
+          padding: 20px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .blob,
+        .hero-badge svg,
+        .nav-logo-dot,
+        .badge-dot {
+          animation: none;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Nav -->
+    <nav>
+      <a href="#" class="nav-brand">
+        <div class="nav-logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <rect
+              x="2"
+              y="4"
+              width="20"
+              height="16"
+              rx="5"
+              stroke="currentColor"
+              stroke-width="2.2"
+            />
+            <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+          </svg>
+          <span class="nav-logo-dot"></span>
+        </div>
+        <span class="nav-wordmark">OPEN<b>REC</b></span>
+        <span class="nav-tag">No cost. No cloud.</span>
+      </a>
+      <div class="nav-right">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#privacy" class="nav-link">Privacy</a>
+        <a
+          href="https://chromewebstore.google.com/detail/openrec-free-screen-recor/ppjljahdiocefhnjlkmffjcpgnhohndm"
+          target="_blank"
+          rel="noopener"
+          class="btn-cta"
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2" />
+            <circle cx="12" cy="12" r="5" fill="currentColor" />
+          </svg>
+          Get Extension
+        </a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          100% local &nbsp;·&nbsp; 100% yours
+        </div>
+
+        <h1 class="hero-title">
+          Record your screen.<br />
+          <span>Keep it to yourself.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          OpenRec captures your screen, camera, and audio right inside Chrome —
+          then saves everything on your own device. No accounts, no uploads, no
+          strings attached.
+        </p>
+
+        <div class="hero-pills">
+          <span class="pill primary">Always free forever</span>
+          <span class="pill secondary">No watermark, ever</span>
+          <span
+            class="pill primary"
+            style="
+              background: #0ea5e9;
+              box-shadow: 0 6px 18px -6px rgba(14, 165, 233, 0.5);
+            "
+            >Works fully offline</span
+          >
+        </div>
+
+        <div class="hero-cta">
+          <a
+            href="https://chromewebstore.google.com/detail/openrec-free-screen-recor/ppjljahdiocefhnjlkmffjcpgnhohndm"
+            target="_blank"
+            rel="noopener"
+            class="btn-cta big"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                fill="currentColor"
+                opacity="0.2"
+              />
+              <circle cx="12" cy="12" r="5" fill="currentColor" />
+            </svg>
+            Get Extension — It's Free
+          </a>
+          <a href="#features" class="hero-secondary-link">
+            See what it can do
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 12h14m0 0-5-5m5 5-5 5"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <div class="chrome-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#e2e8f0" stroke-width="2" />
+            <circle cx="12" cy="12" r="4" fill="#4285F4" />
+            <path
+              d="M12 8h8.5M7.2 17.4l4.2-7.2M15.5 17.6l-7.5.2"
+              stroke="#4285F4"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          Available on Chrome Web Store
+        </div>
+      </div>
+
+      <!-- App Mockup -->
+      <div class="hero-mockup">
+        <div class="mockup-shell">
+          <div class="mockup-bar" aria-hidden="true">
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+            <div class="mockup-dot"></div>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-sidebar" aria-hidden="true">
+              <div class="mock-nav-label">Openrec</div>
+              <div class="mock-nav-item active">
+                <div class="mock-nav-dot" style="border-radius: 4px"></div>
+                Home
+              </div>
+              <div class="mock-nav-label">Record</div>
+              <div class="mock-nav-item">
+                <div class="mock-nav-dot" style="border-radius: 3px"></div>
+                Input Source
+              </div>
+              <div class="mock-nav-item">
+                <div class="mock-nav-dot"></div>
+                Customization
+              </div>
+              <div class="mock-nav-item">
+                <div class="mock-nav-dot"></div>
+                Stream
+              </div>
+              <div class="mock-nav-label">Library</div>
+              <div class="mock-nav-item">
+                <div class="mock-nav-dot" style="border-radius: 3px"></div>
+                My Recordings
+              </div>
+              <div class="mock-nav-item">
+                <div class="mock-nav-dot"></div>
+                Favourites
+              </div>
+            </div>
+            <div class="mockup-main" aria-hidden="true">
+              <div class="mock-hero-area">
+                <div class="mock-blob m1"></div>
+                <div class="mock-blob m2"></div>
+                <div class="mock-badge-row">
+                  <div class="mock-badge">
+                    <div class="mock-badge-spark"></div>
+                    100% local. 100% yours.
+                  </div>
+                </div>
+                <div class="mock-title-bar"></div>
+                <div class="mock-title-bar narrow"></div>
+                <div class="mock-pills-row">
+                  <div class="mock-pill p1">Always free forever</div>
+                  <div class="mock-pill p2">No watermark ever</div>
+                </div>
+                <div class="mock-btn">
+                  <div class="mock-btn-dot"></div>
+                  Start recording
+                </div>
+              </div>
+              <div class="mock-features-grid">
+                <div class="mock-feature-card">
+                  <div class="mock-feature-icon"></div>
+                  <div class="mock-feature-bar"></div>
+                  <div class="mock-feature-bar sub"></div>
+                </div>
+                <div class="mock-feature-card">
+                  <div class="mock-feature-icon"></div>
+                  <div class="mock-feature-bar"></div>
+                  <div class="mock-feature-bar sub"></div>
+                </div>
+                <div class="mock-feature-card">
+                  <div class="mock-feature-icon"></div>
+                  <div class="mock-feature-bar"></div>
+                  <div class="mock-feature-bar sub"></div>
+                </div>
+                <div class="mock-feature-card">
+                  <div class="mock-feature-icon"></div>
+                  <div class="mock-feature-bar"></div>
+                  <div class="mock-feature-bar sub"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12l4 4L19 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        No sign-up required
+      </div>
+      <span class="trust-sep">·</span>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12l4 4L19 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Zero cloud uploads
+      </div>
+      <span class="trust-sep">·</span>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12l4 4L19 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        No time limit
+      </div>
+      <span class="trust-sep">·</span>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12l4 4L19 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        No watermark
+      </div>
+      <span class="trust-sep">·</span>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M5 12l4 4L19 6"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        Works fully offline
+      </div>
+    </div>
+
+    <!-- Features -->
+    <section class="features-section" id="features">
+      <div class="section-header centered">
+        <div class="section-label reveal">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 18l-6.2 3.1 1.2-6.9L2 9.3l6.9-1z"
+              fill="currentColor"
+            />
+          </svg>
+          Everything you need
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Built for people who value <span>simplicity</span>
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          Powerful enough to handle any recording scenario, simple enough to
+          pick up instantly. No tutorial needed.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="2"
+                y="4"
+                width="16"
+                height="12"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="M6 19h8"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+              <circle
+                cx="18"
+                cy="15"
+                r="5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <circle cx="18" cy="15" r="1.6" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>Screen, camera, or both</h3>
+          <p>
+            Capture your full screen, a single window, a browser tab, or your
+            webcam — solo or with a picture-in-picture overlay.
+          </p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect
+                x="3"
+                y="5"
+                width="14"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path d="M9 8v4l3.5-2L9 8Z" fill="currentColor" />
+              <path
+                d="M20 8.5v8a2 2 0 0 1-2 2H8"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h3>Saved only on your device</h3>
+          <p>
+            Every recording lives in your browser's local storage. No server, no
+            sync — nowhere else they could ever go.
+          </p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M4 7h7M15 7h5M4 13h11M4 19h9M17 19h3"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+              <circle cx="13" cy="7" r="2" fill="currentColor" />
+              <circle cx="17" cy="13" r="2" fill="currentColor" />
+              <circle cx="13" cy="19" r="2" fill="currentColor" />
+            </svg>
+          </div>
+          <h3>Made to be customized</h3>
+          <p>
+            Fine-tune the shape, size, opacity, position, and border of your
+            webcam bubble to look exactly how you want.
+          </p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle
+                cx="6"
+                cy="6"
+                r="2.6"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <circle
+                cx="6"
+                cy="18"
+                r="2.6"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+              <path
+                d="M8.5 8 20 20M8.5 16 20 4"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h3>Trim &amp; export as GIF</h3>
+          <p>
+            Cut any clip down to just the part you need, or convert a moment
+            into a shareable GIF — all processed locally, never sent anywhere.
+          </p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M9 3 4 12l5 6M15 3l5 6-5 6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3>Mic, system audio, or both</h3>
+          <p>
+            Record your microphone, system audio, or a combined mix. A quick
+            toggle — no setup headaches, no extra software.
+          </p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M4 8l8-4 8 4-8 4-8-4Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M4 8v8l8 4 8-4V8"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12 12v6"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <h3>Backup &amp; restore everything</h3>
+          <p>
+            Bundle every setting and recording into a single file and restore it
+            here or on a new computer whenever you like.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="privacy-section" id="privacy">
+      <div class="privacy-layout">
+        <div>
+          <div class="section-label reveal">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"
+                fill="currentColor"
+              />
+            </svg>
+            Privacy first
+          </div>
+          <h2 class="section-title reveal reveal-delay-1">
+            Your recordings never<br /><span>leave your device</span>
+          </h2>
+          <p
+            class="section-subtitle reveal reveal-delay-2"
+            style="margin-bottom: 32px"
+          >
+            OpenRec was built on one rule that never bends: your recordings are
+            yours, and only yours. There's no account, no upload step, and
+            honestly — no server on the other end even if we wanted to.
+          </p>
+
+          <div class="privacy-checks reveal reveal-delay-3">
+            <div class="privacy-check">
+              <div class="check-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12l4 4L19 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              Zero servers — none exist
+            </div>
+            <div class="privacy-check">
+              <div class="check-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12l4 4L19 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              No accounts or sign-in required
+            </div>
+            <div class="privacy-check">
+              <div class="check-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12l4 4L19 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              Nothing ever leaves this device
+            </div>
+            <div class="privacy-check">
+              <div class="check-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12l4 4L19 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              You can erase everything, anytime
+            </div>
+            <div class="privacy-check">
+              <div class="check-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 12l4 4L19 6"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              Open source — inspect every line
+            </div>
+          </div>
+        </div>
+
+        <div class="privacy-visual reveal reveal-delay-2">
+          <div class="privacy-card">
+            <div class="privacy-icon-wrap">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9.5 12l1.8 1.8L14.8 10"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h3>Your privacy matters most.</h3>
+            <p>
+              Everything you capture is written straight to your browser's local
+              storage on this device. There's no account, no upload step, and no
+              server on the other end.
+            </p>
+            <div
+              style="
+                display: grid;
+                gap: 8px;
+                padding: 16px;
+                border-radius: 14px;
+                background: var(--bg);
+                border: 1px solid var(--line);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: var(--muted);
+                "
+              >
+                <div
+                  style="
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: var(--green);
+                    flex-shrink: 0;
+                  "
+                ></div>
+                Recordings saved:
+                <strong style="color: var(--ink); margin-left: 4px"
+                  >On this device only</strong
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: var(--muted);
+                "
+              >
+                <div
+                  style="
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: var(--green);
+                    flex-shrink: 0;
+                  "
+                ></div>
+                Data sent to servers:
+                <strong style="color: var(--ink); margin-left: 4px"
+                  >0 bytes</strong
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: var(--muted);
+                "
+              >
+                <div
+                  style="
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: var(--green);
+                    flex-shrink: 0;
+                  "
+                ></div>
+                Accounts required:
+                <strong style="color: var(--ink); margin-left: 4px"
+                  >None</strong
+                >
+              </div>
+            </div>
+          </div>
+          <div class="privacy-floating-badge">
+            <div class="badge-dot"></div>
+            100% Local &amp; Private
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-section" id="how">
+      <div class="section-header centered">
+        <div class="section-label reveal">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          How it works
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Up and recording in <span>3 clicks</span>
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-2">
+          No setup. No tutorial. Just install and start capturing.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="steps-connector" aria-hidden="true"></div>
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <h3>Install the extension</h3>
+          <p>
+            Add OpenRec to Chrome from the Web Store in one click. No sign-up,
+            no permissions beyond what's needed.
+          </p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-number">2</div>
+          <h3>Choose your source</h3>
+          <p>
+            Pick screen, camera, or both. Select your audio source — mic, system
+            audio, or a mix. Customize the webcam bubble if you like.
+          </p>
+        </div>
+        <div class="step reveal reveal-delay-4">
+          <div class="step-number">3</div>
+          <h3>Record &amp; save locally</h3>
+          <p>
+            Hit record. When you're done, the video saves straight to your
+            browser. Trim it, export as GIF, or download the .webm file.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-section">
+      <div class="cta-bg" aria-hidden="true">
+        <div class="cta-blob c1"></div>
+        <div class="cta-blob c2"></div>
+      </div>
+      <div class="cta-content">
+        <h2>Start recording. Keep everything private.</h2>
+        <p>
+          Join thousands of people who record their screen without giving up
+          their privacy.
+        </p>
+        <a
+          href="https://chromewebstore.google.com/detail/openrec-free-screen-recor/ppjljahdiocefhnjlkmffjcpgnhohndm"
+          target="_blank"
+          rel="noopener"
+          class="btn-cta-white"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="2"
+            />
+            <circle cx="12" cy="12" r="4" fill="currentColor" />
+            <path
+              d="M12 8h8.5M7.2 17.4l4.2-7.2M15.5 17.6l-7.5.2"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          Get Extension — It's Free
+        </a>
+        <div class="cta-trust">
+          <div class="cta-trust-item">
+            <div class="cta-trust-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12l4 4L19 6"
+                  stroke="#fff"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            Free forever
+          </div>
+          <div class="cta-trust-item">
+            <div class="cta-trust-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12l4 4L19 6"
+                  stroke="#fff"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            No watermark
+          </div>
+          <div class="cta-trust-item">
+            <div class="cta-trust-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12l4 4L19 6"
+                  stroke="#fff"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            No time limit
+          </div>
+          <div class="cta-trust-item">
+            <div class="cta-trust-check">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M5 12l4 4L19 6"
+                  stroke="#fff"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            No account needed
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <a href="#" class="footer-brand">
+        <div class="footer-logo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <rect
+              x="2"
+              y="4"
+              width="20"
+              height="16"
+              rx="5"
+              stroke="currentColor"
+              stroke-width="2.2"
+            />
+            <circle cx="12" cy="12" r="3.2" fill="currentColor" />
+          </svg>
+        </div>
+        <span class="footer-wordmark">OPEN<b>REC</b></span>
+      </a>
+      <span class="footer-text"
+        >Built with care &amp; zero tracking by
+        <a
+          href="https://shyamkanth.github.io"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            text-decoration: none;
+          "
+          target="_blank"
+          rel="noopener"
+          >Shyam Sunder Kanth</a
+        ></span
+      >
+      <div class="footer-links">
+        <a
+          href="https://chromewebstore.google.com/detail/openrec-free-screen-recor/ppjljahdiocefhnjlkmffjcpgnhohndm"
+          target="_blank"
+          rel="noopener"
+          class="footer-link"
+          >Chrome Web Store</a
+        >
+        <a
+          href="https://shyamkanth.github.io/privacy-policy/policy.html?id=openrec"
+          class="footer-link"
+          >Privacy Policy</a
+        >
+        <a href="https://shyamkanth.github.io" class="footer-link">Portfolio</a>
+      </div>
+    </footer>
+
+    <script>
+      // Scroll reveal
+      const observer = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              observer.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      );
+      document
+        .querySelectorAll(".reveal")
+        .forEach((el) => observer.observe(el));
+
+      // Smooth nav background on scroll
+      const nav = document.querySelector("nav");
+      window.addEventListener(
+        "scroll",
+        () => {
+          nav.style.boxShadow =
+            window.scrollY > 10
+              ? "0 1px 24px -8px rgba(15,23,42,0.12)"
+              : "none";
+        },
+        { passive: true },
+      );
+    </script>
+  </body>
+</html>

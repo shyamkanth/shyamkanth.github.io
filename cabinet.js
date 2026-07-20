@@ -291,6 +291,12 @@
       action: () => _go("/blogs/"),
     },
     {
+      label: "OpenRec - Free Screen Recorder",
+      desc: "Free Chrome extension for screen recording with no watermarks and no time limits.",
+      icon: "videocam",
+      action: () => _go("/projects/openrec/"),
+    },
+    {
       label: "Kinetic Actions - Professional Task Management",
       desc: "A powerful, minimalist project management tool featuring Kanban boards, backlogs, and Eisenhower matrices.",
       icon: "tactic",
